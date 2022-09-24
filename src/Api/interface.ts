@@ -20,7 +20,7 @@ export interface IDetails {
     id: number;
     name: string;
   };
-  runtime: number;
+  runtime: number; // movie
   number_of_episodes: number;
   number_of_seasons: number;
 }
@@ -39,4 +39,10 @@ export interface ISliderProps {
   category: string;
   title: string;
   list?: IContent[];
+}
+
+export interface IModalProps {
+  section: string;
+  category: string;
+  id: string;
 }
