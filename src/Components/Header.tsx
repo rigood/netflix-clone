@@ -24,7 +24,7 @@ const Nav = styled(motion.nav)`
   top: 0;
   width: 100%;
   height: 80px;
-  padding-inline: 60px;
+  padding-inline: ${(props) => props.theme.px};
 `;
 
 const navVariants = {
@@ -107,12 +107,12 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
-const Search = styled.form`
+const SearchForm = styled.form`
   display: flex;
   align-items: center;
 `;
 
-const Input = styled(motion.input)`
+const SearchInput = styled(motion.input)`
   position: absolute; // Fixed posiiton for expanding-motion
   right: 60px; // Nav's padding-right
   z-index: -1; // Input should be under the Search icon
@@ -197,7 +197,7 @@ function Header() {
         </Menus>
       </Col>
       <Col>
-        <Search onSubmit={handleSubmit(onSearch)}>
+        <SearchForm onSubmit={handleSubmit(onSearch)}>
           <SearchIcon
             onClick={() => {
               toggleSearch();
@@ -211,8 +211,14 @@ function Header() {
           >
             <path fillRule="evenodd" clipRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"></path>
           </SearchIcon>
-          <Input {...register("keyword", { required: true, minLength: 2 })} minLength={2} placeholder="검색어를 입력하세요." animate={{ scaleX: searchOpen ? 1 : 0 }} transition={{ type: "linear" }} />
-        </Search>
+          <SearchInput
+            {...register("keyword", { required: true, minLength: 2 })}
+            minLength={2}
+            placeholder="검색어를 입력하세요."
+            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            transition={{ type: "linear" }}
+          />
+        </SearchForm>
       </Col>
     </Nav>
   );

@@ -13,6 +13,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getBackdropPath } from "../Api/utils";
 
 /* Styling */
+
+const Container = styled.div`
+  margin: 3vw 0;
+`;
+
 const Row = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -20,9 +25,17 @@ const Row = styled(motion.div)`
   width: 100%;
   padding-inline: 4%;
 `;
+
+const Title = styled.h3`
+  margin-bottom: 1vw;
+  padding-inline: 4%;
+  font-size: 1.4vw;
+`;
+
 const Box = styled(motion.div)<{ bg: string }>`
   width: 100%;
   padding-top: 56.25%;
+  border-radius: 0.2vw;
   background-image: url(${(props) => props.bg});
   background-size: contain;
   background-repeat: no-repeat;
@@ -30,11 +43,13 @@ const Box = styled(motion.div)<{ bg: string }>`
 `;
 
 function Slider({ section, category, title, list }: ISliderProps) {
+  /* Routing */
   const navigate = useNavigate();
   const onBoxClick = (id: number) => {
     navigate(`/${section}/${category}/${id}`);
   };
 
+  /* Remove content from Slider for Banner */
   let sliceIndex;
   if (category === "nowplaying") {
     sliceIndex = 1;
@@ -43,21 +58,19 @@ function Slider({ section, category, title, list }: ISliderProps) {
   }
 
   return (
-    <>
-      <h1>{title}</h1>
+    <Container>
+      <Title>{title}</Title>
       <AnimatePresence>
         <Row>
           {list
             ?.slice(sliceIndex)
             .slice(0, 6)
             .map((content) => (
-              <Box key={content.id} bg={getBackdropPath(content.backdrop_path, "w500")} onClick={() => onBoxClick(content.id)}>
-                {section === "movie" ? content.title : content.name}
-              </Box>
+              <Box key={content.id} bg={getBackdropPath(content.backdrop_path, "w500")} onClick={() => onBoxClick(content.id)} />
             ))}
         </Row>
       </AnimatePresence>
-    </>
+    </Container>
   );
 }
 

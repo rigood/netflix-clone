@@ -1,8 +1,11 @@
+import styled from "styled-components";
+
 /* Data-fetching */
 import { useQuery } from "@tanstack/react-query";
 
 /* Fetcher function */
 import { getList } from "../Api/api";
+import { getBackdropPath } from "../Api/utils";
 
 /* Interface */
 import { IContent } from "../Api/interface";
@@ -13,14 +16,33 @@ import { useMatch } from "react-router-dom";
 /* Components */
 import Slider from "../Components/Slider";
 import Modal from "../Components/Modal";
+import Banner from "../Components/Banner";
+
+/* Styling */
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+`;
+
+const Background = styled.div<{ bg: string }>`
+  width: 100%;
+  height: 56.25vw;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${(props) => props.bg});
+  background-size: cover;
+`;
+
+const SliderWrapper = styled.div`
+  padding-block: 5vw;
+`;
 
 function Tv() {
   /* Slider Data-fectching */
   const { data: airingTodayTvList, isLoading: loadingAiringToday } = useQuery<IContent[]>(["airingTodayTvList"], () => getList("tv", "airing_today"));
   const { data: popularTvList, isLoading: loadingPopular } = useQuery<IContent[]>(["popularTvList"], () => getList("tv", "popular"));
   const { data: topRatedTvList, isLoading: loadingTopRated } = useQuery<IContent[]>(["topRatedTvList"], () => getList("tv", "top_rated"));
-
-  const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
 
   /* Routing for Modal */
   const modalMatch = useMatch("/:section/:category/:id");
@@ -30,11 +52,22 @@ function Tv() {
   console.log("아이디", id);
   console.log("모달매치", modalMatch);
 
+  /* Loading */
+  const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
+  if (isLoading) {
+    return <Loader>로딩중</Loader>;
+  }
+
   return (
     <>
-      <Slider section="tv" category="airingtoday" title="방영 중인 TV쇼" list={airingTodayTvList} />
-      <Slider section="tv" category="popular" title="인기 TV 콘텐츠" list={popularTvList} />
-      <Slider section="tv" category="toprated" title="최고 평점 TV쇼" list={topRatedTvList} />
+      <Background bg={getBackdropPath(airingTodayTvList?.[0].backdrop_path)}>
+        <Banner section="tv" title="TV" content={airingTodayTvList?.[0]} />
+        <SliderWrapper>
+          <Slider section="tv" category="airingtoday" title="방영 중인 TV쇼" list={airingTodayTvList} />
+          <Slider section="tv" category="popular" title="인기 TV 콘텐츠" list={popularTvList} />
+          <Slider section="tv" category="toprated" title="최고 평점 TV쇼" list={topRatedTvList} />
+        </SliderWrapper>
+      </Background>
       {modalMatch ? <Modal section="tv" category={category!} id={id!} /> : null}
     </>
   );

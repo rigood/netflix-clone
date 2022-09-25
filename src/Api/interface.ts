@@ -68,6 +68,12 @@ export interface ICast {
 
 /* Props interface */
 
+export interface IBannerProps {
+  section: string;
+  title: string;
+  content?: IContent;
+}
+
 export interface ISliderProps {
   section: string;
   category: string;
