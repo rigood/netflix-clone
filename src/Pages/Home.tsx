@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 
 /* Fetcher function */
-import { getList } from "../Api/api";
+import { getCast, getDetails, getList } from "../Api/api";
 import { getBackdropPath } from "../Api/utils";
 
 /* Interface */
-import { IContent } from "../Api/interface";
+import { ICast, IContent, IDetails } from "../Api/interface";
 
 /* Routing */
 import { useMatch } from "react-router-dom";
@@ -49,6 +49,10 @@ function Home() {
   const category = modalMatch?.params.category;
   const id = modalMatch?.params.id;
 
+  /* Modal Data-fectching */
+  const { data: detailsContent } = useQuery<IDetails>(["detailsContent", id], () => getDetails("movie", id!), { enabled: !!id });
+  const { data: castContent } = useQuery<ICast[]>(["castContent", id], () => getCast("movie", id!), { enabled: !!id });
+
   console.log("아이디", id);
   console.log("모달매치", modalMatch);
 
@@ -68,7 +72,7 @@ function Home() {
           <Slider section="movie" category="upcoming" title="개봉 예정 영화" list={upcomingMovieList} />
         </SliderWrapper>
       </Background>
-      {modalMatch ? <Modal section="movie" category={category!} id={id!} /> : null}
+      {modalMatch ? <Modal section="movie" category={category!} details={detailsContent!} cast={castContent!} /> : null}
     </>
   );
 }

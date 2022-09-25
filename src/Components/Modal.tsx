@@ -1,14 +1,10 @@
 import styled from "styled-components";
 
-/* Data-fetching */
-import { useQuery } from "@tanstack/react-query";
-
 /* Fetcher function */
-import { getCast, getDetails } from "../Api/api";
 import { getBackdropPath } from "../Api/utils";
 
 /* Interface */
-import { ICast, IDetails, IModalProps } from "../Api/interface";
+import { IModalProps } from "../Api/interface";
 
 /* Routing */
 import { useNavigate } from "react-router-dom";
@@ -47,19 +43,13 @@ const Backdrop = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
-function Modal({ section, category, id }: IModalProps) {
-  /* Modal Data-fectching */
-  const { data: details, isLoading: loadingDetails } = useQuery<IDetails>(["details", { section, id }], () => getDetails(section, id));
-  const { data: cast, isLoading: loadingCast } = useQuery<ICast[]>(["cast", { section, id }], () => getCast(section, id));
-
-  const isModalLoading = loadingDetails || loadingCast;
-
+function Modal({ section, category, details, cast }: IModalProps) {
   /* Routing */
   const navigate = useNavigate();
   const onOverlayClicked = () => {
     if (section === "movie") {
       navigate("/");
-    } else {
+    } else if (section === "tv") {
       navigate("/tv");
     }
   };
@@ -69,25 +59,21 @@ function Modal({ section, category, id }: IModalProps) {
 
   return (
     <>
-      {isModalLoading ? (
-        <Loader>로딩중</Loader>
-      ) : (
-        <AnimatePresence>
-          <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
-          <Container scroll={scrollY.get()}>
-            <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
-            <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
-            <p> 줄거리 : {details?.overview}</p>
-            <ul>
-              {cast?.map((actor, index) => (
-                <li key={index}>
-                  {actor.name} - {actor.character}
-                </li>
-              ))}
-            </ul>
-          </Container>
-        </AnimatePresence>
-      )}
+      <AnimatePresence>
+        <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+        <Container scroll={scrollY.get()}>
+          <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
+          <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
+          <p> 줄거리 : {details?.overview}</p>
+          <ul>
+            {cast?.map((actor, index) => (
+              <li key={index}>
+                {actor.name} - {actor.character}
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </AnimatePresence>
     </>
   );
 }

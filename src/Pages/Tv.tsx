@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 
 /* Fetcher function */
-import { getList } from "../Api/api";
+import { getCast, getDetails, getList } from "../Api/api";
 import { getBackdropPath } from "../Api/utils";
 
 /* Interface */
-import { IContent } from "../Api/interface";
+import { ICast, IContent, IDetails } from "../Api/interface";
 
 /* Routing */
 import { useMatch } from "react-router-dom";
@@ -49,6 +49,10 @@ function Tv() {
   const category = modalMatch?.params.category;
   const id = modalMatch?.params.id;
 
+  /* Modal Data-fectching */
+  const { data: detailsContent } = useQuery<IDetails>(["detailsContent", id], () => getDetails("tv", id!), { enabled: !!id });
+  const { data: castContent } = useQuery<ICast[]>(["castContent", id], () => getCast("tv", id!), { enabled: !!id });
+
   console.log("아이디", id);
   console.log("모달매치", modalMatch);
 
@@ -68,7 +72,7 @@ function Tv() {
           <Slider section="tv" category="toprated" title="최고 평점 TV쇼" list={topRatedTvList} />
         </SliderWrapper>
       </Background>
-      {modalMatch ? <Modal section="tv" category={category!} id={id!} /> : null}
+      {modalMatch ? <Modal section="tv" category={category!} details={detailsContent!} cast={castContent!} /> : null}
     </>
   );
 }

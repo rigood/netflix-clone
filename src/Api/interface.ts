@@ -84,5 +84,6 @@ export interface ISliderProps {
 export interface IModalProps {
   section: string;
   category: string;
-  id: string;
+  details: IDetails;
+  cast: ICast[];
 }
