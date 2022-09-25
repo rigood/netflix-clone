@@ -65,7 +65,7 @@ function Home() {
   return (
     <>
       <Background bg={getBackdropPath(nowPlayingMovieList?.[0].backdrop_path)}>
-        <Banner section="movie" title="영화" content={nowPlayingMovieList?.[0]} />
+        <Banner section="movie" category="nowPlaying" title="영화" content={nowPlayingMovieList?.[0]} />
         <SliderWrapper>
           <Slider section="movie" category="nowplaying" title="현재 상영 중인 영화" list={nowPlayingMovieList} />
           <Slider section="movie" category="toprated" title="최고 평점 영화" list={topRatedMovieList} />

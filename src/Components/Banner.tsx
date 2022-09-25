@@ -3,6 +3,9 @@ import styled from "styled-components";
 /* Interface */
 import { IBannerProps } from "../Api/interface";
 
+/* Routing */
+import { useNavigate } from "react-router-dom";
+
 /* Styling */
 const Container = styled.div`
   display: flex;
@@ -59,7 +62,12 @@ const DateAndRating = styled.div`
   }
 `;
 
-function Banner({ section, title, content }: IBannerProps) {
+function Banner({ section, category, title, content }: IBannerProps) {
+  /* Routing */
+  const navigate = useNavigate();
+  const onButtonClick = (id: number) => {
+    navigate(`/${section}/${category}/${id}`);
+  };
   return (
     <Container>
       <Title>{section === "movie" ? content?.title : content?.name}</Title>
@@ -72,6 +80,7 @@ function Banner({ section, title, content }: IBannerProps) {
         <span>{section === "movie" ? `개봉일 : ${content?.release_date}` : `첫방영 : ${content?.first_air_date}`}</span>
         <span>평점 : ⭐{content?.vote_average} 점</span>
       </DateAndRating>
+      <button onClick={() => onButtonClick(content?.id!)}>클릭</button>
     </Container>
   );
 }

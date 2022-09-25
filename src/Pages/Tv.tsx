@@ -65,7 +65,7 @@ function Tv() {
   return (
     <>
       <Background bg={getBackdropPath(airingTodayTvList?.[0].backdrop_path)}>
-        <Banner section="tv" title="TV" content={airingTodayTvList?.[0]} />
+        <Banner section="tv" category="airingtoday" title="TV" content={airingTodayTvList?.[0]} />
         <SliderWrapper>
           <Slider section="tv" category="airingtoday" title="방영 중인 TV쇼" list={airingTodayTvList} />
           <Slider section="tv" category="popular" title="인기 TV 콘텐츠" list={popularTvList} />

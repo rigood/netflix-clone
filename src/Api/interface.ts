@@ -70,6 +70,7 @@ export interface ICast {
 
 export interface IBannerProps {
   section: string;
+  category: string;
   title: string;
   content?: IContent;
 }
