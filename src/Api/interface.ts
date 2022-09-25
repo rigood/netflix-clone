@@ -86,4 +86,5 @@ export interface IModalProps {
   category: string;
   details: IDetails;
   cast: ICast[];
+  bgPath: string;
 }

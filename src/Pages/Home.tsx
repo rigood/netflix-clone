@@ -72,7 +72,7 @@ function Home() {
           <Slider section="movie" category="upcoming" title="개봉 예정 영화" list={upcomingMovieList} />
         </SliderWrapper>
       </Background>
-      {modalMatch ? <Modal section="movie" category={category!} details={detailsContent!} cast={castContent!} /> : null}
+      {modalMatch ? <Modal section="movie" category={category!} details={detailsContent!} cast={castContent!} bgPath={getBackdropPath(detailsContent?.backdrop_path)} /> : null}
     </>
   );
 }

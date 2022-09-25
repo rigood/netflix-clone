@@ -43,7 +43,7 @@ const Backdrop = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
-function Modal({ section, category, details, cast }: IModalProps) {
+function Modal({ section, category, details, cast, bgPath }: IModalProps) {
   /* Routing */
   const navigate = useNavigate();
   const onOverlayClicked = () => {
@@ -62,7 +62,7 @@ function Modal({ section, category, details, cast }: IModalProps) {
       <AnimatePresence>
         <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
         <Container scroll={scrollY.get()}>
-          <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
+          <Backdrop bg={bgPath} />
           <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
           <p> 줄거리 : {details?.overview}</p>
           <ul>

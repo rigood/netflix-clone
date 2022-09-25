@@ -72,7 +72,7 @@ function Tv() {
           <Slider section="tv" category="toprated" title="최고 평점 TV쇼" list={topRatedTvList} />
         </SliderWrapper>
       </Background>
-      {modalMatch ? <Modal section="tv" category={category!} details={detailsContent!} cast={castContent!} /> : null}
+      {modalMatch ? <Modal section="tv" category={category!} details={detailsContent!} cast={castContent!} bgPath={getBackdropPath(detailsContent?.backdrop_path)} /> : null}
     </>
   );
 }
