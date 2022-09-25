@@ -9,7 +9,18 @@ import Home from "./Pages/Home";
 import Tv from "./Pages/Tv";
 import Search from "./Pages/Search";
 
+/* State-management */
+import { useRecoilState } from "recoil";
+import { modalState } from "./atom";
+import { useEffect } from "react";
+
 function App() {
+  /* State-management for Modal scroll */
+  const [isModalActive] = useRecoilState(modalState);
+  useEffect(() => {
+    // isModalActive ? (document.body.style.overflowY = "hidden") : (document.body.style.overflowY = "scroll");
+  }, [isModalActive]);
+
   return (
     <BrowserRouter>
       <Header />

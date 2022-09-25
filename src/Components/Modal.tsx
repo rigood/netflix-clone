@@ -12,9 +12,17 @@ import { useNavigate } from "react-router-dom";
 /* Motion */
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 
-/* Styling */
+/* Modal-scroll */
+import { useSetRecoilState } from "recoil";
+import { modalState } from "../atom";
 
+/* Styling */
 const Loader = styled.div``;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -26,15 +34,21 @@ const Overlay = styled(motion.div)`
   cursor: pointer;
 `;
 
-const Container = styled(motion.div)<{ scroll: number }>`
+const Wrapper = styled(motion.div)<{ scroll: number }>`
+  overflow-y: auto;
   position: absolute;
-  top: ${(props) => props.scroll + 100}px;
+  top: ${(props) => props.scroll + 30}px;
   left: 0;
   right: 0;
+  z-index: 9999;
   width: min(90%, 900px);
+  height: fit-content;
   margin-inline: auto;
-  background-color: teal;
+  background-color: black;
   opacity: 0; // for animation
+  /* ::-webkit-scrollbar {
+    display: none;
+  } */
 `;
 
 const Backdrop = styled.div<{ bg: string }>`
@@ -45,9 +59,13 @@ const Backdrop = styled.div<{ bg: string }>`
 `;
 
 function Modal({ section, category, details, cast, bgPath }: IModalProps) {
+  /* State-management for Modal scroll */
+  const setIsModalActive = useSetRecoilState(modalState);
+
   /* Routing */
   const navigate = useNavigate();
   const onOverlayClicked = () => {
+    setIsModalActive(false);
     if (section === "movie") {
       navigate("/");
     } else if (section === "tv") {
@@ -61,18 +79,20 @@ function Modal({ section, category, details, cast, bgPath }: IModalProps) {
   return (
     <>
       <AnimatePresence>
-        <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
-        <Container scroll={scrollY.get()} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-          <Backdrop bg={bgPath} />
-          <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
-          <p> 줄거리 : {details?.overview}</p>
-          <ul>
-            {cast?.map((actor, index) => (
-              <li key={index}>
-                {actor.name} - {actor.character}
-              </li>
-            ))}
-          </ul>
+        <Container>
+          <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
+          <Wrapper scroll={scrollY.get()} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+            <Backdrop bg={bgPath} />
+            <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
+            <p> 줄거리 : {details?.overview}</p>
+            <ul>
+              {cast?.map((actor, index) => (
+                <li key={index}>
+                  {actor.name} - {actor.character}
+                </li>
+              ))}
+            </ul>
+          </Wrapper>
         </Container>
       </AnimatePresence>
     </>

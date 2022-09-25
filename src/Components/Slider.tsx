@@ -12,6 +12,10 @@ import { motion, AnimatePresence } from "framer-motion";
 /* Data-fetching */
 import { getBackdropPath } from "../Api/utils";
 
+/* State-management */
+import { useSetRecoilState } from "recoil";
+import { modalState } from "../atom";
+
 /* Styling */
 
 const Container = styled.div`
@@ -43,10 +47,14 @@ const Box = styled(motion.div)<{ bg: string }>`
 `;
 
 function Slider({ section, category, title, list }: ISliderProps) {
+  /* State-management for Modal scroll */
+  const setIsModalActive = useSetRecoilState(modalState);
+
   /* Routing */
   const navigate = useNavigate();
   const onBoxClick = (id: number) => {
     navigate(`/${section}/${category}/${id}`);
+    setIsModalActive(true);
   };
 
   /* Remove content from Slider for Banner */

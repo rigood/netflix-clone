@@ -6,6 +6,10 @@ import { IBannerProps } from "../Api/interface";
 /* Routing */
 import { useNavigate } from "react-router-dom";
 
+/* State-management */
+import { useSetRecoilState } from "recoil";
+import { modalState } from "../atom";
+
 /* Styling */
 const Container = styled.div`
   display: flex;
@@ -63,11 +67,16 @@ const DateAndRating = styled.div`
 `;
 
 function Banner({ section, category, title, content }: IBannerProps) {
+  /* State-management for Modal scroll */
+  const setIsModalActive = useSetRecoilState(modalState);
+
   /* Routing */
   const navigate = useNavigate();
   const onButtonClick = (id: number) => {
     navigate(`/${section}/${category}/${id}`);
+    setIsModalActive(true);
   };
+
   return (
     <Container>
       <Title>{section === "movie" ? content?.title : content?.name}</Title>

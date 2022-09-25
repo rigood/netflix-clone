@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+/* Statement-management */
+import { RecoilRoot } from "recoil";
+
 /* Data-fetching */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -40,11 +43,13 @@ const client = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
-  <QueryClientProvider client={client}>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
-    <ReactQueryDevtools position="bottom-right" />
-  </QueryClientProvider>
+  <RecoilRoot>
+    <QueryClientProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+      <ReactQueryDevtools position="bottom-right" />
+    </QueryClientProvider>
+  </RecoilRoot>
 );
