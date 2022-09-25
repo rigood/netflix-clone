@@ -34,6 +34,7 @@ const Container = styled(motion.div)<{ scroll: number }>`
   width: min(90%, 900px);
   margin-inline: auto;
   background-color: teal;
+  opacity: 0; // for animation
 `;
 
 const Backdrop = styled.div<{ bg: string }>`
@@ -60,8 +61,8 @@ function Modal({ section, category, details, cast, bgPath }: IModalProps) {
   return (
     <>
       <AnimatePresence>
-        <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
-        <Container scroll={scrollY.get()}>
+        <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
+        <Container scroll={scrollY.get()} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
           <Backdrop bg={bgPath} />
           <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
           <p> 줄거리 : {details?.overview}</p>
