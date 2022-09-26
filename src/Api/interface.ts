@@ -2,14 +2,22 @@
 
 export interface IContent {
   id: number;
-  title: string; // movie
-  name: string; // tv shows
-  overview: string;
-  release_date: string; // movie
-  first_air_date: string; // tv shows
-  vote_average: number;
   backdrop_path: string;
   poster_path: string;
+  overview: string;
+  vote_average: number;
+}
+
+/* for Movie */
+export interface IContent {
+  title: string;
+  release_date: string;
+}
+
+/* for Tv */
+export interface IContent {
+  name: string;
+  first_air_date: string;
 }
 
 export interface IGenre {
@@ -35,8 +43,6 @@ export interface ISeason {
 
 export interface IDetails {
   id: number;
-  title: string; // movie
-  name: string; // tv
   backdrop_path: string;
   poster_path: string;
   status: string;
@@ -44,19 +50,29 @@ export interface IDetails {
   overview: string;
   vote_average: string;
   original_language: string;
-  runtime: number; // movie
-  episode_run_time: number; // tv
-  release_date: string; // movie
-  first_air_date: string; // tv
-  last_air_date: string; // tv
-  imdb_id: string; // movie
-  homepage: string; // tv
-  adult: boolean; // movie
-  video: boolean; // movie
-  networks: INetwork[]; // tv
-  seasons: ISeason[]; // tv
-  number_of_seasons: number; // tv
-  number_of_episodes: number; // tv
+}
+
+/* for Movie */
+export interface IDetails {
+  title: string;
+  runtime: number;
+  release_date: string;
+  imdb_id: string;
+  adult: boolean;
+  video: boolean;
+}
+
+/* for Tv */
+export interface IDetails {
+  name: string;
+  episode_run_time: number;
+  first_air_date: string;
+  last_air_date: string;
+  homepage: string;
+  networks: INetwork[];
+  seasons: ISeason[];
+  number_of_seasons: number;
+  number_of_episodes: number;
 }
 
 export interface ICast {
