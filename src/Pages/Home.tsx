@@ -53,9 +53,6 @@ function Home() {
   const { data: detailsContent } = useQuery<IDetails>(["detailsContent", id], () => getDetails("movie", id!), { enabled: !!id });
   const { data: castContent } = useQuery<ICast[]>(["castContent", id], () => getCast("movie", id!), { enabled: !!id });
 
-  console.log("아이디", id);
-  console.log("모달매치", modalMatch);
-
   /* Loading */
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
   if (isLoading) {
@@ -64,7 +61,7 @@ function Home() {
 
   return (
     <>
-      <Background bg={getBackdropPath(nowPlayingMovieList?.[0].backdrop_path)}>
+      <Background bg={getBackdropPath(nowPlayingMovieList?.[0].backdrop_path!)}>
         <Banner section="movie" category="nowPlaying" title="영화" content={nowPlayingMovieList?.[0]} />
         <SliderWrapper>
           <Slider section="movie" category="nowplaying" title="현재 상영 중인 영화" list={nowPlayingMovieList} />
@@ -72,7 +69,7 @@ function Home() {
           <Slider section="movie" category="upcoming" title="개봉 예정 영화" list={upcomingMovieList} />
         </SliderWrapper>
       </Background>
-      {modalMatch ? <Modal section="movie" category={category!} details={detailsContent!} cast={castContent!} bgPath={getBackdropPath(detailsContent?.backdrop_path)} /> : null}
+      {modalMatch ? <Modal section="movie" category={category!} details={detailsContent!} cast={castContent!} /> : null}
     </>
   );
 }

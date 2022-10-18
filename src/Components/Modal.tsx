@@ -58,7 +58,7 @@ const Backdrop = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
-function Modal({ section, category, details, cast, bgPath }: IModalProps) {
+function Modal({ section, category, details, cast }: IModalProps) {
   /* State-management for Modal scroll */
   const setIsModalActive = useSetRecoilState(modalState);
 
@@ -76,13 +76,16 @@ function Modal({ section, category, details, cast, bgPath }: IModalProps) {
   /* Motion */
   const { scrollY } = useScroll();
 
+  /* Default Background */
+  const defaultBg = process.env.PUBLIC_URL + "/assets/no-image-landscape.png";
+
   return (
     <>
       <AnimatePresence>
         <Container>
           <Overlay key="overlay" onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
           <Wrapper scroll={scrollY.get()} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-            <Backdrop bg={bgPath} />
+            <Backdrop bg={getBackdropPath(details?.backdrop_path) || defaultBg} />
             <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
             <p> 줄거리 : {details?.overview}</p>
             <ul>

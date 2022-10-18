@@ -53,9 +53,6 @@ function Tv() {
   const { data: detailsContent } = useQuery<IDetails>(["detailsContent", id], () => getDetails("tv", id!), { enabled: !!id });
   const { data: castContent } = useQuery<ICast[]>(["castContent", id], () => getCast("tv", id!), { enabled: !!id });
 
-  console.log("아이디", id);
-  console.log("모달매치", modalMatch);
-
   /* Loading */
   const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
   if (isLoading) {
@@ -64,7 +61,7 @@ function Tv() {
 
   return (
     <>
-      <Background bg={getBackdropPath(airingTodayTvList?.[0].backdrop_path)}>
+      <Background bg={getBackdropPath(airingTodayTvList?.[0].backdrop_path!)}>
         <Banner section="tv" category="airingtoday" title="TV" content={airingTodayTvList?.[0]} />
         <SliderWrapper>
           <Slider section="tv" category="airingtoday" title="방영 중인 TV쇼" list={airingTodayTvList} />
@@ -72,7 +69,7 @@ function Tv() {
           <Slider section="tv" category="toprated" title="최고 평점 TV쇼" list={topRatedTvList} />
         </SliderWrapper>
       </Background>
-      {modalMatch ? <Modal section="tv" category={category!} details={detailsContent!} cast={castContent!} bgPath={getBackdropPath(detailsContent?.backdrop_path)} /> : null}
+      {modalMatch ? <Modal section="tv" category={category!} details={detailsContent!} cast={castContent!} /> : null}
     </>
   );
 }
