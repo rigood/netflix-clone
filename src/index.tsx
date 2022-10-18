@@ -36,6 +36,12 @@ a {
   text-decoration: none;
   color: inherit;
 }
+.no-scroll{
+  overflow-y: hidden;
+}
+.scroll-width{
+  width: calc(100% - 17px);
+}
 `;
 
 const client = new QueryClient();

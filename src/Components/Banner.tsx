@@ -17,7 +17,7 @@ const Container = styled.div`
   justify-content: flex-end;
   width: 40%;
   height: 34vw;
-  padding-inline: ${(props) => props.theme.px};
+  padding-inline: 60px;
 `;
 
 const Title = styled.h1`

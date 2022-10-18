@@ -24,7 +24,8 @@ const Nav = styled(motion.nav)`
   top: 0;
   width: 100%;
   height: 80px;
-  padding-inline: ${(props) => props.theme.px};
+  padding-inline: 60px;
+  z-index: 7;
 `;
 
 const navVariants = {
