@@ -104,3 +104,8 @@ export interface IModalProps {
   details: IDetails;
   cast: ICast[];
 }
+
+export interface IRowVariantsProps {
+  movingBack: boolean;
+  windowWidth: number;
+}

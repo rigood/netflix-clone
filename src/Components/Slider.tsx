@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 /* Interface */
-import { ISliderProps } from "../Api/interface";
+import { IRowVariantsProps, ISliderProps } from "../Api/interface";
 
 /* Motion */
 import { motion, AnimatePresence } from "framer-motion";
@@ -57,17 +57,17 @@ const Btn = styled.button`
   padding: 0;
   border: none;
   background: none;
-  color: white;
+  opacity: 0;
   z-index: 6;
   ${(props) =>
     !props.disabled &&
     css`
       color: white;
-      opacity: 0.5;
       font-size: 1.5vw;
+      opacity: 0.5;
       &:hover {
-        opacity: 1;
         font-size: 1.8vw;
+        opacity: 1;
         border: none;
         outline: none;
         cursor: pointer;
@@ -102,15 +102,15 @@ const Box = styled(motion.div)<{ bg: string }>`
 `;
 
 const rowVariants = {
-  enter: {
-    x: "100vw",
-  },
+  enter: ({ movingBack, windowWidth }: IRowVariantsProps) => ({
+    x: movingBack ? -windowWidth + 10 : windowWidth - 10,
+  }),
   show: {
     x: 0,
   },
-  exit: {
-    x: "-100vw",
-  },
+  exit: ({ movingBack, windowWidth }: IRowVariantsProps) => ({
+    x: movingBack ? windowWidth - 10 : -windowWidth + 10,
+  }),
 };
 
 function Slider({ section, category, title, list }: ISliderProps) {
@@ -132,18 +132,38 @@ function Slider({ section, category, title, list }: ISliderProps) {
     sliceIndex = 0;
   }
 
-  /* Slice list */
+  /* Slider list */
   const offset = 6;
   const [index, setIndex] = useState(0);
   const listLength = list?.length!;
   const maxIndex = Math.floor(listLength / offset) - 1;
 
+  /* Slider movement */
+  const [moving, setMoving] = useState(false);
+  const [movingBack, setMovingBack] = useState(false);
+
   /* Prev, Next */
+  const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
+
   const decreaseIndex = () => {
-    setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    if (list) {
+      if (moving) return;
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+      setMoving(true);
+      setMovingBack(true);
+    }
   };
   const increaseIndex = () => {
-    setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    if (list) {
+      if (moving) return;
+      setIsPrevBtnDisabled(false);
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+      setMoving(true);
+    }
+  };
+  const toggleMoving = () => {
+    setMoving((prev) => !prev);
+    setMovingBack(false);
   };
 
   /* Set slider-height */
@@ -158,11 +178,11 @@ function Slider({ section, category, title, list }: ISliderProps) {
     <Container>
       <Title>{title}</Title>
       <RowWrapper height={rowWrapperHeight}>
-        <PrevBtn onClick={decreaseIndex}>
+        <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
-        <AnimatePresence initial={false}>
-          <Row key={index} variants={rowVariants} initial="enter" animate="show" exit="exit" transition={{ type: "tween", duration: 5 }} ref={rowRef}>
+        <AnimatePresence initial={false} onExitComplete={toggleMoving} custom={{ movingBack, windowWidth }}>
+          <Row key={index} variants={rowVariants} initial="enter" animate="show" exit="exit" transition={{ type: "tween", duration: 0.5 }} ref={rowRef} custom={{ movingBack, windowWidth }}>
             {list
               ?.slice(sliceIndex)
               .slice(offset * index, offset * index + offset)
