@@ -1,46 +1,97 @@
-# Getting Started with Create React App
+<br>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+<img src="./public/assets/logo.png">
+</p>
 
-## Available Scripts
+<br>
 
-In the project directory, you can run:
+# 넷플릭스 클론코딩 리팩토링
 
-### `npm start`
+- [기존 프로젝트 링크](https://rigood.github.io/netflix)
+- 리팩토링 결과 링크
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 목표
 
-### `npm test`
+### 1) 기존 프로젝트 리팩토링
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [x] 컴포넌트 분리
+- [x] API 호출 함수 재사용
+- [x] 페이지 하단 빈 공간 관련 레이아웃 개선
+- [x] 모달창 스크롤 개선
+- [x] 배너, 모달창 연결
+- [x] 슬라이더 Prev, Next 버튼 배치 조절
+- [x] Prev 버튼 초기 비활성화
+- [ ] 오버레이, 모달창 이벤트 겹침 해결
+- [ ] api 이미지가 존재하지 않는 경우 default 이미지로 대체
+- [ ] 화면 작아지면 배너 text 숨기기
 
-### `npm run build`
+### 2) 추가 기능 구현
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [ ] 예고편 유튜브 동영상 삽입
+- [ ] 상세정보에 추천/유사 콘텐츠 추가
+- [ ] 검색 결과를 무한 스크롤로 구현
+- [ ] footer 추가
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<br>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 리팩토링 결과
 
-### `npm run eject`
+<br>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+> ### 1. 컴포넌트 분리
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Slider 컴포넌트 내에 있던 Modal을 별도 컴포넌트로 분리
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<br>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+> ### 2. API 호출 함수 재사용
 
-## Learn More
+- (기존) 섹션, 카테고리마다 API 호출 함수 생성
+  <br>
+- (개선) URL에 섹션, 카테고리 parameter를 추가하여 함수 재사용
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<br>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> ### 3. 페이지 하단 빈 공간 관련 레이아웃 개선
+
+- (기존) Banner 밑에 있는 SliderWrapper를 position: relative로 설정하고 위로 끌어올리니 하단에 빈 공간이 남음
+  <br>
+- (참고) relative 요소에 margin을 음수(-)로 주면 빈 공간이 사라진다고 함
+  <br>
+- (개선) Banner의 배경화면을 분리해 Background 컴포넌트로 만들고 Background 컴포넌트 내에 Banner, SlideWrapper를 자식 컴포넌트로 배치함
+
+<br>
+
+> ### 4. 모달창 스크롤 개선
+
+- (기존) 모달창을 position: fixed로 고정하고 화면 정중앙에 배치했으나, 모달창이 화면보다 긴 경우 모달창 콘텐츠가 짤림, 모달창은 스크롤 되지 않고 모달창 뒷배경만 스크롤 됨
+  <br>
+- (개선) 화면 전체를 차지하는 오버레이 내에 모달창을 배치하고 오버레이는 스크롤 가능하게 설정, 모달창이 열리면 뒷배경은 스크롤 되지 않도록 body에 overflow-y: hidden 속성 부여
+  <br>
+  <br>
+- (개선 후 발생한 문제점) 모달창이 오버레이의 자식 컴포넌트이다보니, 모달창을 클릭해도 오버레이 클릭 이벤트가 발생함
+
+<br>
+
+> ### 5. 배너, 모달창 연결
+
+- 배너 버튼 클릭 시 해당 콘텐츠의 URL로 이동
+  <br>
+- URL에서 콘텐츠 id를 추출하여 API를 통해 데이터를 받은 후 모달창 오픈
+
+<br>
+
+> ### 6. 슬라이더 Prev, Next 버튼 배치 조절
+
+- (기존) 썸네일 height와 무관하게 슬라이더 높이를 15vw로 고정한 후 Prev, Next 버튼을 배치하여 버튼이 썸네일 수직 가운데에 위치하지 않음
+  <br>
+- (개선) 화면 너비에 따라 유동적으로 변하는 썸네일 height를 useEffect로 감지하여 슬라이더 높이로 지정한 후 Prev, Next 버튼을 수직 가운데 배치함
+
+<br>
+
+> ### 7. Prev 버튼 초기 비활성화
+
+- 초기에는 Prev 버튼을 비활성화 시키고, Next 버튼 클릭 시 Prev 버튼을 활성화 시킴
