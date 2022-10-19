@@ -10,7 +10,7 @@ import { IModalProps } from "../Api/interface";
 import { useNavigate } from "react-router-dom";
 
 /* Motion */
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 /* Modal-scroll */
 import { useSetRecoilState } from "recoil";
@@ -31,6 +31,7 @@ const Wrapper = styled(motion.div)`
   width: min(90%, 900px);
   margin: 30px auto;
   background-color: black;
+  z-index: 9999;
 `;
 
 const Backdrop = styled.div<{ bg: string }>`
@@ -60,22 +61,20 @@ function Modal({ section, category, details, cast }: IModalProps) {
 
   return (
     <>
-      <AnimatePresence>
-        <Overlay onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-          <Wrapper animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-            <Backdrop bg={getBackdropPath(details?.backdrop_path) || defaultBg} />
-            <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
-            <p> 줄거리 : {details?.overview}</p>
-            <ul>
-              {cast?.map((actor, index) => (
-                <li key={index}>
-                  {actor.name} - {actor.character}
-                </li>
-              ))}
-            </ul>
-          </Wrapper>
-        </Overlay>
-      </AnimatePresence>
+      <Overlay onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+        <Wrapper animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
+          <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
+          <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
+          <p> 줄거리 : {details?.overview}</p>
+          <ul>
+            {cast?.map((actor, index) => (
+              <li key={index}>
+                {actor.name} - {actor.character}
+              </li>
+            ))}
+          </ul>
+        </Wrapper>
+      </Overlay>
     </>
   );
 }

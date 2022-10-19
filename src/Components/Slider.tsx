@@ -1,3 +1,4 @@
+import React from "react";
 import styled, { css } from "styled-components";
 
 /* Routing */
@@ -99,6 +100,22 @@ const Box = styled(motion.div)<{ bg: string }>`
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
+`;
+
+const BoxInfo = styled(motion.div)`
+  display: none;
+  width: 100%;
+  padding: 5%;
+  border-bottom-left-radius: 0.2vw;
+  border-bottom-right-radius: 0.2vw;
+  background-color: ${(props) => props.theme.black.lighter};
+  color: white;
 `;
 
 const rowVariants = {
@@ -111,6 +128,32 @@ const rowVariants = {
   exit: ({ movingBack, windowWidth }: IRowVariantsProps) => ({
     x: movingBack ? windowWidth - 10 : -windowWidth + 10,
   }),
+};
+
+const boxVariants = {
+  initial: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.2,
+    y: -50,
+    transition: {
+      delay: 0.5,
+      duaration: 0.3,
+      type: "tween", // default
+    },
+  },
+};
+
+const infoVariants = {
+  hover: {
+    display: "block",
+    transition: {
+      delay: 0.5,
+      duaration: 0.3,
+      type: "tween", // default
+    },
+  },
 };
 
 function Slider({ section, category, title, list }: ISliderProps) {
@@ -187,7 +230,13 @@ function Slider({ section, category, title, list }: ISliderProps) {
               ?.slice(sliceIndex)
               .slice(offset * index, offset * index + offset)
               .map((content) => (
-                <Box key={content.id} bg={getBackdropPath(content.backdrop_path, "w500")} onClick={() => onBoxClick(content.id)} />
+                <React.Fragment key={content.id}>
+                  <Box bg={getBackdropPath(content.backdrop_path, "w500")} onClick={() => onBoxClick(content.id)} variants={boxVariants} whileHover="hover" initial="initial">
+                    <BoxInfo variants={infoVariants}>
+                      <p>{content.title}</p>
+                    </BoxInfo>
+                  </Box>
+                </React.Fragment>
               ))}
           </Row>
         </AnimatePresence>
