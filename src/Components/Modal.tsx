@@ -71,6 +71,7 @@ function Modal({ section, category, details, cast }: IModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
+          onClick={(e) => e.stopPropagation()}
         >
           <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
           <h1>
