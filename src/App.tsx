@@ -15,7 +15,7 @@ import { modalState } from "./atom";
 import { useEffect } from "react";
 
 function App() {
-  const [isModalActive] = useRecoilState(modalState);
+  const [isModalOpen] = useRecoilState(modalState);
 
   const stopBodyScroll = () => {
     document.body.classList.add("no-scroll", "scroll-width");
@@ -27,8 +27,8 @@ function App() {
   };
 
   useEffect(() => {
-    isModalActive ? stopBodyScroll() : restoreBodyScroll();
-  }, [isModalActive]);
+    isModalOpen ? stopBodyScroll() : restoreBodyScroll();
+  }, [isModalOpen]);
 
   return (
     <BrowserRouter>

@@ -43,12 +43,12 @@ const Backdrop = styled.div<{ bg: string }>`
 
 function Modal({ section, category, details, cast }: IModalProps) {
   /* State-management for Modal scroll */
-  const setIsModalActive = useSetRecoilState(modalState);
+  const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onOverlayClicked = () => {
-    setIsModalActive(false);
+    setIsModalOpen(false);
     if (section === "movie") {
       navigate("/");
     } else if (section === "tv") {
@@ -61,10 +61,22 @@ function Modal({ section, category, details, cast }: IModalProps) {
 
   return (
     <>
-      <Overlay onClick={onOverlayClicked} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-        <Wrapper animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
+      <Overlay
+        onClick={onOverlayClicked}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Wrapper
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
-          <h1> 제목 : {section === "movie" ? details?.title : details?.name}</h1>
+          <h1>
+            {" "}
+            제목 : {section === "movie" ? details?.title : details?.name}
+          </h1>
           <p> 줄거리 : {details?.overview}</p>
           <ul>
             {cast?.map((actor, index) => (

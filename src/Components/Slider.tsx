@@ -158,13 +158,13 @@ const infoVariants = {
 
 function Slider({ section, category, title, list }: ISliderProps) {
   /* State-management for Modal scroll */
-  const setIsModalActive = useSetRecoilState(modalState);
+  const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onBoxClick = (id: number) => {
     navigate(`/${section}/${category}/${id}`);
-    setIsModalActive(true);
+    setIsModalOpen(true);
   };
 
   /* Remove content from Slider for Banner */
@@ -224,14 +224,33 @@ function Slider({ section, category, title, list }: ISliderProps) {
         <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
-        <AnimatePresence initial={false} onExitComplete={toggleMoving} custom={{ movingBack, windowWidth }}>
-          <Row key={index} variants={rowVariants} initial="enter" animate="show" exit="exit" transition={{ type: "tween", duration: 0.5 }} ref={rowRef} custom={{ movingBack, windowWidth }}>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={toggleMoving}
+          custom={{ movingBack, windowWidth }}
+        >
+          <Row
+            key={index}
+            variants={rowVariants}
+            initial="enter"
+            animate="show"
+            exit="exit"
+            transition={{ type: "tween", duration: 0.5 }}
+            ref={rowRef}
+            custom={{ movingBack, windowWidth }}
+          >
             {list
               ?.slice(sliceIndex)
               .slice(offset * index, offset * index + offset)
               .map((content) => (
                 <React.Fragment key={content.id}>
-                  <Box bg={getBackdropPath(content.backdrop_path, "w500")} onClick={() => onBoxClick(content.id)} variants={boxVariants} whileHover="hover" initial="initial">
+                  <Box
+                    bg={getBackdropPath(content.backdrop_path, "w500")}
+                    onClick={() => onBoxClick(content.id)}
+                    variants={boxVariants}
+                    whileHover="hover"
+                    initial="initial"
+                  >
                     <BoxInfo variants={infoVariants}>
                       <p>{content.title}</p>
                     </BoxInfo>

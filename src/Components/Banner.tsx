@@ -68,25 +68,38 @@ const DateAndRating = styled.div`
 
 function Banner({ section, category, title, content }: IBannerProps) {
   /* State-management for Modal scroll */
-  const setIsModalActive = useSetRecoilState(modalState);
+  const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onButtonClick = (id: number) => {
     navigate(`/${section}/${category}/${id}`);
-    setIsModalActive(true);
+    setIsModalOpen(true);
   };
 
   return (
     <Container>
       <Title>{section === "movie" ? content?.title : content?.name}</Title>
       <Ranking>
-        <img src={process.env.PUBLIC_URL + "/assets/logo.png"} alt="Netflix logo" />
+        <img
+          src={process.env.PUBLIC_URL + "/assets/logo.png"}
+          alt="Netflix logo"
+        />
         <h2>오늘의 {title} 순위 1위</h2>
       </Ranking>
-      <Overview>{content?.overview ? (content?.overview.length! > 100 ? `${content?.overview.slice(0, 100)}... 더보기` : content?.overview) : "등록된 Overview 정보가 없습니다."}</Overview>
+      <Overview>
+        {content?.overview
+          ? content?.overview.length! > 100
+            ? `${content?.overview.slice(0, 100)}... 더보기`
+            : content?.overview
+          : "등록된 Overview 정보가 없습니다."}
+      </Overview>
       <DateAndRating>
-        <span>{section === "movie" ? `개봉일 : ${content?.release_date}` : `첫방영 : ${content?.first_air_date}`}</span>
+        <span>
+          {section === "movie"
+            ? `개봉일 : ${content?.release_date}`
+            : `첫방영 : ${content?.first_air_date}`}
+        </span>
         <span>평점 : ⭐{content?.vote_average} 점</span>
       </DateAndRating>
       <button onClick={() => onButtonClick(content?.id!)}>클릭</button>
