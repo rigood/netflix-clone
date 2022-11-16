@@ -252,7 +252,9 @@ function Slider({ section, category, title, list }: ISliderProps) {
                     initial="initial"
                   >
                     <BoxInfo variants={infoVariants}>
-                      <p>{content.title}</p>
+                      <p>
+                        {section === "movie" ? content.title : content.name}
+                      </p>
                     </BoxInfo>
                   </Box>
                 </React.Fragment>
