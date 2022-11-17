@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 
 /* Fetcher function */
-import { getCast, getDetails, getList } from "../Api/api";
+import { getCast, getDetails, getList, getVideos } from "../Api/api";
 import { getBackdropPath } from "../Api/utils";
 
 /* Interface */
-import { ICast, IContent, IDetails } from "../Api/interface";
+import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
 
 /* Routing */
 import { useMatch } from "react-router-dom";
@@ -72,6 +72,11 @@ function Home() {
     () => getCast("movie", id!),
     { enabled: !!id }
   );
+  const { data: videoContent } = useQuery<IVideo[]>(
+    ["videoContent", id],
+    () => getVideos("movie", id!),
+    { enabled: !!id }
+  );
 
   /* Loading */
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
@@ -115,6 +120,7 @@ function Home() {
           category={category!}
           details={detailsContent!}
           cast={castContent!}
+          videos={videoContent!}
         />
       )}
     </>

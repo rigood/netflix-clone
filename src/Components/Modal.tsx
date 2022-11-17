@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { useState } from "react";
+
 /* Fetcher function */
 import { getBackdropPath } from "../Api/utils";
 
@@ -21,7 +23,11 @@ import { noImg } from "../Api/utils";
 
 /* Close Btn */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClose,
+  faVolumeOff,
+  faVolumeXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 /* Styling */
 
@@ -40,6 +46,8 @@ const Wrapper = styled(motion.div)`
   background-color: black;
   z-index: 9999;
   position: relative; // CloseBtn 배치
+  border-radius: 20px;
+  overflow: hidden;
 `;
 
 const Backdrop = styled.div<{ bg: string }>`
@@ -49,22 +57,38 @@ const Backdrop = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
-const CloseBtn = styled(FontAwesomeIcon)`
+const Button = styled(FontAwesomeIcon)`
   position: absolute;
-  top: 20px;
-  right: 20px;
-
-  font-size: 20px;
-  padding: 4px 8px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
   color: white;
   cursor: pointer;
 `;
 
-function Modal({ section, category, details, cast }: IModalProps) {
+const CloseBtn = styled(Button)`
+  top: 20px;
+  right: 20px;
+`;
+
+const VolumeBtn = styled(Button)`
+  bottom: 90px;
+  right: 30px;
+`;
+
+const MainVideo = styled.div`
+  position: relative;
+  iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+`;
+
+function Modal({ section, category, details, cast, videos }: IModalProps) {
   /* State-management for Modal scroll */
   const setIsModalOpen = useSetRecoilState(modalState);
+
+  const mainVideoKey = videos?.[0]?.key;
+
+  const [mute, setMute] = useState(1);
 
   /* Routing */
   const navigate = useNavigate();
@@ -75,6 +99,10 @@ function Modal({ section, category, details, cast }: IModalProps) {
     } else if (section === "tv") {
       navigate("/tv");
     }
+  };
+
+  const toggleMute = () => {
+    setMute((prev) => (prev === 1 ? 0 : 1));
   };
 
   return (
@@ -92,6 +120,19 @@ function Modal({ section, category, details, cast }: IModalProps) {
             transition={{ duration: 0.8 }}
             onClick={(e) => e.stopPropagation()}
           >
+            {mainVideoKey && (
+              <MainVideo>
+                <iframe
+                  src={`https://www.youtube.com/embed/${mainVideoKey}?autoplay=1&controls=0&showinfo=0&rel=0&mute=${mute}`}
+                  frameBorder="0"
+                  allow="autoplay;"
+                ></iframe>
+                <VolumeBtn
+                  icon={mute === 1 ? faVolumeXmark : faVolumeOff}
+                  onClick={toggleMute}
+                />
+              </MainVideo>
+            )}
             <Backdrop
               bg={
                 details.backdrop_path
@@ -99,6 +140,7 @@ function Modal({ section, category, details, cast }: IModalProps) {
                   : noImg
               }
             />
+
             <h1>
               {" "}
               제목 : {section === "movie" ? details.title : details.name}

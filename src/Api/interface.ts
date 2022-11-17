@@ -1,5 +1,7 @@
 /* API interface */
 
+/////////////////////////////////////
+
 export interface IContent {
   id: number;
   backdrop_path: string;
@@ -19,6 +21,8 @@ export interface IContent {
   name: string;
   first_air_date: string;
 }
+
+/////////////////////////////////////
 
 export interface IGenre {
   id: number;
@@ -40,6 +44,8 @@ export interface ISeason {
   poster_path: string;
   season_number: number;
 }
+
+/////////////////////////////////////
 
 export interface IDetails {
   id: number;
@@ -75,12 +81,29 @@ export interface IDetails {
   number_of_episodes: number;
 }
 
+/////////////////////////////////////
+
 export interface ICast {
   name: string;
   original_name: string;
   profile_path: string;
   character: string;
 }
+
+/////////////////////////////////////
+
+export interface IVideo {
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+}
+
+/////////////////////////////////////
 
 /* Props interface */
 
@@ -103,6 +126,7 @@ export interface IModalProps {
   category: string;
   details: IDetails;
   cast: ICast[];
+  videos: IVideo[];
 }
 
 export interface IRowVariantsProps {
