@@ -16,6 +16,9 @@ import { motion } from "framer-motion";
 import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 
+/* Default BgImg */
+import { noImg } from "../Api/utils";
+
 /* Styling */
 
 const Overlay = styled(motion.div)`
@@ -56,38 +59,43 @@ function Modal({ section, category, details, cast }: IModalProps) {
     }
   };
 
-  /* Default Background */
-  const defaultBg = process.env.PUBLIC_URL + "/assets/no-image-landscape.png";
-
   return (
     <>
-      <Overlay
-        onClick={onOverlayClicked}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Wrapper
+      {details && (
+        <Overlay
+          onClick={onOverlayClicked}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          onClick={(e) => e.stopPropagation()}
+          transition={{ duration: 0.5 }}
         >
-          <Backdrop bg={getBackdropPath(details?.backdrop_path)} />
-          <h1>
-            {" "}
-            제목 : {section === "movie" ? details?.title : details?.name}
-          </h1>
-          <p> 줄거리 : {details?.overview}</p>
-          <ul>
-            {cast?.map((actor, index) => (
-              <li key={index}>
-                {actor.name} - {actor.character}
-              </li>
-            ))}
-          </ul>
-        </Wrapper>
-      </Overlay>
+          <Wrapper
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Backdrop
+              bg={
+                details.backdrop_path
+                  ? getBackdropPath(details.backdrop_path)
+                  : noImg
+              }
+            />
+            <h1>
+              {" "}
+              제목 : {section === "movie" ? details.title : details.name}
+            </h1>
+            <p> 줄거리 : {details.overview}</p>
+            <ul>
+              {cast?.map((actor, index) => (
+                <li key={index}>
+                  {actor.name} - {actor.character}
+                </li>
+              ))}
+            </ul>
+          </Wrapper>
+        </Overlay>
+      )}
     </>
   );
 }

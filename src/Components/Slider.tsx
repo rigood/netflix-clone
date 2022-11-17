@@ -11,7 +11,7 @@ import { IRowVariantsProps, ISliderProps } from "../Api/interface";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* Data-fetching */
-import { getBackdropPath } from "../Api/utils";
+import { getBackdropPath, noImg } from "../Api/utils";
 
 /* State-management */
 import { useSetRecoilState } from "recoil";
@@ -245,7 +245,11 @@ function Slider({ section, category, title, list }: ISliderProps) {
               .map((content) => (
                 <React.Fragment key={content.id}>
                   <Box
-                    bg={getBackdropPath(content.backdrop_path, "w500")}
+                    bg={
+                      content.backdrop_path
+                        ? getBackdropPath(content.backdrop_path, "w500")
+                        : noImg
+                    }
                     onClick={() => onBoxClick(content.id)}
                     variants={boxVariants}
                     whileHover="hover"

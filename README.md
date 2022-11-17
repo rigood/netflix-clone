@@ -20,13 +20,13 @@
 - [x] 컴포넌트 분리
 - [x] API 호출 함수 재사용
 - [x] 페이지 하단 빈 공간 관련 레이아웃 개선
-- [x] 모달창 스크롤 개선
-- [x] 배너, 모달창 연결
-- [x] 슬라이더 Prev, Next 버튼 배치 조절
+- [x] Modal 스크롤 개선
+- [x] Banner, Modal 연결
+- [x] Slider Prev, Next 버튼 배치 조절
 - [x] Prev 버튼 초기 비활성화
-- [x] 오버레이, 모달창 이벤트 겹침 해결
-- [ ] api 이미지가 존재하지 않는 경우 default 이미지로 대체
-- [ ] 화면 작아지면 배너 text 숨기기
+- [x] Overlay, Modal 이벤트 중복 해결
+- [x] api 이미지가 존재하지 않는 경우 default 이미지로 대체
+- [ ] 화면이 작아지면 Banner text 숨기기
 
 ### 2) 추가 기능 구현
 
@@ -44,7 +44,7 @@
 
 > ### 1. 컴포넌트 분리
 
-- Slider 컴포넌트 내에 있던 Modal을 별도 컴포넌트로 분리
+- Slider 컴포넌트 내에 있는 Modal을 별도 컴포넌트로 분리
 
 <br>
 
@@ -66,38 +66,65 @@
 
 <br>
 
-> ### 4. 모달창 스크롤 개선
+> ### 4. Modal 스크롤 개선
 
-- (기존) 모달창을 position: fixed로 고정하고 화면 정중앙에 배치했으나, 모달창이 화면보다 긴 경우 모달창 콘텐츠가 짤림, 모달창은 스크롤 되지 않고 모달창 뒷배경만 스크롤 됨
+- (기존) Modal을 position: fixed로 고정하고 화면 정중앙에 배치했으나, Modal이 화면보다 긴 경우 Modal 콘텐츠가 짤림, Modal은 스크롤 되지 않고 Modal 뒷배경만 스크롤 됨
   <br>
-- (개선) 오버레이 안에 모달창을 배치하고 오버레이는 스크롤 가능하게 설정, 모달창이 열리면 뒷배경은 스크롤 되지 않도록 body에 overflow-y: hidden 속성 부여
+- (개선) Overlay 안에 Modal을 배치하고 Overlay는 스크롤 가능하게 설정, Modal이 열리면 뒷배경은 스크롤 되지 않도록 body에 overflow-y: hidden 속성 부여
 
 <br>
 
-> ### 4-1. 모달창 스크롤 개선 후 발생한 문제 해결
+> ### 4-1. Modal 이벤트 버블링 해결
 
-- (문제) 모달창이 오버레이의 자식 컴포넌트이다보니, 모달창을 클릭해도 오버레이 클릭 이벤트가 발생함
+- (문제) Modal 내부 클릭시 Overlay의 닫기 이벤트가 발생함(Modal이 Overlay의 자식 컴포넌트이기 때문에)
   <br>
-- (해결) 모달창 onClick 이벤트에 stopPropagation을 추가하여, 모달창 클릭시 부모 이벤트인 오버레이 클릭 이벤트가 발생하지 않도록 함 (버블링 방지)
+- (해결) Modal onClick 이벤트 핸들러에 stopPropagation을 추가하여, Modal 클릭시 부모 이벤트가 발생하지 않도록 함 (버블링 방지)
 
 <br>
 
-> ### 5. 배너, 모달창 연결
+> ### 5. Banner와 Modal 연결
 
-- 배너 버튼 클릭 시 해당 콘텐츠의 URL로 이동
+- Banner 버튼 클릭 시 해당 콘텐츠 URL로 이동
   <br>
-- URL에서 콘텐츠 id를 추출하여 API를 통해 데이터를 받은 후 모달창 오픈
+- URL에서 콘텐츠 id를 추출하여 API를 통해 데이터를 받은 후 Modal 오픈
 
 <br>
 
-> ### 6. 슬라이더 Prev, Next 버튼 위치 조절
+> ### 6. Slider Prev, Next 버튼 위치 조절
 
-- (기존) 썸네일 height와 무관하게 슬라이더 높이를 15vw로 고정한 후 Prev, Next 버튼을 배치하여, 버튼이 썸네일 수직 가운데에 위치하지 않음
+- (기존) Slider의 Prev, Next 버튼이 Slider 수직 가운데에 위치하지 않음(썸네일 높이가 화면 너비에 따라 변하기 때문에)
   <br>
-- (개선) 화면 너비에 따라 유동적으로 변하는 썸네일 height를 useEffect로 감지하여 슬라이더 높이로 지정한 후, Prev, Next 버튼을 수직 가운데 배치함
+- (개선) useEffect를 통해 화면 너비에 따라 변하는 썸네일 높이를 감지하여 Slider 높이로 지정한 후, Prev, Next 버튼을 수직 가운데 배치함
 
 <br>
 
 > ### 7. Prev 버튼 초기 비활성화
 
 - 초기에는 Prev 버튼을 감추고, Next 버튼 클릭 시 Prev 버튼을 표시함
+
+```javascript
+  const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
+
+   const increaseIndex = () => {
+    if (list) {
+      if (moving) return;
+      setIsPrevBtnDisabled(false);
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+      setMoving(true);
+    }
+  };
+
+ <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
+```
+
+<br>
+
+> ### 8. api 이미지가 없는 경우 기본 이미지 표시
+
+- 삼항연산자를 통해 backdrop_path가 존재하지 않는 경우 기본 이미지를 표시함
+
+```javascript
+<Backdrop
+  bg={details.backdrop_path ? getBackdropPath(details.backdrop_path) : noImg}
+/>
+```
