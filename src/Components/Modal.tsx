@@ -19,6 +19,10 @@ import { modalState } from "../atom";
 /* Default BgImg */
 import { noImg } from "../Api/utils";
 
+/* Close Btn */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+
 /* Styling */
 
 const Overlay = styled(motion.div)`
@@ -35,6 +39,7 @@ const Wrapper = styled(motion.div)`
   margin: 30px auto;
   background-color: black;
   z-index: 9999;
+  position: relative; // CloseBtn 배치
 `;
 
 const Backdrop = styled.div<{ bg: string }>`
@@ -44,13 +49,26 @@ const Backdrop = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
+const CloseBtn = styled(FontAwesomeIcon)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  font-size: 20px;
+  padding: 4px 8px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  cursor: pointer;
+`;
+
 function Modal({ section, category, details, cast }: IModalProps) {
   /* State-management for Modal scroll */
   const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
-  const onOverlayClicked = () => {
+  const closeModal = () => {
     setIsModalOpen(false);
     if (section === "movie") {
       navigate("/");
@@ -63,7 +81,7 @@ function Modal({ section, category, details, cast }: IModalProps) {
     <>
       {details && (
         <Overlay
-          onClick={onOverlayClicked}
+          onClick={closeModal}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
@@ -93,6 +111,7 @@ function Modal({ section, category, details, cast }: IModalProps) {
                 </li>
               ))}
             </ul>
+            <CloseBtn icon={faClose} onClick={closeModal} />
           </Wrapper>
         </Overlay>
       )}
