@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 /* State-management */
 import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 /* Styling */
 const Container = styled.div`
@@ -53,6 +55,7 @@ const Overview = styled.p`
   margin-bottom: 1vw;
   font-size: 1.2vw;
   font-weight: 400;
+  text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);
   word-wrap: break-word;
   word-break: keep-all;
   @media screen and (max-width: 960px) {
@@ -78,6 +81,24 @@ const DateAndRating = styled.div`
   }
   @media screen and (max-width: 768px) {
     display: none;
+  }
+`;
+
+const Button = styled.div`
+  width: fit-content;
+  padding: 0.6vw 1.8vw;
+  margin-top: 20px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: ${(props) => props.theme.black.darker};
+  cursor: pointer;
+  font-size: 1.2vw;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+  span {
+    margin-left: 0.4vw;
   }
 `;
 
@@ -117,7 +138,10 @@ function Banner({ section, category, title, content }: IBannerProps) {
         </span>
         <span>평점 : ⭐{content?.vote_average} 점</span>
       </DateAndRating>
-      <button onClick={() => onButtonClick(content?.id!)}>클릭</button>
+      <Button onClick={() => onButtonClick(content?.id!)}>
+        <FontAwesomeIcon icon={faInfoCircle} />
+        <span>자세히 보기</span>
+      </Button>
     </Container>
   );
 }
