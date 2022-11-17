@@ -26,7 +26,7 @@
 - [x] Prev 버튼 초기 비활성화
 - [x] Overlay, Modal 이벤트 중복 해결
 - [x] api 이미지가 존재하지 않는 경우 default 이미지로 대체
-- [ ] 화면이 작아지면 Banner text 숨기기
+- [x] Banner 컴포넌트 반응형 작업
 
 ### 2) 추가 기능 구현
 
@@ -127,4 +127,27 @@
 <Backdrop
   bg={details.backdrop_path ? getBackdropPath(details.backdrop_path) : noImg}
 />
+```
+
+<br>
+
+> ### 9. Banner 컴포넌트 반응형 작업
+
+- Media Query를 이용하여 화면 크기에 따라 display, width 속성 조절
+
+```css
+const Container = styled.div`
+  @media screen and (max-width: 1024px) {
+    width: 50%;
+  }
+  @media screen and (max-width: 576px) {
+    width: 80%;
+  }
+`;
+
+const Overview = styled.p`
+  @media screen and (max-width: 960px) {
+    display: none;
+  }
+`;
 ```

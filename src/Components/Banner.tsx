@@ -18,6 +18,12 @@ const Container = styled.div`
   width: 40%;
   height: 34vw;
   padding-inline: 60px;
+  @media screen and (max-width: 1024px) {
+    width: 50%;
+  }
+  @media screen and (max-width: 576px) {
+    width: 80%;
+  }
 `;
 
 const Title = styled.h1`
@@ -38,6 +44,9 @@ const Ranking = styled.div`
     font-size: 1.6vw;
     text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);
   }
+  @media screen and (max-width: 576px) {
+    display: none;
+  }
 `;
 
 const Overview = styled.p`
@@ -46,6 +55,9 @@ const Overview = styled.p`
   font-weight: 400;
   word-wrap: break-word;
   word-break: keep-all;
+  @media screen and (max-width: 960px) {
+    display: none;
+  }
 `;
 
 const DateAndRating = styled.div`
@@ -63,6 +75,9 @@ const DateAndRating = styled.div`
   span:first-child {
     margin-right: 0.5vw;
     color: ${(props) => props.theme.green};
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 `;
 
