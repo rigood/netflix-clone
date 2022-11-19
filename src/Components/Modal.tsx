@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-import { useState } from "react";
-
 /* Fetcher function */
 import { getBackdropPath } from "../Api/utils";
 
@@ -23,11 +21,8 @@ import { noImg } from "../Api/utils";
 
 /* Close Btn */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClose,
-  faVolumeOff,
-  faVolumeXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import MainVideo from "./MainVideo";
 
 /* Styling */
 
@@ -53,7 +48,12 @@ const Wrapper = styled(motion.div)`
 const Backdrop = styled.div<{ bg: string }>`
   width: 100%;
   padding-top: 56.25%;
-  background-image: url(${(props) => props.bg});
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 1)
+    ),
+    url(${(props) => props.bg});
   background-size: cover;
 `;
 
@@ -69,26 +69,11 @@ const CloseBtn = styled(Button)`
   right: 20px;
 `;
 
-const VolumeBtn = styled(Button)`
-  bottom: 90px;
-  right: 30px;
-`;
-
-const MainVideo = styled.div`
-  position: relative;
-  iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-  }
-`;
-
 function Modal({ section, category, details, cast, videos }: IModalProps) {
   /* State-management for Modal scroll */
   const setIsModalOpen = useSetRecoilState(modalState);
 
   const mainVideoKey = videos?.[0]?.key;
-
-  const [mute, setMute] = useState(1);
 
   /* Routing */
   const navigate = useNavigate();
@@ -99,10 +84,6 @@ function Modal({ section, category, details, cast, videos }: IModalProps) {
     } else if (section === "tv") {
       navigate("/tv");
     }
-  };
-
-  const toggleMute = () => {
-    setMute((prev) => (prev === 1 ? 0 : 1));
   };
 
   return (
@@ -120,26 +101,17 @@ function Modal({ section, category, details, cast, videos }: IModalProps) {
             transition={{ duration: 0.8 }}
             onClick={(e) => e.stopPropagation()}
           >
-            {mainVideoKey && (
-              <MainVideo>
-                <iframe
-                  src={`https://www.youtube.com/embed/${mainVideoKey}?autoplay=1&controls=0&showinfo=0&rel=0&mute=${mute}`}
-                  frameBorder="0"
-                  allow="autoplay;"
-                ></iframe>
-                <VolumeBtn
-                  icon={mute === 1 ? faVolumeXmark : faVolumeOff}
-                  onClick={toggleMute}
-                />
-              </MainVideo>
+            {mainVideoKey ? (
+              <MainVideo videoKey={mainVideoKey} />
+            ) : (
+              <Backdrop
+                bg={
+                  details.backdrop_path
+                    ? getBackdropPath(details.backdrop_path)
+                    : noImg
+                }
+              />
             )}
-            <Backdrop
-              bg={
-                details.backdrop_path
-                  ? getBackdropPath(details.backdrop_path)
-                  : noImg
-              }
-            />
 
             <h1>
               {" "}

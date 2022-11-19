@@ -133,3 +133,7 @@ export interface IRowVariantsProps {
   movingBack: boolean;
   windowWidth: number;
 }
+
+export interface IMainVideoProps {
+  videoKey: string;
+}
