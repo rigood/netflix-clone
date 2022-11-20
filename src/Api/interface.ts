@@ -127,6 +127,8 @@ export interface IModalProps {
   details: IDetails;
   cast: ICast[];
   videos: IVideo[];
+  reco: IContent[];
+  similar: IContent[];
 }
 
 export interface IRowVariantsProps {
@@ -136,4 +138,8 @@ export interface IRowVariantsProps {
 
 export interface IMainVideoProps {
   videoKey: string;
+}
+
+export interface IGridProps {
+  contents: IContent[];
 }

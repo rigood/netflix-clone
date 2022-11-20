@@ -4,7 +4,14 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 
 /* Fetcher function */
-import { getCast, getDetails, getList, getVideos } from "../Api/api";
+import {
+  getCast,
+  getDetails,
+  getList,
+  getRecommendations,
+  getSimilar,
+  getVideos,
+} from "../Api/api";
 import { getBackdropPath } from "../Api/utils";
 
 /* Interface */
@@ -77,6 +84,16 @@ function Home() {
     () => getVideos("movie", id!),
     { enabled: !!id }
   );
+  const { data: recoContent } = useQuery<IContent[]>(
+    ["recoContent", id],
+    () => getRecommendations("movie", id!),
+    { enabled: !!id }
+  );
+  const { data: similarContent } = useQuery<IContent[]>(
+    ["similarContent", id],
+    () => getSimilar("movie", id!),
+    { enabled: !!id }
+  );
 
   /* Loading */
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
@@ -121,6 +138,8 @@ function Home() {
           details={detailsContent!}
           cast={castContent!}
           videos={videoContent!}
+          reco={recoContent!}
+          similar={similarContent!}
         />
       )}
     </>

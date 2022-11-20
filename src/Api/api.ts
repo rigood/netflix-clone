@@ -37,3 +37,17 @@ export async function getVideos(section: string, id: string) {
   );
   return youtubeVideos;
 }
+
+export async function getRecommendations(section: string, id: string) {
+  const response = await db.get(
+    `${section}/${id}/recommendations?api_key=${API_KEY}&language=ko-KR&region=kr&page=1`
+  );
+  return response.data.results;
+}
+
+export async function getSimilar(section: string, id: string) {
+  const response = await db.get(
+    `${section}/${id}/similar?api_key=${API_KEY}&language=ko-KR&region=kr&page=1`
+  );
+  return response.data.results;
+}

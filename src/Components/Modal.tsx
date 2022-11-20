@@ -23,6 +23,7 @@ import { noImg } from "../Api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import MainVideo from "./MainVideo";
+import Grid from "./Grid";
 
 /* Styling */
 
@@ -64,12 +65,25 @@ const Button = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
+const Title = styled.h1`
+  font-size: 2rem;
+  margin: 1rem 0;
+`;
+
 const CloseBtn = styled(Button)`
   top: 20px;
   right: 20px;
 `;
 
-function Modal({ section, category, details, cast, videos }: IModalProps) {
+function Modal({
+  section,
+  category,
+  details,
+  cast,
+  videos,
+  reco,
+  similar,
+}: IModalProps) {
   /* State-management for Modal scroll */
   const setIsModalOpen = useSetRecoilState(modalState);
 
@@ -113,10 +127,15 @@ function Modal({ section, category, details, cast, videos }: IModalProps) {
               />
             )}
 
-            <h1>
+            <Title>추천 콘텐츠</Title>
+            <Grid contents={reco} />
+            <Title>비슷한 콘텐츠</Title>
+            <Grid contents={similar} />
+
+            <Title>
               {" "}
               제목 : {section === "movie" ? details.title : details.name}
-            </h1>
+            </Title>
             <p> 줄거리 : {details.overview}</p>
             <ul>
               {cast?.map((actor, index) => (
