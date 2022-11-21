@@ -65,9 +65,15 @@ const Button = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
+const ContentsWrapper = styled.div`
+  margin: 0 30px;
+  padding-bottom: 50px;
+`;
+
 const Title = styled.h1`
-  font-size: 2rem;
-  margin: 1rem 0;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  margin-top: 3rem;
 `;
 
 const CloseBtn = styled(Button)`
@@ -126,24 +132,22 @@ function Modal({
                 }
               />
             )}
-
-            <Title>추천 콘텐츠</Title>
-            <Grid contents={reco} />
-            <Title>비슷한 콘텐츠</Title>
-            <Grid contents={similar} />
-
-            <Title>
-              {" "}
-              제목 : {section === "movie" ? details.title : details.name}
-            </Title>
-            <p> 줄거리 : {details.overview}</p>
-            <ul>
-              {cast?.map((actor, index) => (
-                <li key={index}>
-                  {actor.name} - {actor.character}
-                </li>
-              ))}
-            </ul>
+            <ContentsWrapper>
+              <Title>{details.title || details.name}</Title>
+              <p> {details.overview}</p>
+              <Title>출연진</Title>
+              <ul>
+                {cast?.map((actor, index) => (
+                  <li key={index}>
+                    {actor.name} - {actor.character}
+                  </li>
+                ))}
+              </ul>
+              <Title>추천 콘텐츠</Title>
+              <Grid contents={reco} section={section} />
+              <Title>비슷한 콘텐츠</Title>
+              <Grid contents={similar} section={section} />
+            </ContentsWrapper>
             <CloseBtn icon={faClose} onClick={closeModal} />
           </Wrapper>
         </Overlay>

@@ -142,4 +142,5 @@ export interface IMainVideoProps {
 
 export interface IGridProps {
   contents: IContent[];
+  section: string;
 }

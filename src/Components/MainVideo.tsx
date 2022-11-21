@@ -26,7 +26,7 @@ const Overlay = styled.div`
 
 const VolumeBtn = styled(FontAwesomeIcon)`
   position: absolute;
-  bottom: 60px;
+  bottom: 30px;
   right: 30px;
   width: 24px;
   height: 24px;
