@@ -21,7 +21,7 @@ const Video = styled.div`
   grid-template-columns: 160px auto;
   cursor: pointer;
   &:not(:last-child) {
-    padding-bottom: 30px;
+    margin-bottom: 30px;
   }
   .info {
     display: flex;
@@ -35,6 +35,9 @@ const Video = styled.div`
       font-size: 13px;
       font-weight: 400;
       font-style: italic;
+    }
+    &:hover {
+      background-color: #202020;
     }
   }
 `;
@@ -73,7 +76,7 @@ const ThumbnailOverlay = styled.div`
 `;
 
 const Thumbnail = styled.div<{ bg: string }>`
-  width: 100%;
+  width: 90%;
   aspect-ratio: 4 / 3;
   background-image: url(${(props) => props.bg});
   background-size: cover;
@@ -114,5 +117,3 @@ function Videos({ title, videos }: IVideosProps) {
 }
 
 export default Videos;
-
-//  {index + 1} {video.name} {video.published_at.slice(0, 10)}

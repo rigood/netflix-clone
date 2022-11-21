@@ -41,6 +41,7 @@ const Overlay = styled(motion.div)`
 const Wrapper = styled(motion.div)`
   width: min(90%, 900px);
   margin: 30px auto;
+  padding-bottom: 30px;
   background-color: black;
   z-index: 9999;
   position: relative; // CloseBtn 배치

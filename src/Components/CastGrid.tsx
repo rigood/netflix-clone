@@ -1,3 +1,6 @@
+import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import styled from "styled-components";
 import { ICastGridProps } from "../Api/interface";
 import { getImgPath, noProfile } from "../Api/utils";
@@ -14,6 +17,7 @@ const GridWrapper = styled.div`
   grid-template-columns: repeat(5, 1fr);
   column-gap: 20px;
   row-gap: 40px;
+  position: relative;
 `;
 
 const Actor = styled.div`
@@ -37,12 +41,29 @@ const Img = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
+const MoreButton = styled(FontAwesomeIcon)`
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 3px solid lightgray;
+  color: lightgray;
+  cursor: pointer;
+`;
+
 function CastGrid({ title, cast }: ICastGridProps) {
+  const offset = 5;
+  const [index, setIndex] = useState(offset);
   return (
     <>
       <Title>{title}</Title>
       <GridWrapper>
-        {cast?.slice(0, 5).map((actor, index) => (
+        {cast?.slice(0, index).map((actor, index) => (
           <Actor key={index}>
             <Img
               bg={
@@ -55,8 +76,15 @@ function CastGrid({ title, cast }: ICastGridProps) {
             <div className="character">{actor.character}</div>
           </Actor>
         ))}
-        {cast?.length === 0 ? "준비중입니다." : null}
+        {index < cast?.length ? (
+          <MoreButton
+            icon={faChevronDown}
+            onClick={() => setIndex((prev) => prev + offset)}
+          />
+        ) : null}
       </GridWrapper>
+
+      <p>{cast?.length === 0 ? "준비중입니다." : null}</p>
     </>
   );
 }
