@@ -54,7 +54,7 @@ export interface IDetails {
   status: string;
   genres: IGenre[];
   overview: string;
-  vote_average: string;
+  vote_average: number;
   original_language: string;
 }
 

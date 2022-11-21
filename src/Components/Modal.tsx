@@ -65,16 +65,50 @@ const Button = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
-const ContentsWrapper = styled.div`
+const ContentWrapper = styled.div`
   margin: 0 30px;
   padding-bottom: 50px;
 `;
 
+const Genres = styled.div`
+  margin-bottom: 10px;
+  span {
+    margin-right: 10px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background-color: ${(props) => props.theme.red};
+    font-size: 14px;
+    font-weight: 400;
+  }
+`;
+
+const Number = styled.div`
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 400;
+`;
+
 const Title = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 10px;
+`;
+
+const DateAndRating = styled.div`
+  margin-bottom: 15px;
+  font-size: 16px;
+  span:first-child {
+    margin-right: 10px;
+    color: ${(props) => props.theme.green};
+  }
+`;
+
+const SubTitle = styled.h1`
   font-size: 1.3rem;
   margin-bottom: 1.5rem;
   margin-top: 3rem;
 `;
+
+const Overview = styled.p``;
 
 const CloseBtn = styled(Button)`
   top: 20px;
@@ -132,10 +166,32 @@ function Modal({
                 }
               />
             )}
-            <ContentsWrapper>
+            <ContentWrapper>
+              <Genres>
+                {details.genres.map((genre) => (
+                  <span key={genre.id}>{genre.name}</span>
+                ))}
+              </Genres>
               <Title>{details.title || details.name}</Title>
-              <p> {details.overview}</p>
-              <Title>출연진</Title>
+              <Number>
+                {section === "movie"
+                  ? `상영시간 : ${details.runtime}분`
+                  : `시즌 ${details.number_of_seasons}개 에피소드 ${details.number_of_episodes}개`}
+              </Number>
+              <DateAndRating>
+                <span>
+                  {section === "movie"
+                    ? `개봉일 : ${details.release_date}`
+                    : `첫방영 : ${details.first_air_date}`}
+                </span>
+                <span>⭐{Math.round(details.vote_average * 10) / 10}점</span>
+              </DateAndRating>
+              <Overview>
+                {details.overview
+                  ? details.overview
+                  : "줄거리 정보 준비중입니다."}
+              </Overview>
+              <SubTitle>출연진</SubTitle>
               <ul>
                 {cast?.map((actor, index) => (
                   <li key={index}>
@@ -143,11 +199,11 @@ function Modal({
                   </li>
                 ))}
               </ul>
-              <Title>추천 콘텐츠</Title>
+              <SubTitle>추천 콘텐츠</SubTitle>
               <Grid contents={reco} section={section} />
-              <Title>비슷한 콘텐츠</Title>
+              <SubTitle>비슷한 콘텐츠</SubTitle>
               <Grid contents={similar} section={section} />
-            </ContentsWrapper>
+            </ContentWrapper>
             <CloseBtn icon={faClose} onClick={closeModal} />
           </Wrapper>
         </Overlay>
