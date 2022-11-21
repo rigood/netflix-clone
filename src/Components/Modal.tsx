@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 /* Fetcher function */
-import { getImgPath } from "../Api/utils";
+import { getImgPath, getRating } from "../Api/utils";
 
 /* Interface */
 import { IModalProps } from "../Api/interface";
@@ -181,7 +181,7 @@ function Modal({
                     ? `개봉일 : ${details.release_date}`
                     : `첫방영 : ${details.first_air_date}`}
                 </span>
-                <span>⭐{Math.round(details.vote_average * 10) / 10}점</span>
+                <span>{getRating(details.vote_average)}</span>
               </DateAndRating>
               <Overview>
                 {details.overview

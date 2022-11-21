@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { IContentsGridProps } from "../Api/interface";
-import { getImgPath, noImg } from "../Api/utils";
+import { getImgPath, getRating, noImg } from "../Api/utils";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
@@ -136,7 +136,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
                   ? "개봉일 : " + content.release_date
                   : "첫방영 : " + content.first_air_date}
               </div>
-              <div>⭐{Math.round(content.vote_average * 10) / 10}점</div>
+              <div>{getRating(content.vote_average)}</div>
             </Info>
           </ContentWrapper>
         ))}
