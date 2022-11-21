@@ -15,6 +15,8 @@ export function getRating(rating: number) {
   return `⭐${rounded}점`;
 }
 
-export const noImg = process.env.PUBLIC_URL + "/assets/noImg.png";
+export const noBackdrop = process.env.PUBLIC_URL + "/assets/noBackdrop.png";
+
+export const noPoster = process.env.PUBLIC_URL + "/assets/noPoster.png";
 
 export const noProfile = process.env.PUBLIC_URL + "/assets/noProfile.png";

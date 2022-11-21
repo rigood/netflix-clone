@@ -17,7 +17,7 @@ import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 
 /* Default BgImg */
-import { noImg } from "../Api/utils";
+import { noBackdrop } from "../Api/utils";
 
 /* Close Btn */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -159,7 +159,7 @@ function Modal({
                 bg={
                   details.backdrop_path
                     ? getImgPath(details.backdrop_path)
-                    : noImg
+                    : noBackdrop
                 }
               />
             )}

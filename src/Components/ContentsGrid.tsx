@@ -5,7 +5,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { IContentsGridProps } from "../Api/interface";
-import { getImgPath, getRating, noImg } from "../Api/utils";
+import { getImgPath, getRating, noPoster } from "../Api/utils";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
@@ -150,7 +150,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
               bg={
                 content.poster_path
                   ? getImgPath(content.poster_path, "w500")
-                  : noImg
+                  : noPoster
               }
               onClick={() => onPosterClick(content.id)}
             >

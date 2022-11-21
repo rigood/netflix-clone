@@ -11,7 +11,7 @@ import { IRowVariantsProps, ISliderProps } from "../Api/interface";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* Data-fetching */
-import { getImgPath, noImg } from "../Api/utils";
+import { getImgPath, noBackdrop } from "../Api/utils";
 
 /* State-management */
 import { useSetRecoilState } from "recoil";
@@ -248,7 +248,7 @@ function Slider({ section, category, title, list }: ISliderProps) {
                     bg={
                       content.backdrop_path
                         ? getImgPath(content.backdrop_path, "w500")
-                        : noImg
+                        : noBackdrop
                     }
                     onClick={() => onBoxClick(content.id)}
                     variants={boxVariants}
