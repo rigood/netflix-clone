@@ -25,6 +25,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import MainVideo from "./MainVideo";
 import ContentsGrid from "./ContentsGrid";
 import CastGrid from "./CastGrid";
+import Videos from "./Videos";
 
 /* Styling */
 
@@ -103,12 +104,6 @@ const DateAndRating = styled.div`
   }
 `;
 
-const SubTitle = styled.h1`
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  margin-top: 3rem;
-`;
-
 const Overview = styled.p``;
 
 const CloseBtn = styled(Button)`
@@ -167,6 +162,7 @@ function Modal({
                 }
               />
             )}
+
             <ContentWrapper>
               <Genres>
                 {details.genres.map((genre) => (
@@ -193,6 +189,7 @@ function Modal({
                   : "줄거리 정보 준비중입니다."}
               </Overview>
               <CastGrid title="출연진" cast={cast} />
+              <Videos title="관련 영상" videos={videos} />
               <ContentsGrid
                 title="추천 콘텐츠"
                 contents={reco}
