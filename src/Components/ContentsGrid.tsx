@@ -1,10 +1,16 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
-import { IGridProps } from "../Api/interface";
-import { getPosterPath, noImg } from "../Api/utils";
+import { IContentsGridProps } from "../Api/interface";
+import { getImgPath, noImg } from "../Api/utils";
 
-const Wrapper = styled.div`
+const Title = styled.h1`
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  margin-top: 3rem;
+`;
+
+const GridWrapper = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -92,35 +98,38 @@ const Info = styled.div`
   }
 `;
 
-function Grid({ contents, section }: IGridProps) {
+function ContentsGrid({ title, contents, section }: IContentsGridProps) {
   return (
-    <Wrapper>
-      {contents?.slice(0, 8).map((content) => (
-        <ContentWrapper>
-          <Poster
-            key={content.id}
-            bg={
-              content.poster_path
-                ? getPosterPath(content.poster_path, "w500")
-                : noImg
-            }
-          >
-            <PosterOverlay />
-            <PosterButton icon={faPlay} />
-          </Poster>
-          <Info>
-            <h1>{section === "movie" ? content.title : content.name}</h1>
-            <div>
-              {section === "movie"
-                ? "개봉일 : " + content.release_date
-                : "첫방영 : " + content.first_air_date}
-            </div>
-            <div>⭐{Math.round(content.vote_average * 10) / 10}점</div>
-          </Info>
-        </ContentWrapper>
-      ))}
-    </Wrapper>
+    <>
+      <Title>{title}</Title>
+      <GridWrapper>
+        {contents?.slice(0, 8).map((content) => (
+          <ContentWrapper>
+            <Poster
+              key={content.id}
+              bg={
+                content.poster_path
+                  ? getImgPath(content.poster_path, "w500")
+                  : noImg
+              }
+            >
+              <PosterOverlay />
+              <PosterButton icon={faPlay} />
+            </Poster>
+            <Info>
+              <h1>{section === "movie" ? content.title : content.name}</h1>
+              <div>
+                {section === "movie"
+                  ? "개봉일 : " + content.release_date
+                  : "첫방영 : " + content.first_air_date}
+              </div>
+              <div>⭐{Math.round(content.vote_average * 10) / 10}점</div>
+            </Info>
+          </ContentWrapper>
+        ))}
+      </GridWrapper>
+    </>
   );
 }
 
-export default Grid;
+export default ContentsGrid;

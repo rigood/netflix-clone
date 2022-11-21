@@ -140,7 +140,13 @@ export interface IMainVideoProps {
   videoKey: string;
 }
 
-export interface IGridProps {
+export interface IContentsGridProps {
+  title: string;
   contents: IContent[];
   section: string;
+}
+
+export interface ICastGridProps {
+  title: string;
+  cast: ICast[];
 }

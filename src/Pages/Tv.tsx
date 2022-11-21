@@ -12,7 +12,7 @@ import {
   getSimilar,
   getVideos,
 } from "../Api/api";
-import { getBackdropPath } from "../Api/utils";
+import { getImgPath } from "../Api/utils";
 
 /* Interface */
 import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
@@ -103,7 +103,7 @@ function Tv() {
 
   return (
     <>
-      <Background bg={getBackdropPath(airingTodayTvList?.[0].backdrop_path!)}>
+      <Background bg={getImgPath(airingTodayTvList?.[0].backdrop_path!)}>
         <Banner
           section="tv"
           category="airingtoday"

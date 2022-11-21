@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 /* Fetcher function */
-import { getBackdropPath } from "../Api/utils";
+import { getImgPath } from "../Api/utils";
 
 /* Interface */
 import { IModalProps } from "../Api/interface";
@@ -23,7 +23,8 @@ import { noImg } from "../Api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import MainVideo from "./MainVideo";
-import Grid from "./Grid";
+import ContentsGrid from "./ContentsGrid";
+import CastGrid from "./CastGrid";
 
 /* Styling */
 
@@ -161,7 +162,7 @@ function Modal({
               <Backdrop
                 bg={
                   details.backdrop_path
-                    ? getBackdropPath(details.backdrop_path)
+                    ? getImgPath(details.backdrop_path)
                     : noImg
                 }
               />
@@ -191,18 +192,17 @@ function Modal({
                   ? details.overview
                   : "줄거리 정보 준비중입니다."}
               </Overview>
-              <SubTitle>출연진</SubTitle>
-              <ul>
-                {cast?.map((actor, index) => (
-                  <li key={index}>
-                    {actor.name} - {actor.character}
-                  </li>
-                ))}
-              </ul>
-              <SubTitle>추천 콘텐츠</SubTitle>
-              <Grid contents={reco} section={section} />
-              <SubTitle>비슷한 콘텐츠</SubTitle>
-              <Grid contents={similar} section={section} />
+              <CastGrid title="출연진" cast={cast} />
+              <ContentsGrid
+                title="추천 콘텐츠"
+                contents={reco}
+                section={section}
+              />
+              <ContentsGrid
+                title="비슷한 콘텐츠"
+                contents={similar}
+                section={section}
+              />
             </ContentWrapper>
             <CloseBtn icon={faClose} onClick={closeModal} />
           </Wrapper>

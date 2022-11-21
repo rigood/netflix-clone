@@ -125,7 +125,7 @@
 
 ```javascript
 <Backdrop
-  bg={details.backdrop_path ? getBackdropPath(details.backdrop_path) : noImg}
+  bg={details.backdrop_path ? getImgPath(details.backdrop_path) : noImg}
 />
 ```
 

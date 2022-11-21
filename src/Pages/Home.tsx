@@ -12,7 +12,7 @@ import {
   getSimilar,
   getVideos,
 } from "../Api/api";
-import { getBackdropPath } from "../Api/utils";
+import { getImgPath } from "../Api/utils";
 
 /* Interface */
 import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
@@ -103,7 +103,7 @@ function Home() {
 
   return (
     <>
-      <Background bg={getBackdropPath(nowPlayingMovieList?.[0].backdrop_path!)}>
+      <Background bg={getImgPath(nowPlayingMovieList?.[0].backdrop_path!)}>
         <Banner
           section="movie"
           category="nowPlaying"
