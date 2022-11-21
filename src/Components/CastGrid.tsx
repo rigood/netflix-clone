@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ICastGridProps } from "../Api/interface";
-import { getImgPath, noImg } from "../Api/utils";
+import { getImgPath, noProfile } from "../Api/utils";
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -48,7 +48,7 @@ function CastGrid({ title, cast }: ICastGridProps) {
               bg={
                 actor.profile_path
                   ? getImgPath(actor.profile_path, "w200")
-                  : noImg
+                  : noProfile
               }
             />
             <div className="name">{actor.name}</div>

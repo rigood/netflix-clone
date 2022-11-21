@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { IContentsGridProps } from "../Api/interface";
 import { getImgPath, getRating, noImg } from "../Api/utils";
 import { useNavigate } from "react-router-dom";
@@ -127,7 +127,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
               onClick={() => onPosterClick(content.id)}
             >
               <PosterOverlay />
-              <PosterButton icon={faPlay} />
+              <PosterButton icon={faChevronRight} />
             </Poster>
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>

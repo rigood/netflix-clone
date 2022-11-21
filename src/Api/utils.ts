@@ -10,9 +10,11 @@ export function getYoutubeUrl(key: string) {
   return `https://www.youtube.com/watch?v=${key}`;
 }
 
-export const noImg = process.env.PUBLIC_URL + "/assets/noImg.png";
-
 export function getRating(rating: number) {
   const rounded = Math.round(rating * 10) / 10;
   return `⭐${rounded}점`;
 }
+
+export const noImg = process.env.PUBLIC_URL + "/assets/noImg.png";
+
+export const noProfile = process.env.PUBLIC_URL + "/assets/noProfile.png";
