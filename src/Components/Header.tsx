@@ -4,7 +4,12 @@ import styled from "styled-components";
 import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 
 /* Motion */
-import { motion, useScroll, useAnimation, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useAnimation,
+  AnimatePresence,
+} from "framer-motion";
 
 /* Detect scrollY change*/
 import { useEffect } from "react";
@@ -128,6 +133,13 @@ const SearchInput = styled(motion.input)`
     font-family: "Noto Sans KR", sans-serif;
     font-size: 12px;
   }
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    transition: background-color 5000s;
+    -webkit-text-fill-color: ${(porps) => porps.theme.white.darker} !important;
+  }
 `;
 
 const SearchIcon = styled(motion.svg)`
@@ -172,7 +184,12 @@ function Header() {
     <Nav variants={navVariants} initial="top" animate={navAnimation}>
       <Col>
         <Link to="/">
-          <Logo xmlns="http://www.w3.org/2000/svg" width="1024" height="276.742" viewBox="0 0 1024 276.742">
+          <Logo
+            xmlns="http://www.w3.org/2000/svg"
+            width="1024"
+            height="276.742"
+            viewBox="0 0 1024 276.742"
+          >
             <motion.path
               variants={logoVariants}
               initial="start"
@@ -186,13 +203,17 @@ function Header() {
           <Menu>
             <Link to="/">
               Home
-              <AnimatePresence>{homeMatch && <Circle layoutId="circle" />}</AnimatePresence>
+              <AnimatePresence>
+                {homeMatch && <Circle layoutId="circle" />}
+              </AnimatePresence>
             </Link>
           </Menu>
           <Menu>
             <Link to="tv">
               TV Shows
-              <AnimatePresence>{tvMatch && <Circle layoutId="circle" />}</AnimatePresence>
+              <AnimatePresence>
+                {tvMatch && <Circle layoutId="circle" />}
+              </AnimatePresence>
             </Link>
           </Menu>
         </Menus>
@@ -210,7 +231,11 @@ function Header() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
           >
-            <path fillRule="evenodd" clipRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"></path>
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+            ></path>
           </SearchIcon>
           <SearchInput
             {...register("keyword", { required: true, minLength: 2 })}
