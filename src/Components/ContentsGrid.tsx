@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { IContentsGridProps } from "../Api/interface";
 import { getImgPath, noImg } from "../Api/utils";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { modalState } from "../atom";
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -99,19 +102,29 @@ const Info = styled.div`
 `;
 
 function ContentsGrid({ title, contents, section }: IContentsGridProps) {
+  /* State-management for Modal scroll */
+  const setIsModalOpen = useSetRecoilState(modalState);
+
+  /* Routing */
+  const navigate = useNavigate();
+  const onPosterClick = (id: number) => {
+    navigate(`/${section}/none/${id}`);
+    setIsModalOpen(true);
+  };
+
   return (
     <>
       <Title>{title}</Title>
       <GridWrapper>
         {contents?.slice(0, 8).map((content) => (
-          <ContentWrapper>
+          <ContentWrapper key={content.id}>
             <Poster
-              key={content.id}
               bg={
                 content.poster_path
                   ? getImgPath(content.poster_path, "w500")
                   : noImg
               }
+              onClick={() => onPosterClick(content.id)}
             >
               <PosterOverlay />
               <PosterButton icon={faPlay} />
