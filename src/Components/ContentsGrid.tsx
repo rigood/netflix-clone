@@ -140,6 +140,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
             </Info>
           </ContentWrapper>
         ))}
+        {contents?.length === 0 ? "준비중입니다." : null}
       </GridWrapper>
     </>
   );

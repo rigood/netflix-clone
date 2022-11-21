@@ -55,6 +55,7 @@ function CastGrid({ title, cast }: ICastGridProps) {
             <div className="character">{actor.character}</div>
           </Actor>
         ))}
+        {cast?.length === 0 ? "준비중입니다." : null}
       </GridWrapper>
     </>
   );
