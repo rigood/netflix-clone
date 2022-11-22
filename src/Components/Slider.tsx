@@ -156,20 +156,20 @@ const infoVariants = {
   },
 };
 
-function Slider({ section, category, title, list }: ISliderProps) {
+function Slider({ section, title, list, isFirst }: ISliderProps) {
   /* State-management for Modal scroll */
   const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onBoxClick = (id: number) => {
-    navigate(`/${section}/${category}/${id}`);
+    navigate(`/${section}/${id}`);
     setIsModalOpen(true);
   };
 
   /* Remove content from Slider for Banner */
   let sliceIndex;
-  if (category === "nowplaying") {
+  if (isFirst) {
     sliceIndex = 1;
   } else {
     sliceIndex = 0;

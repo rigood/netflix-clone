@@ -140,7 +140,6 @@ function Search() {
       {isModalOpen && (
         <Modal
           section={isMovieTab ? "movie" : "tv"}
-          category="search"
           details={detailsContent!}
           cast={castContent!}
           videos={videoContent!}

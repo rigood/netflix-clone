@@ -118,21 +118,19 @@ export interface ISearch {
 
 export interface IBannerProps {
   section: string;
-  category: string;
   title: string;
   content?: IContent;
 }
 
 export interface ISliderProps {
   section: string;
-  category: string;
   title: string;
   list?: IContent[];
+  isFirst: boolean;
 }
 
 export interface IModalProps {
   section: string;
-  category: string; // includes "search"
   details: IDetails;
   cast: ICast[];
   videos: IVideo[];

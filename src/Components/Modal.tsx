@@ -112,15 +112,7 @@ const CloseBtn = styled(Button)`
   right: 20px;
 `;
 
-function Modal({
-  section,
-  category,
-  details,
-  cast,
-  videos,
-  reco,
-  similar,
-}: IModalProps) {
+function Modal({ section, details, cast, videos, reco, similar }: IModalProps) {
   /* State-management for Modal scroll */
   const setIsModalOpen = useSetRecoilState(modalState);
 
@@ -130,10 +122,7 @@ function Modal({
   const navigate = useNavigate();
   const closeModal = () => {
     setIsModalOpen(false);
-    if (category === "search") {
-      navigate(-1);
-      return;
-    }
+
     if (section === "movie") {
       navigate("/");
     } else if (section === "tv") {

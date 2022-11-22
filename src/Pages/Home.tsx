@@ -63,8 +63,7 @@ function Home() {
   >(["upcomingMovieList"], () => getList("movie", "upcoming"));
 
   /* Routing for Modal */
-  const modalMatch = useMatch("/:section/:category/:id");
-  const category = modalMatch?.params.category;
+  const modalMatch = useMatch("/:section/:id");
   const id = modalMatch?.params.id;
   const [isModalOpen] = useRecoilState(modalState);
 
@@ -106,35 +105,33 @@ function Home() {
       <Background bg={getImgPath(nowPlayingMovieList?.[0].backdrop_path!)}>
         <Banner
           section="movie"
-          category="nowPlaying"
           title="영화"
           content={nowPlayingMovieList?.[0]}
         />
         <SliderWrapper>
           <Slider
             section="movie"
-            category="nowplaying"
             title="현재 상영 중인 영화"
             list={nowPlayingMovieList}
+            isFirst={true}
           />
           <Slider
             section="movie"
-            category="toprated"
             title="최고 평점 영화"
             list={topRatedMovieList}
+            isFirst={false}
           />
           <Slider
             section="movie"
-            category="upcoming"
             title="개봉 예정 영화"
             list={upcomingMovieList}
+            isFirst={false}
           />
         </SliderWrapper>
       </Background>
       {isModalOpen && (
         <Modal
           section="movie"
-          category={category!}
           details={detailsContent!}
           cast={castContent!}
           videos={videoContent!}
