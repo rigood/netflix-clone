@@ -51,3 +51,10 @@ export async function getSimilar(section: string, id: string) {
   );
   return response.data.results;
 }
+
+export async function getSearch(section: string, keyword: string) {
+  const response = await db.get(
+    `search/${section}?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr`
+  );
+  return response.data;
+}

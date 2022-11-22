@@ -105,6 +105,15 @@ export interface IVideo {
 
 /////////////////////////////////////
 
+export interface ISearch {
+  page: number;
+  results: IContent[];
+  total_pages: number;
+  total_results: number;
+}
+
+/////////////////////////////////////
+
 /* Props interface */
 
 export interface IBannerProps {
@@ -123,7 +132,7 @@ export interface ISliderProps {
 
 export interface IModalProps {
   section: string;
-  category: string;
+  category: string; // includes "search"
   details: IDetails;
   cast: ICast[];
   videos: IVideo[];
@@ -154,4 +163,9 @@ export interface IContentsGridProps {
 export interface ICastGridProps {
   title: string;
   cast: ICast[];
+}
+
+export interface ISearchGridProps {
+  section: string;
+  contents?: IContent[];
 }

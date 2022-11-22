@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
 /* Routing */
-import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useMatch,
+  PathMatch,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 
 /* Motion */
 import {
@@ -19,6 +25,7 @@ import { useForm } from "react-hook-form";
 
 /* Toggle search-input */
 import { useState } from "react";
+import reset from "styled-reset";
 
 /* Components Styling */
 const Nav = styled(motion.nav)`
@@ -139,6 +146,7 @@ const SearchInput = styled(motion.input)`
   &:-webkit-autofill:active {
     transition: background-color 5000s;
     -webkit-text-fill-color: ${(porps) => porps.theme.white.darker} !important;
+    caret-color: ${(porps) => porps.theme.white.darker};
   }
 `;
 
@@ -155,6 +163,7 @@ function Header() {
   // Routing
   const homeMatch: PathMatch<string> | null = useMatch("/");
   const tvMatch: PathMatch<string> | null = useMatch("tv");
+  const location = useLocation();
 
   // Nav Scroll
   const { scrollY } = useScroll();
@@ -170,7 +179,7 @@ function Header() {
   }, []);
 
   // Search-form
-  const { register, handleSubmit, setFocus } = useForm<IForm>();
+  const { register, handleSubmit, setFocus, setValue } = useForm<IForm>();
   const navigate = useNavigate();
   const onSearch = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
@@ -179,6 +188,15 @@ function Header() {
   // Toggle Search-input
   const [searchOpen, setSearchOpen] = useState(false);
   const toggleSearch = () => setSearchOpen((prev) => !prev);
+
+  useEffect(() => {
+    if (location.pathname === "/search") return;
+    setValue("keyword", "");
+
+    if (searchOpen) {
+      setSearchOpen((prev) => !prev);
+    }
+  }, [location]);
 
   return (
     <Nav variants={navVariants} initial="top" animate={navAnimation}>

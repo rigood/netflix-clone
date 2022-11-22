@@ -130,6 +130,10 @@ function Modal({
   const navigate = useNavigate();
   const closeModal = () => {
     setIsModalOpen(false);
+    if (category === "search") {
+      navigate(-1);
+      return;
+    }
     if (section === "movie") {
       navigate("/");
     } else if (section === "tv") {
