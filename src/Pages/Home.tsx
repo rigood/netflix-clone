@@ -18,7 +18,7 @@ import { getImgPath } from "../Api/utils";
 import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
 
 /* Routing */
-import { useLocation, useMatch } from "react-router-dom";
+import { useLocation, useMatch, useParams } from "react-router-dom";
 
 /* State-management for Modal */
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -64,8 +64,9 @@ function Home() {
   >(["upcomingMovieList"], () => getList("movie", "upcoming"));
 
   /* Routing for Modal */
-  const modalMatch = useMatch("/:section/:id");
-  const id = modalMatch?.params.id;
+  // const modalMatch = useMatch("/:section/:id");
+  // const id = modalMatch?.params.id;
+  const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
   const location = useLocation();
