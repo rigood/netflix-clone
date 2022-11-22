@@ -18,7 +18,7 @@ import { getImgPath } from "../Api/utils";
 import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
 
 /* Routing */
-import { useMatch } from "react-router-dom";
+import { useLocation, useMatch } from "react-router-dom";
 
 /* State-management for Modal */
 import { useRecoilState } from "recoil";
@@ -28,6 +28,7 @@ import { modalState } from "../atom";
 import Slider from "../Components/Slider";
 import Modal from "../Components/Modal";
 import Banner from "../Components/Banner";
+import { useEffect } from "react";
 
 /* Styling */
 const Loader = styled.div`
@@ -65,7 +66,13 @@ function Tv() {
   /* Routing for Modal */
   const modalMatch = useMatch("/:section/:id");
   const id = modalMatch?.params.id;
-  const [isModalOpen] = useRecoilState(modalState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsModalOpen(id ? true : false);
+  }, [location]);
 
   /* Modal Data-fectching */
   const { data: detailsContent } = useQuery<IDetails>(

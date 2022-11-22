@@ -158,13 +158,11 @@ const infoVariants = {
 
 function Slider({ section, title, list, isFirst }: ISliderProps) {
   /* State-management for Modal scroll */
-  const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onBoxClick = (id: number) => {
     navigate(`/${section}/${id}`);
-    setIsModalOpen(true);
   };
 
   /* Remove content from Slider for Banner */

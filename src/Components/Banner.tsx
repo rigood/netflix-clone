@@ -104,13 +104,11 @@ const Button = styled.div`
 
 function Banner({ section, title, content }: IBannerProps) {
   /* State-management for Modal scroll */
-  const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onButtonClick = (id: number) => {
     navigate(`/${section}/${id}`);
-    setIsModalOpen(true);
   };
 
   return (

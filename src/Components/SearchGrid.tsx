@@ -98,13 +98,11 @@ const Info = styled.div`
 
 function SearchGrid({ section, contents }: ISearchGridProps) {
   /* State-management for Modal scroll */
-  const setIsModalOpen = useSetRecoilState(modalState);
 
   /* Routing */
   const navigate = useNavigate();
   const onPosterClick = (id: number) => {
     navigate(`${section}/${id}`);
-    setIsModalOpen(true);
   };
 
   return (

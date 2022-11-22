@@ -11,7 +11,7 @@ import {
   getVideos,
 } from "../Api/api";
 import { ICast, IContent, IDetails, ISearch, IVideo } from "../Api/interface";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchGrid from "../Components/SearchGrid";
 import Modal from "../Components/Modal";
 import { useRecoilState } from "recoil";
@@ -71,7 +71,11 @@ function Search() {
   // Routing for Modal
   const modalMatch = useMatch("/search/:section/:id");
   const id = modalMatch?.params.id;
-  const [isModalOpen] = useRecoilState(modalState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
+
+  useEffect(() => {
+    setIsModalOpen(id ? true : false);
+  }, [location]);
 
   // Data-fectching
   const { data: movieSearch, isLoading: loadingMovie } = useQuery<ISearch>(

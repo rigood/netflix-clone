@@ -114,14 +114,12 @@ const CloseBtn = styled(Button)`
 
 function Modal({ section, details, cast, videos, reco, similar }: IModalProps) {
   /* State-management for Modal scroll */
-  const setIsModalOpen = useSetRecoilState(modalState);
 
   const mainVideoKey = videos?.[0]?.key;
 
   /* Routing */
   const navigate = useNavigate();
   const closeModal = () => {
-    setIsModalOpen(false);
     navigate(-1);
   };
 
