@@ -164,6 +164,7 @@ export interface ICastGridProps {
 }
 
 export interface ISearchGridProps {
+  keyword: string;
   section: string;
   contents?: IContent[];
 }

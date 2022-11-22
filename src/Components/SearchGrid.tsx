@@ -96,13 +96,13 @@ const Info = styled.div`
   }
 `;
 
-function SearchGrid({ section, contents }: ISearchGridProps) {
+function SearchGrid({ keyword, section, contents }: ISearchGridProps) {
   /* State-management for Modal scroll */
 
   /* Routing */
   const navigate = useNavigate();
   const onPosterClick = (id: number) => {
-    navigate(`${section}/${id}`);
+    navigate(`/search?keyword=${keyword}&section=${section}&id=${id}`);
   };
 
   return (

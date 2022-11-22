@@ -64,13 +64,12 @@ function Search() {
   // Extract keyword
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get("keyword");
+  const section = new URLSearchParams(location.search).get("section");
+  const id = new URLSearchParams(location.search).get("id");
 
   // Tab
   const [isMovieTab, setIsMovieTab] = useState(true);
 
-  // Routing for Modal
-  const modalMatch = useMatch("/search/:section/:id");
-  const id = modalMatch?.params.id;
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
   useEffect(() => {
@@ -90,27 +89,27 @@ function Search() {
 
   const { data: detailsContent } = useQuery<IDetails>(
     ["detailsContent", id],
-    () => getDetails("movie", id!),
+    () => getDetails(section!, id!),
     { enabled: !!id }
   );
   const { data: castContent } = useQuery<ICast[]>(
     ["castContent", id],
-    () => getCast("movie", id!),
+    () => getCast(section!, id!),
     { enabled: !!id }
   );
   const { data: videoContent } = useQuery<IVideo[]>(
     ["videoContent", id],
-    () => getVideos("movie", id!),
+    () => getVideos(section!, id!),
     { enabled: !!id }
   );
   const { data: recoContent } = useQuery<IContent[]>(
     ["recoContent", id],
-    () => getRecommendations("movie", id!),
+    () => getRecommendations(section!, id!),
     { enabled: !!id }
   );
   const { data: similarContent } = useQuery<IContent[]>(
     ["similarContent", id],
-    () => getSimilar("movie", id!),
+    () => getSimilar(section!, id!),
     { enabled: !!id }
   );
 
@@ -137,6 +136,7 @@ function Search() {
           </Tab>
         </TabWrapper>
         <SearchGrid
+          keyword={keyword!}
           section={isMovieTab ? "movie" : "tv"}
           contents={isMovieTab ? movieSearch?.results : tvSearch?.results}
         />
