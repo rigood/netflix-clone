@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { IContentsGridProps } from "../Api/interface";
 import { getImgPath, getRating, noPoster } from "../Api/utils";
 import { useNavigate } from "react-router-dom";
@@ -127,14 +124,8 @@ const MoreButton = styled(FontAwesomeIcon)`
 `;
 
 function ContentsGrid({ title, contents, section }: IContentsGridProps) {
-  /* State-management for Modal scroll */
-  const setIsModalOpen = useSetRecoilState(modalState);
-
-  /* Routing */
-  const navigate = useNavigate();
-  const onPosterClick = (id: number) => {
-    navigate(`/${section}/none/${id}`);
-    setIsModalOpen(true);
+  const onPosterClick = (section: string, id: number) => {
+    alert(`${section} ${id} 내가 찜한 콘텐츠에 추가되었습니다.`);
   };
 
   const offset = 8;
@@ -152,10 +143,10 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
                   ? getImgPath(content.poster_path, "w500")
                   : noPoster
               }
-              onClick={() => onPosterClick(content.id)}
+              onClick={() => onPosterClick(section, content.id)}
             >
               <PosterOverlay />
-              <PosterButton icon={faChevronRight} />
+              <PosterButton icon={faPlus} />
             </Poster>
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>
