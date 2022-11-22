@@ -78,12 +78,12 @@ function Search() {
 
   // Data-fectching
   const { data: movieSearch, isLoading: loadingMovie } = useQuery<ISearch>(
-    ["movieSearch"],
+    ["movieSearch", keyword],
     () => getSearch("movie", keyword!)
   );
 
   const { data: tvSearch, isLoading: loadingTv } = useQuery<ISearch>(
-    ["tvSearch"],
+    ["tvSearch", keyword],
     () => getSearch("tv", keyword!)
   );
 
