@@ -35,9 +35,9 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/movie/:category/:id" element={<Home />} />
+        <Route path="/movie/:id" element={<Home />} />
         <Route path="/tv" element={<Tv />} />
-        <Route path="/tv/:category/:id" element={<Tv />} />
+        <Route path="/tv/:id" element={<Tv />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:section/:id" element={<Search />} />
       </Routes>

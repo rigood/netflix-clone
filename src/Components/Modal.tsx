@@ -122,12 +122,7 @@ function Modal({ section, details, cast, videos, reco, similar }: IModalProps) {
   const navigate = useNavigate();
   const closeModal = () => {
     setIsModalOpen(false);
-
-    if (section === "movie") {
-      navigate("/");
-    } else if (section === "tv") {
-      navigate("/tv");
-    }
+    navigate(-1);
   };
 
   return (
