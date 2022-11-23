@@ -1,21 +1,23 @@
 import styled from "styled-components";
 
 import { useLocation, useMatch } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   getCast,
   getDetails,
-  getRecommendations,
-  getSearch,
-  getSimilar,
   getVideos,
+  getRecommendations,
+  getSimilar,
+  getMovieSearch,
+  getTvSearch,
 } from "../Api/api";
 import { ICast, IContent, IDetails, ISearch, IVideo } from "../Api/interface";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SearchGrid from "../Components/SearchGrid";
 import Modal from "../Components/Modal";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
+import axios from "axios";
 
 /* Styling */
 const Loader = styled.div`
@@ -67,53 +69,101 @@ function Search() {
   const section = new URLSearchParams(location.search).get("section");
   const id = new URLSearchParams(location.search).get("id");
 
-  // Tab
-  const [isMovieTab, setIsMovieTab] = useState(true);
-
+  // Open Modal
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
-
   useEffect(() => {
     setIsModalOpen(id ? true : false);
   }, [location]);
 
-  // Data-fectching
-  const { data: movieSearch, isLoading: loadingMovie } = useQuery<ISearch>(
+  // Open Tab
+  const [isMovieTab, setIsMovieTab] = useState(true);
+
+  // Search data fetching
+  const {
+    data: movieData,
+    isLoading: loadingMovie,
+    hasNextPage: hasNextMoviePage,
+    fetchNextPage: fetchNextMoviePage,
+  } = useInfiniteQuery(
     ["movieSearch", keyword],
-    () => getSearch("movie", keyword!)
+    ({ pageParam = 1 }) => getMovieSearch(keyword!, pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        return (
+          lastPage.data.page < lastPage.data.total_pages &&
+          lastPage.data.page + 1
+        );
+      },
+    }
   );
 
-  const { data: tvSearch, isLoading: loadingTv } = useQuery<ISearch>(
-    ["tvSearch", keyword],
-    () => getSearch("tv", keyword!)
+  const {
+    data: tvData,
+    isLoading: loadingTv,
+    hasNextPage: hasNextTvPage,
+    fetchNextPage: fetchNextTvPage,
+  } = useInfiniteQuery(
+    ["TvSearch", keyword],
+    ({ pageParam = 1 }) => getTvSearch(keyword!, pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        return (
+          lastPage.data.page < lastPage.data.total_pages &&
+          lastPage.data.page + 1
+        );
+      },
+    }
   );
 
-  const { data: detailsContent } = useQuery<IDetails>(
-    ["detailsContent", id],
-    () => getDetails(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: castContent } = useQuery<ICast[]>(
-    ["castContent", id],
-    () => getCast(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: videoContent } = useQuery<IVideo[]>(
-    ["videoContent", id],
-    () => getVideos(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: recoContent } = useQuery<IContent[]>(
-    ["recoContent", id],
-    () => getRecommendations(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: similarContent } = useQuery<IContent[]>(
-    ["similarContent", id],
-    () => getSimilar(section!, id!),
-    { enabled: !!id }
-  );
+  const movieSearch = movieData?.pages.flatMap((page) => page.data.results);
+  const tvSearch = tvData?.pages.flatMap((page) => page.data.results);
 
-  console.log("movie", movieSearch);
+  console.log(movieSearch);
+  console.log(tvSearch);
+
+  // Infinite Scroll
+  // const observer = useRef<IntersectionObserver>();
+  // const lastRef = useRef<HTMLDivElement>(null);
+  // const lastRef = useCallback(
+  //   (node: any) => {
+  //     if (isLoading) return;
+  //     if (observer.current) observer.current.disconnect();
+  //     observer.current = new IntersectionObserver((entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         setMoviePage((prev) => prev + 1);
+  //       }
+  //     });
+  //     if (node) observer.current.observe(node);
+  //   },
+  //   [isLoading]
+  // );
+
+  // Modal data fetching
+  // const { data: detailsContent } = useQuery<IDetails>(
+  //   ["detailsContent", id],
+  //   () => getDetails(section!, id!),
+  //   { enabled: !!id }
+  // );
+  // const { data: castContent } = useQuery<ICast[]>(
+  //   ["castContent", id],
+  //   () => getCast(section!, id!),
+  //   { enabled: !!id }
+  // );
+  // const { data: videoContent } = useQuery<IVideo[]>(
+  //   ["videoContent", id],
+  //   () => getVideos(section!, id!),
+  //   { enabled: !!id }
+  // );
+  // const { data: recoContent } = useQuery<IContent[]>(
+  //   ["recoContent", id],
+  //   () => getRecommendations(section!, id!),
+  //   { enabled: !!id }
+  // );
+  // const { data: similarContent } = useQuery<IContent[]>(
+  //   ["similarContent", id],
+  //   () => getSimilar(section!, id!),
+  //   { enabled: !!id }
+  // );
 
   // Loading
   const isLoading = loadingMovie || loadingTv;
@@ -135,13 +185,23 @@ function Search() {
             TV 프로그램
           </Tab>
         </TabWrapper>
+        <button
+          onClick={() =>
+            isMovieTab
+              ? hasNextMoviePage && fetchNextMoviePage()
+              : hasNextTvPage && fetchNextTvPage()
+          }
+        >
+          Next
+        </button>
         <SearchGrid
           keyword={keyword!}
           section={isMovieTab ? "movie" : "tv"}
-          contents={isMovieTab ? movieSearch?.results : tvSearch?.results}
+          contents={isMovieTab ? movieSearch! : tvSearch!}
         />
       </Wrapper>
-      {isModalOpen && (
+      {/* <div ref={lastRef}></div> */}
+      {/* {isModalOpen && (
         <Modal
           section={isMovieTab ? "movie" : "tv"}
           details={detailsContent!}
@@ -150,7 +210,7 @@ function Search() {
           reco={recoContent!}
           similar={similarContent!}
         />
-      )}
+      )} */}
     </>
   );
 }

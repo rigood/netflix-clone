@@ -52,9 +52,16 @@ export async function getSimilar(section: string, id: string) {
   return response.data.results;
 }
 
-export async function getSearch(section: string, keyword: string) {
+export async function getMovieSearch(keyword: string, pageParam: number) {
   const response = await db.get(
-    `search/${section}?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr`
+    `search/movie?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr&page=${pageParam}`
   );
-  return response.data;
+  return response;
+}
+
+export async function getTvSearch(keyword: string, pageParam: number) {
+  const response = await db.get(
+    `search/tv?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr&page=${pageParam}`
+  );
+  return response;
 }
