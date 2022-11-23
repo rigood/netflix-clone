@@ -118,9 +118,12 @@ function Search() {
   const isLoading = loadingMovie || loadingTv;
   const movieSearch = movieData?.pages.flatMap((page) => page.data.results);
   const tvSearch = tvData?.pages.flatMap((page) => page.data.results);
+  const movieCount = movieData?.pages[0].data.total_results;
+  const tvCount = tvData?.pages[0].data.total_results;
 
-  console.log(movieSearch);
+  console.log(tvData);
   console.log(tvSearch);
+  console.log(hasNextTvPage);
 
   // Infinite Scroll
   const movieObserver = useRef<IntersectionObserver>();
@@ -130,12 +133,14 @@ function Search() {
       if (movieObserver.current) movieObserver.current.disconnect();
       movieObserver.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          hasNextMoviePage && fetchNextMoviePage();
+          if (hasNextMoviePage) {
+            fetchNextMoviePage();
+          }
         }
       });
       if (node) movieObserver.current.observe(node);
     },
-    [isLoading, keyword]
+    [isLoading, keyword, movieData]
   );
 
   const tvObserver = useRef<IntersectionObserver>();
@@ -150,7 +155,7 @@ function Search() {
       });
       if (node) tvObserver.current.observe(node);
     },
-    [isLoading, keyword]
+    [isLoading, keyword, tvData]
   );
 
   // Modal data fetching
@@ -181,7 +186,6 @@ function Search() {
   // );
 
   // Loading
-
   if (isLoading) {
     return <Loader>로딩중</Loader>;
   }
@@ -194,10 +198,10 @@ function Search() {
         </Title>
         <TabWrapper>
           <Tab isActive={isMovieTab} onClick={() => setIsMovieTab(true)}>
-            영화
+            영화({movieCount})
           </Tab>
           <Tab isActive={!isMovieTab} onClick={() => setIsMovieTab(false)}>
-            TV 프로그램
+            TV 프로그램({tvCount})
           </Tab>
         </TabWrapper>
         <SearchGrid
