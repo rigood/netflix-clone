@@ -121,7 +121,7 @@ export interface ISliderProps {
 }
 
 export interface IModalProps {
-  section: string;
+  section?: string;
   id?: string;
 }
 

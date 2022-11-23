@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getImgPath, getRating, noPoster } from "../Api/utils";
 import { IMyListGridProps } from "../Api/interface";
+import { useNavigate } from "react-router-dom";
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -100,6 +101,11 @@ const Info = styled.div`
 `;
 
 function MyListGrid({ title, contents, section }: IMyListGridProps) {
+  const navigate = useNavigate();
+  const onPosterClick = (id: number) => {
+    navigate(`/mylist/${section}/${id}`);
+  };
+
   return (
     <>
       <Title>{title}</Title>
@@ -112,6 +118,7 @@ function MyListGrid({ title, contents, section }: IMyListGridProps) {
                   ? getImgPath(content.poster_path, "w500")
                   : noPoster
               }
+              onClick={() => onPosterClick(content.id)}
             >
               <PosterOverlay />
               <PosterButton icon={faPlus} />

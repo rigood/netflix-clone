@@ -124,10 +124,11 @@ const CloseBtn = styled(Button)`
   right: 20px;
 `;
 
-function Modal({ section, id: idQuery }: IModalProps) {
-  // Extract id
-  const { id: idParams } = useParams();
-  const id = idParams || idQuery;
+function Modal({ section: sectionProp, id: idProp }: IModalProps) {
+  // Extract section, id
+  const { section: sectionParam, id: idParam } = useParams();
+  const section = sectionParam || sectionProp;
+  const id = idParam || idProp;
 
   // Open Modal
   const location = useLocation();
@@ -146,27 +147,27 @@ function Modal({ section, id: idQuery }: IModalProps) {
   // Fetch data
   const { data: details, isLoading: detailsLoading } = useQuery<IDetails>(
     ["detailsContent", id],
-    () => getDetails(section, id!),
+    () => getDetails(section!, id!),
     { enabled: !!id }
   );
   const { data: cast, isLoading: castLoading } = useQuery<ICast[]>(
     ["castContent", id],
-    () => getCast(section, id!),
+    () => getCast(section!, id!),
     { enabled: !!id }
   );
   const { data: videos, isLoading: videosLoading } = useQuery<IVideo[]>(
     ["videoContent", id],
-    () => getVideos(section, id!),
+    () => getVideos(section!, id!),
     { enabled: !!id }
   );
   const { data: reco, isLoading: recoLoading } = useQuery<IContent[]>(
     ["recoContent", id],
-    () => getRecommendations(section, id!),
+    () => getRecommendations(section!, id!),
     { enabled: !!id }
   );
   const { data: similar, isLoading: similarLoading } = useQuery<IContent[]>(
     ["similarContent", id],
-    () => getSimilar(section, id!),
+    () => getSimilar(section!, id!),
     { enabled: !!id }
   );
 
@@ -237,12 +238,12 @@ function Modal({ section, id: idQuery }: IModalProps) {
                 <ContentsGrid
                   title="추천 콘텐츠"
                   contents={reco!}
-                  section={section}
+                  section={section!}
                 />
                 <ContentsGrid
                   title="비슷한 콘텐츠"
                   contents={similar!}
-                  section={section}
+                  section={section!}
                 />
               </ContentWrapper>
               <CloseBtn icon={faClose} onClick={closeModal} />
