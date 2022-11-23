@@ -77,12 +77,6 @@ function Search() {
     window.scrollTo({ top: 0 });
   }, [keyword]);
 
-  // Open Modal
-  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
-  useEffect(() => {
-    setIsModalOpen(id ? true : false);
-  }, [location]);
-
   // Fetch search-data
   const {
     data: movieData,
@@ -175,33 +169,6 @@ function Search() {
     [isLoading, keyword, tvData]
   );
 
-  // Fetch Modal-data
-  const { data: detailsContent } = useQuery<IDetails>(
-    ["detailsContent", id],
-    () => getDetails(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: castContent } = useQuery<ICast[]>(
-    ["castContent", id],
-    () => getCast(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: videoContent } = useQuery<IVideo[]>(
-    ["videoContent", id],
-    () => getVideos(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: recoContent } = useQuery<IContent[]>(
-    ["recoContent", id],
-    () => getRecommendations(section!, id!),
-    { enabled: !!id }
-  );
-  const { data: similarContent } = useQuery<IContent[]>(
-    ["similarContent", id],
-    () => getSimilar(section!, id!),
-    { enabled: !!id }
-  );
-
   // Loading
   if (isLoading) {
     return <Loader>로딩중</Loader>;
@@ -228,16 +195,7 @@ function Search() {
           ref={isMovieTab ? movieRef : tvRef}
         />
       </Wrapper>
-      {isModalOpen && (
-        <Modal
-          section={isMovieTab ? "movie" : "tv"}
-          details={detailsContent!}
-          cast={castContent!}
-          videos={videoContent!}
-          reco={recoContent!}
-          similar={similarContent!}
-        />
-      )}
+      <Modal section={section!} id={id!} />
     </>
   );
 }

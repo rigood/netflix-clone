@@ -63,45 +63,6 @@ function Tv() {
     IContent[]
   >(["topRatedTvList"], () => getList("tv", "top_rated"));
 
-  /* Routing for Modal */
-  // const modalMatch = useMatch("/:section/:id");
-  // const id = modalMatch?.params.id;
-  const { id } = useParams();
-  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    setIsModalOpen(id ? true : false);
-  }, [location]);
-
-  /* Modal Data-fectching */
-  const { data: detailsContent } = useQuery<IDetails>(
-    ["detailsContent", id],
-    () => getDetails("tv", id!),
-    { enabled: !!id }
-  );
-  const { data: castContent } = useQuery<ICast[]>(
-    ["castContent", id],
-    () => getCast("tv", id!),
-    { enabled: !!id }
-  );
-  const { data: videoContent } = useQuery<IVideo[]>(
-    ["videoContent", id],
-    () => getVideos("tv", id!),
-    { enabled: !!id }
-  );
-  const { data: recoContent } = useQuery<IContent[]>(
-    ["recoContent", id],
-    () => getRecommendations("tv", id!),
-    { enabled: !!id }
-  );
-  const { data: similarContent } = useQuery<IContent[]>(
-    ["similarContent", id],
-    () => getSimilar("tv", id!),
-    { enabled: !!id }
-  );
-
   /* Loading */
   const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
   if (isLoading) {
@@ -133,16 +94,7 @@ function Tv() {
           />
         </SliderWrapper>
       </Background>
-      {isModalOpen && (
-        <Modal
-          section="tv"
-          details={detailsContent!}
-          cast={castContent!}
-          videos={videoContent!}
-          reco={recoContent!}
-          similar={similarContent!}
-        />
-      )}
+      <Modal section="tv" />
     </>
   );
 }

@@ -122,11 +122,7 @@ export interface ISliderProps {
 
 export interface IModalProps {
   section: string;
-  details: IDetails;
-  cast: ICast[];
-  videos: IVideo[];
-  reco: IContent[];
-  similar: IContent[];
+  id?: string;
 }
 
 export interface IRowVariantsProps {

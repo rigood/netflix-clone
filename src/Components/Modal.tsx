@@ -1,33 +1,45 @@
-import styled from "styled-components";
-
-/* Fetcher function */
-import { getImgPath, getRating, getRuntime } from "../Api/utils";
-
-/* Interface */
-import { IModalProps } from "../Api/interface";
-
-/* Routing */
-import { useNavigate } from "react-router-dom";
-
-/* Motion */
-import { motion } from "framer-motion";
-
-/* Modal-scroll */
-import { useSetRecoilState } from "recoil";
+import { useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 
-/* Default BgImg */
-import { noBackdrop } from "../Api/utils";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 
-/* Close Btn */
+import {
+  ICast,
+  IContent,
+  IDetails,
+  IModalProps,
+  IVideo,
+} from "../Api/interface";
+import {
+  getCast,
+  getDetails,
+  getRecommendations,
+  getSimilar,
+  getVideos,
+} from "../Api/api";
+
+import MainVideo from "./MainVideo";
+import Videos from "./Videos";
+import CastGrid from "./CastGrid";
+import ContentsGrid from "./ContentsGrid";
+import { getImgPath, getRating, getRuntime, noBackdrop } from "../Api/utils";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-import MainVideo from "./MainVideo";
-import ContentsGrid from "./ContentsGrid";
-import CastGrid from "./CastGrid";
-import Videos from "./Videos";
 
-/* Styling */
+// Styled-components
+
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+`;
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -112,84 +124,130 @@ const CloseBtn = styled(Button)`
   right: 20px;
 `;
 
-function Modal({ section, details, cast, videos, reco, similar }: IModalProps) {
-  /* State-management for Modal scroll */
+function Modal({ section, id: idQuery }: IModalProps) {
+  // Extract id
+  const { id: idParams } = useParams();
+  const id = idParams || idQuery;
 
-  const mainVideoKey = videos?.[0]?.key;
+  // Open Modal
+  const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
-  /* Routing */
+  useEffect(() => {
+    setIsModalOpen(id ? true : false);
+  }, [location]);
+
+  // Close Modal
   const navigate = useNavigate();
   const closeModal = () => {
     navigate(-1);
   };
 
+  // Fetch data
+  const { data: details, isLoading: detailsLoading } = useQuery<IDetails>(
+    ["detailsContent", id],
+    () => getDetails(section, id!),
+    { enabled: !!id }
+  );
+  const { data: cast, isLoading: castLoading } = useQuery<ICast[]>(
+    ["castContent", id],
+    () => getCast(section, id!),
+    { enabled: !!id }
+  );
+  const { data: videos, isLoading: videosLoading } = useQuery<IVideo[]>(
+    ["videoContent", id],
+    () => getVideos(section, id!),
+    { enabled: !!id }
+  );
+  const { data: reco, isLoading: recoLoading } = useQuery<IContent[]>(
+    ["recoContent", id],
+    () => getRecommendations(section, id!),
+    { enabled: !!id }
+  );
+  const { data: similar, isLoading: similarLoading } = useQuery<IContent[]>(
+    ["similarContent", id],
+    () => getSimilar(section, id!),
+    { enabled: !!id }
+  );
+
+  const mainVideoKey = videos?.[0]?.key;
+
+  // Loading
+  const isLoading =
+    detailsLoading ||
+    castLoading ||
+    videosLoading ||
+    recoLoading ||
+    similarLoading;
+
   return (
     <>
-      {details && (
+      {isModalOpen && (
         <Overlay
           onClick={closeModal}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Wrapper
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {mainVideoKey ? (
-              <MainVideo videoKey={mainVideoKey} />
-            ) : (
-              <Backdrop
-                bg={
-                  details.backdrop_path
-                    ? getImgPath(details.backdrop_path)
-                    : noBackdrop
-                }
-              />
-            )}
-
-            <ContentWrapper>
-              <Genres>
-                {details.genres.map((genre) => (
-                  <span key={genre.id}>{genre.name}</span>
-                ))}
-              </Genres>
-              <Title>{details.title || details.name}</Title>
-              <Number>
-                {section === "movie"
-                  ? `상영시간: ${getRuntime(details.runtime)}`
-                  : `시즌 ${details.number_of_seasons}개 에피소드 ${details.number_of_episodes}개`}
-              </Number>
-              <DateAndRating>
-                <span>
+          {isLoading ? (
+            <Loader>로딩중</Loader>
+          ) : (
+            <Wrapper
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {mainVideoKey ? (
+                <MainVideo videoKey={mainVideoKey} />
+              ) : (
+                <Backdrop
+                  bg={
+                    details?.backdrop_path
+                      ? getImgPath(details?.backdrop_path)
+                      : noBackdrop
+                  }
+                />
+              )}
+              <ContentWrapper>
+                <Genres>
+                  {details?.genres.map((genre) => (
+                    <span key={genre.id}>{genre.name}</span>
+                  ))}
+                </Genres>
+                <Title>{details?.title || details?.name}</Title>
+                <Number>
                   {section === "movie"
-                    ? `개봉일: ${details.release_date}`
-                    : `첫방영: ${details.first_air_date}`}
-                </span>
-                <span>{getRating(details.vote_average)}</span>
-              </DateAndRating>
-              <Overview>
-                {details.overview
-                  ? details.overview
-                  : "줄거리 정보 준비중입니다."}
-              </Overview>
-              <CastGrid title="출연진" cast={cast} />
-              <Videos title="관련 영상" videos={videos} />
-              <ContentsGrid
-                title="추천 콘텐츠"
-                contents={reco}
-                section={section}
-              />
-              <ContentsGrid
-                title="비슷한 콘텐츠"
-                contents={similar}
-                section={section}
-              />
-            </ContentWrapper>
-            <CloseBtn icon={faClose} onClick={closeModal} />
-          </Wrapper>
+                    ? `상영시간: ${getRuntime(details?.runtime!)}`
+                    : `시즌 ${details?.number_of_seasons}개 에피소드 ${details?.number_of_episodes}개`}
+                </Number>
+                <DateAndRating>
+                  <span>
+                    {section === "movie"
+                      ? `개봉일: ${details?.release_date}`
+                      : `첫방영: ${details?.first_air_date}`}
+                  </span>
+                  <span>{getRating(details?.vote_average!)}</span>
+                </DateAndRating>
+                <Overview>
+                  {details?.overview || "줄거리 정보 준비중입니다."}
+                </Overview>
+                <CastGrid title="출연진" cast={cast!} />
+                <Videos title="관련 영상" videos={videos!} />
+                <ContentsGrid
+                  title="추천 콘텐츠"
+                  contents={reco!}
+                  section={section}
+                />
+                <ContentsGrid
+                  title="비슷한 콘텐츠"
+                  contents={similar!}
+                  section={section}
+                />
+              </ContentWrapper>
+              <CloseBtn icon={faClose} onClick={closeModal} />
+            </Wrapper>
+          )}
         </Overlay>
       )}
     </>
