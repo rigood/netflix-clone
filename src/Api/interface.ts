@@ -105,15 +105,6 @@ export interface IVideo {
 
 /////////////////////////////////////
 
-export interface ISearch {
-  page: number;
-  results: IContent[];
-  total_pages: number;
-  total_results: number;
-}
-
-/////////////////////////////////////
-
 /* Props interface */
 
 export interface IBannerProps {

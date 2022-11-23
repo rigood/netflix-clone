@@ -1,12 +1,10 @@
 import styled from "styled-components";
+import { forwardRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { ISearchGridProps } from "../Api/interface";
 import { getImgPath, getRating, noPoster } from "../Api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { useSetRecoilState } from "recoil";
-import { modalState } from "../atom";
-import { useNavigate } from "react-router-dom";
-import { forwardRef } from "react";
 
 const GridWrapper = styled.div`
   width: 100%;
