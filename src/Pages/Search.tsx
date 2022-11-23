@@ -115,6 +115,7 @@ function Search() {
     }
   );
 
+  const isLoading = loadingMovie || loadingTv;
   const movieSearch = movieData?.pages.flatMap((page) => page.data.results);
   const tvSearch = tvData?.pages.flatMap((page) => page.data.results);
 
@@ -122,21 +123,35 @@ function Search() {
   console.log(tvSearch);
 
   // Infinite Scroll
-  // const observer = useRef<IntersectionObserver>();
-  // const lastRef = useRef<HTMLDivElement>(null);
-  // const lastRef = useCallback(
-  //   (node: any) => {
-  //     if (isLoading) return;
-  //     if (observer.current) observer.current.disconnect();
-  //     observer.current = new IntersectionObserver((entries) => {
-  //       if (entries[0].isIntersecting) {
-  //         setMoviePage((prev) => prev + 1);
-  //       }
-  //     });
-  //     if (node) observer.current.observe(node);
-  //   },
-  //   [isLoading]
-  // );
+  const movieObserver = useRef<IntersectionObserver>();
+  const movieRef = useCallback(
+    (node: any) => {
+      if (isLoading) return;
+      if (movieObserver.current) movieObserver.current.disconnect();
+      movieObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          hasNextMoviePage && fetchNextMoviePage();
+        }
+      });
+      if (node) movieObserver.current.observe(node);
+    },
+    [isLoading, keyword]
+  );
+
+  const tvObserver = useRef<IntersectionObserver>();
+  const tvRef = useCallback(
+    (node: any) => {
+      if (isLoading) return;
+      if (tvObserver.current) tvObserver.current.disconnect();
+      tvObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          hasNextTvPage && fetchNextTvPage();
+        }
+      });
+      if (node) tvObserver.current.observe(node);
+    },
+    [isLoading, keyword]
+  );
 
   // Modal data fetching
   // const { data: detailsContent } = useQuery<IDetails>(
@@ -166,7 +181,7 @@ function Search() {
   // );
 
   // Loading
-  const isLoading = loadingMovie || loadingTv;
+
   if (isLoading) {
     return <Loader>로딩중</Loader>;
   }
@@ -185,22 +200,13 @@ function Search() {
             TV 프로그램
           </Tab>
         </TabWrapper>
-        <button
-          onClick={() =>
-            isMovieTab
-              ? hasNextMoviePage && fetchNextMoviePage()
-              : hasNextTvPage && fetchNextTvPage()
-          }
-        >
-          Next
-        </button>
         <SearchGrid
           keyword={keyword!}
           section={isMovieTab ? "movie" : "tv"}
           contents={isMovieTab ? movieSearch! : tvSearch!}
+          ref={isMovieTab ? movieRef : tvRef}
         />
       </Wrapper>
-      {/* <div ref={lastRef}></div> */}
       {/* {isModalOpen && (
         <Modal
           section={isMovieTab ? "movie" : "tv"}

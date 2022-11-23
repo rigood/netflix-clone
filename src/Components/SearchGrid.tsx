@@ -6,11 +6,12 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 import { useNavigate } from "react-router-dom";
+import { forwardRef } from "react";
 
 const GridWrapper = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   column-gap: 20px;
   row-gap: 40px;
   position: relative;
@@ -96,7 +97,10 @@ const Info = styled.div`
   }
 `;
 
-function SearchGrid({ keyword, section, contents }: ISearchGridProps) {
+function SearchGrid(
+  { keyword, section, contents }: ISearchGridProps,
+  ref: any
+) {
   /* State-management for Modal scroll */
 
   /* Routing */
@@ -107,9 +111,12 @@ function SearchGrid({ keyword, section, contents }: ISearchGridProps) {
 
   return (
     <GridWrapper>
-      {contents?.map((content) => {
+      {contents?.map((content, index) => {
         return (
-          <ContentWrapper key={content.id}>
+          <ContentWrapper
+            key={content.id}
+            ref={contents?.length === index + 1 ? ref : null}
+          >
             <Poster
               bg={
                 content.poster_path
@@ -137,4 +144,4 @@ function SearchGrid({ keyword, section, contents }: ISearchGridProps) {
   );
 }
 
-export default SearchGrid;
+export default forwardRef(SearchGrid);
