@@ -11,8 +11,22 @@ export function getYoutubeUrl(key: string) {
 }
 
 export function getRating(rating: number) {
-  const rounded = Math.round(rating * 10) / 10;
-  return `⭐${rounded}점`;
+  if (rating) {
+    const rounded = Math.round(rating * 10) / 10;
+    return `⭐${rounded}점`;
+  } else {
+    return `⭐없음`;
+  }
+}
+
+export function getRuntime(runtime: number) {
+  if (runtime) {
+    const hour = Math.floor(runtime / 60);
+    const min = runtime % 60;
+    return `${runtime}분 (${hour}시간 ${min}분)`;
+  } else {
+    return `미정`;
+  }
 }
 
 export const noBackdrop = process.env.PUBLIC_URL + "/assets/noBackdrop.png";

@@ -11,6 +11,7 @@ import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { getRating } from "../Api/utils";
 
 /* Styling */
 const Container = styled.div`
@@ -58,6 +59,12 @@ const Overview = styled.p`
   text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);
   word-wrap: break-word;
   word-break: keep-all;
+  --max-lines: 4;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--max-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.8vw;
   @media screen and (max-width: 960px) {
     display: none;
   }
@@ -112,35 +119,35 @@ function Banner({ section, title, content }: IBannerProps) {
   };
 
   return (
-    <Container>
-      <Title>{section === "movie" ? content?.title : content?.name}</Title>
-      <Ranking>
-        <img
-          src={process.env.PUBLIC_URL + "/assets/logo.png"}
-          alt="Netflix logo"
-        />
-        <h2>오늘의 {title} 순위 1위</h2>
-      </Ranking>
-      <Overview>
-        {content?.overview
-          ? content?.overview.length! > 100
-            ? `${content?.overview.slice(0, 100)}... 더보기`
-            : content?.overview
-          : "등록된 Overview 정보가 없습니다."}
-      </Overview>
-      <DateAndRating>
-        <span>
-          {section === "movie"
-            ? `개봉일 : ${content?.release_date}`
-            : `첫방영 : ${content?.first_air_date}`}
-        </span>
-        <span>평점 : ⭐{content?.vote_average} 점</span>
-      </DateAndRating>
-      <Button onClick={() => onButtonClick(content?.id!)}>
-        <FontAwesomeIcon icon={faInfoCircle} />
-        <span>자세히 보기</span>
-      </Button>
-    </Container>
+    <>
+      {content && (
+        <Container>
+          <Title>{section === "movie" ? content.title : content.name}</Title>
+          <Ranking>
+            <img
+              src={process.env.PUBLIC_URL + "/assets/logo.png"}
+              alt="Netflix logo"
+            />
+            <h2>오늘의 {title} 순위 1위</h2>
+          </Ranking>
+          <Overview>
+            {content.overview || "등록된 Overview 정보가 없습니다."}
+          </Overview>
+          <DateAndRating>
+            <span>
+              {section === "movie"
+                ? `개봉일: ${content.release_date}`
+                : `첫방영: ${content.first_air_date}`}
+            </span>
+            <span>평점: {getRating(content.vote_average)}</span>
+          </DateAndRating>
+          <Button onClick={() => onButtonClick(content.id)}>
+            <FontAwesomeIcon icon={faInfoCircle} />
+            <span>자세히 보기</span>
+          </Button>
+        </Container>
+      )}
+    </>
   );
 }
 

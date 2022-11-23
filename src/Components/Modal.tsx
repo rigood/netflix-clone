@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 /* Fetcher function */
-import { getImgPath, getRating } from "../Api/utils";
+import { getImgPath, getRating, getRuntime } from "../Api/utils";
 
 /* Interface */
 import { IModalProps } from "../Api/interface";
@@ -159,14 +159,14 @@ function Modal({ section, details, cast, videos, reco, similar }: IModalProps) {
               <Title>{details.title || details.name}</Title>
               <Number>
                 {section === "movie"
-                  ? `상영시간 : ${details.runtime}분`
+                  ? `상영시간: ${getRuntime(details.runtime)}`
                   : `시즌 ${details.number_of_seasons}개 에피소드 ${details.number_of_episodes}개`}
               </Number>
               <DateAndRating>
                 <span>
                   {section === "movie"
-                    ? `개봉일 : ${details.release_date}`
-                    : `첫방영 : ${details.first_air_date}`}
+                    ? `개봉일: ${details.release_date}`
+                    : `첫방영: ${details.first_air_date}`}
                 </span>
                 <span>{getRating(details.vote_average)}</span>
               </DateAndRating>

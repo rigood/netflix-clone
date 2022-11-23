@@ -152,8 +152,8 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
               <h1>{section === "movie" ? content.title : content.name}</h1>
               <div>
                 {section === "movie"
-                  ? "개봉일 : " + content.release_date
-                  : "첫방영 : " + content.first_air_date}
+                  ? "개봉일: " + content.release_date
+                  : "첫방영: " + content.first_air_date}
               </div>
               <div>{getRating(content.vote_average)}</div>
             </Info>
