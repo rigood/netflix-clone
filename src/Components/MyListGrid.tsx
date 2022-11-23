@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { getImgPath, getRating, noPoster } from "../Api/utils";
 import { IMyListGridProps } from "../Api/interface";
 import { useNavigate } from "react-router-dom";
@@ -121,7 +121,7 @@ function MyListGrid({ title, contents, section }: IMyListGridProps) {
               onClick={() => onPosterClick(content.id)}
             >
               <PosterOverlay />
-              <PosterButton icon={faPlus} />
+              <PosterButton icon={faChevronRight} />
             </Poster>
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>

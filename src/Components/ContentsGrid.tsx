@@ -1,12 +1,17 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faChevronDown,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { IContent, IContentsGridProps } from "../Api/interface";
 import { getImgPath, getRating, noPoster } from "../Api/utils";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { myMovieAtom, myTvAtom } from "../atom";
+// import { useRecoilState } from "recoil";
+// import { myMovieAtom, myTvAtom } from "../atom";
 import { useState } from "react";
+import useList from "../hook/useList";
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -124,17 +129,7 @@ const MoreButton = styled(FontAwesomeIcon)`
 `;
 
 function ContentsGrid({ title, contents, section }: IContentsGridProps) {
-  const [myMovie, setMyMovie] = useRecoilState<IContent[]>(myMovieAtom);
-  const [myTv, setMyTv] = useRecoilState<IContent[]>(myTvAtom);
-
-  const onPosterClick = (content: IContent) => {
-    if (section === "movie") {
-      setMyMovie([content, ...myMovie]);
-    } else if (section === "tv") {
-      setMyTv([content, ...myTv]);
-    }
-    alert(`My List에 추가되었습니다!`);
-  };
+  const [checkDuplicate, onPosterClick] = useList(section);
 
   const offset = 8;
   const [index, setIndex] = useState(offset);
@@ -154,7 +149,9 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
               onClick={() => onPosterClick(content)}
             >
               <PosterOverlay />
-              <PosterButton icon={faPlus} />
+              <PosterButton
+                icon={checkDuplicate(content.id) ? faCheck : faPlus}
+              />
             </Poster>
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>
