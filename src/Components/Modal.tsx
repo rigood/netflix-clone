@@ -29,7 +29,8 @@ import ContentsGrid from "./ContentsGrid";
 import { getImgPath, getRating, getRuntime, noBackdrop } from "../Api/utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
+import useList from "../hook/useList";
 
 // Styled-components
 
@@ -98,7 +99,6 @@ const Genres = styled.div`
 `;
 
 const Number = styled.div`
-  margin-bottom: 5px;
   font-size: 14px;
   font-weight: 400;
 `;
@@ -108,12 +108,38 @@ const Title = styled.h1`
   margin-bottom: 10px;
 `;
 
-const DateAndRating = styled.div`
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 15px;
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+`;
+
+const DateAndRating = styled.div`
   font-size: 16px;
   span:first-child {
     margin-right: 10px;
     color: ${(props) => props.theme.green};
+  }
+`;
+
+const ListButton = styled(FontAwesomeIcon)`
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: white;
+    color: white;
   }
 `;
 
@@ -173,6 +199,9 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
 
   const mainVideoKey = videos?.[0]?.key;
 
+  // Add/Remove content from MyList
+  const [checkDuplicate, onPosterClick] = useList(section!);
+
   // Loading
   const isLoading =
     detailsLoading ||
@@ -217,19 +246,28 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
                   ))}
                 </Genres>
                 <Title>{details?.title || details?.name}</Title>
-                <Number>
-                  {section === "movie"
-                    ? `상영시간: ${getRuntime(details?.runtime!)}`
-                    : `시즌 ${details?.number_of_seasons}개 에피소드 ${details?.number_of_episodes}개`}
-                </Number>
-                <DateAndRating>
-                  <span>
-                    {section === "movie"
-                      ? `개봉일: ${details?.release_date}`
-                      : `첫방영: ${details?.first_air_date}`}
-                  </span>
-                  <span>{getRating(details?.vote_average!)}</span>
-                </DateAndRating>
+                <Row>
+                  <div className="info">
+                    <Number>
+                      {section === "movie"
+                        ? `상영시간: ${getRuntime(details?.runtime!)}`
+                        : `시즌 ${details?.number_of_seasons}개 에피소드 ${details?.number_of_episodes}개`}
+                    </Number>
+                    <DateAndRating>
+                      <span>
+                        {section === "movie"
+                          ? `개봉일: ${details?.release_date}`
+                          : `첫방영: ${details?.first_air_date}`}
+                      </span>
+                      <span>{getRating(details?.vote_average!)}</span>
+                    </DateAndRating>
+                  </div>
+                  <div>
+                    <ListButton
+                      icon={checkDuplicate(details?.id!) ? faCheck : faPlus}
+                    />
+                  </div>
+                </Row>
                 <Overview>
                   {details?.overview || "줄거리 정보 준비중입니다."}
                 </Overview>
