@@ -15,7 +15,7 @@ import {
 import { getImgPath } from "../Api/utils";
 
 /* Interface */
-import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
+import { ICast, IContent, IVideo } from "../Api/interface";
 
 /* Routing */
 import { useLocation, useMatch, useParams } from "react-router-dom";

@@ -6,7 +6,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 
-import { ICast, IContent, IDetails, IVideo } from "../Api/interface";
+import { ICast, IContent, IVideo } from "../Api/interface";
 import {
   getCast,
   getDetails,

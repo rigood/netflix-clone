@@ -7,13 +7,7 @@ import { modalState } from "../atom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-import {
-  ICast,
-  IContent,
-  IDetails,
-  IModalProps,
-  IVideo,
-} from "../Api/interface";
+import { ICast, IContent, IModalProps, IVideo } from "../Api/interface";
 import {
   getCast,
   getDetails,
@@ -171,7 +165,7 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
   };
 
   // Fetch data
-  const { data: details, isLoading: detailsLoading } = useQuery<IDetails>(
+  const { data: details, isLoading: detailsLoading } = useQuery<IContent>(
     ["detailsContent", id],
     () => getDetails(section!, id!),
     { enabled: !!id }
@@ -265,6 +259,7 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
                   <div>
                     <ListButton
                       icon={checkDuplicate(details?.id!) ? faCheck : faPlus}
+                      onClick={() => onPosterClick(details!)}
                     />
                   </div>
                 </Row>

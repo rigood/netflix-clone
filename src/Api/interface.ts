@@ -2,25 +2,25 @@
 
 /////////////////////////////////////
 
-export interface IContent {
-  id: number;
-  backdrop_path: string;
-  poster_path: string;
-  overview: string;
-  vote_average: number;
-}
+// export interface IContent {
+//   id: number;
+//   backdrop_path: string;
+//   poster_path: string;
+//   overview: string;
+//   vote_average: number;
+// }
 
-/* for Movie */
-export interface IContent {
-  title: string;
-  release_date: string;
-}
+// /* for Movie */
+// export interface IContent {
+//   title: string;
+//   release_date: string;
+// }
 
-/* for Tv */
-export interface IContent {
-  name: string;
-  first_air_date: string;
-}
+// /* for Tv */
+// export interface IContent {
+//   name: string;
+//   first_air_date: string;
+// }
 
 /////////////////////////////////////
 
@@ -47,7 +47,7 @@ export interface ISeason {
 
 /////////////////////////////////////
 
-export interface IDetails {
+export interface IContent {
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -59,7 +59,7 @@ export interface IDetails {
 }
 
 /* for Movie */
-export interface IDetails {
+export interface IContent {
   title: string;
   runtime: number;
   release_date: string;
@@ -69,7 +69,7 @@ export interface IDetails {
 }
 
 /* for Tv */
-export interface IDetails {
+export interface IContent {
   name: string;
   episode_run_time: number;
   first_air_date: string;
