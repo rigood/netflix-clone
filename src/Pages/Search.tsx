@@ -115,15 +115,27 @@ function Search() {
     }
   );
 
-  const isLoading = loadingMovie || loadingTv;
   const movieSearch = movieData?.pages.flatMap((page) => page.data.results);
-  const tvSearch = tvData?.pages.flatMap((page) => page.data.results);
   const movieCount = movieData?.pages[0].data.total_results;
-  const tvCount = tvData?.pages[0].data.total_results;
+  const filteredMovieSearch = movieSearch?.filter((movie, i) => {
+    return (
+      movieSearch.findIndex((movie2, j) => {
+        return movie.id === movie2.id;
+      }) === i
+    );
+  });
 
-  console.log(tvData);
-  console.log(tvSearch);
-  console.log(hasNextTvPage);
+  const tvSearch = tvData?.pages.flatMap((page) => page.data.results);
+  const tvCount = tvData?.pages[0].data.total_results;
+  const filteredTvSearch = tvSearch?.filter((tv, i) => {
+    return (
+      tvSearch.findIndex((tv2, j) => {
+        return tv.id === tv2.id;
+      }) === i
+    );
+  });
+
+  const isLoading = loadingMovie || loadingTv;
 
   // Infinite Scroll
   const movieObserver = useRef<IntersectionObserver>();
@@ -207,7 +219,7 @@ function Search() {
         <SearchGrid
           keyword={keyword!}
           section={isMovieTab ? "movie" : "tv"}
-          contents={isMovieTab ? movieSearch! : tvSearch!}
+          contents={isMovieTab ? filteredMovieSearch! : filteredTvSearch!}
           ref={isMovieTab ? movieRef : tvRef}
         />
       </Wrapper>
