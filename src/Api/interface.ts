@@ -155,3 +155,9 @@ export interface ISearchGridProps {
   section: string;
   contents?: IContent[];
 }
+
+export interface IMyListGridProps {
+  title: string;
+  contents: IContent[];
+  section: string;
+}

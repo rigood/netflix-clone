@@ -8,6 +8,7 @@ import Header from "./Components/Header";
 import Home from "./Pages/Home";
 import Tv from "./Pages/Tv";
 import Search from "./Pages/Search";
+import MyList from "./Pages/MyList";
 
 /* State-management for body-scroll */
 import { useRecoilState } from "recoil";
@@ -40,6 +41,8 @@ function App() {
         <Route path="/tv/:id" element={<Tv />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:section/:id" element={<Search />} />
+        <Route path="/mylist" element={<MyList />} />
+        <Route path="/mylist/:section/:id" element={<MyList />} />
       </Routes>
     </BrowserRouter>
   );

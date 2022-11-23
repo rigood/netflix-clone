@@ -1,12 +1,8 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { IContent, IContentsGridProps } from "../Api/interface";
 import { getImgPath, getRating, noPoster } from "../Api/utils";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { myMovieAtom, myTvAtom } from "../atom";
-import { useState } from "react";
+import { IMyListGridProps } from "../Api/interface";
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -17,7 +13,7 @@ const Title = styled.h1`
 const GridWrapper = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   column-gap: 20px;
   row-gap: 40px;
   position: relative;
@@ -103,47 +99,12 @@ const Info = styled.div`
   }
 `;
 
-const MoreButton = styled(FontAwesomeIcon)`
-  position: absolute;
-  bottom: -50px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 20px;
-  height: 20px;
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid lightgray;
-  color: lightgray;
-  cursor: pointer;
-  &:hover {
-    background-color: gray;
-    border-color: white;
-    color: white;
-  }
-`;
-
-function ContentsGrid({ title, contents, section }: IContentsGridProps) {
-  const [myMovie, setMyMovie] = useRecoilState<IContent[]>(myMovieAtom);
-  const [myTv, setMyTv] = useRecoilState<IContent[]>(myTvAtom);
-
-  const onPosterClick = (content: IContent) => {
-    if (section === "movie") {
-      setMyMovie([content, ...myMovie]);
-    } else if (section === "tv") {
-      setMyTv([content, ...myTv]);
-    }
-    alert(`My List에 추가되었습니다!`);
-  };
-
-  const offset = 8;
-  const [index, setIndex] = useState(offset);
-
+function MyListGrid({ title, contents, section }: IMyListGridProps) {
   return (
     <>
       <Title>{title}</Title>
       <GridWrapper>
-        {contents?.slice(0, index).map((content) => (
+        {contents?.map((content) => (
           <ContentWrapper key={content.id}>
             <Poster
               bg={
@@ -151,7 +112,6 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
                   ? getImgPath(content.poster_path, "w500")
                   : noPoster
               }
-              onClick={() => onPosterClick(content)}
             >
               <PosterOverlay />
               <PosterButton icon={faPlus} />
@@ -167,16 +127,10 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
             </Info>
           </ContentWrapper>
         ))}
-        {index < contents?.length ? (
-          <MoreButton
-            icon={faChevronDown}
-            onClick={() => setIndex((prev) => prev + offset)}
-          />
-        ) : null}
       </GridWrapper>
-      {contents?.length === 0 ? "준비중입니다." : null}
+      {contents?.length === 0 ? "목록이 비어있습니다." : null}
     </>
   );
 }
 
-export default ContentsGrid;
+export default MyListGrid;

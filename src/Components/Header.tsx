@@ -101,7 +101,7 @@ const Menu = styled.li`
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
-  &:first-child {
+  &:not(:last-child) {
     margin-right: 15px;
   }
 `;
@@ -163,6 +163,7 @@ function Header() {
   // Routing
   const homeMatch: PathMatch<string> | null = useMatch("/");
   const tvMatch: PathMatch<string> | null = useMatch("tv");
+  const mylistMatch: PathMatch<string> | null = useMatch("mylist");
   const location = useLocation();
 
   // Nav Scroll
@@ -231,6 +232,14 @@ function Header() {
               TV Shows
               <AnimatePresence>
                 {tvMatch && <Circle layoutId="circle" />}
+              </AnimatePresence>
+            </Link>
+          </Menu>
+          <Menu>
+            <Link to="mylist">
+              My List
+              <AnimatePresence>
+                {mylistMatch && <Circle layoutId="circle" />}
               </AnimatePresence>
             </Link>
           </Menu>
