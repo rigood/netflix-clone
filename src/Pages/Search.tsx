@@ -69,14 +69,18 @@ function Search() {
   const section = new URLSearchParams(location.search).get("section");
   const id = new URLSearchParams(location.search).get("id");
 
+  // Open Tab
+  const [isMovieTab, setIsMovieTab] = useState(true);
+  useEffect(() => {
+    setIsMovieTab(true);
+    window.scrollTo({ top: 0 });
+  }, [keyword]);
+
   // Open Modal
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
   useEffect(() => {
     setIsModalOpen(id ? true : false);
   }, [location]);
-
-  // Open Tab
-  const [isMovieTab, setIsMovieTab] = useState(true);
 
   // Search data fetching
   const {
