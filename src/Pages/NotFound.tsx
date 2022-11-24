@@ -18,14 +18,15 @@ const Wrapper = styled.div`
 `;
 
 function NotFound() {
-  const [seconds, setSeconds] = useState(5);
+  const INITIAL_SECONDS = 3;
+  const [seconds, setSeconds] = useState(INITIAL_SECONDS);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
       navigate("/");
-    }, 5000);
+    }, INITIAL_SECONDS * 1000);
 
     setInterval(() => {
       setSeconds((prev) => prev - 1);
@@ -34,7 +35,7 @@ function NotFound() {
 
   return (
     <Wrapper>
-      <h1>잘못된 접근입니다.</h1>
+      <h1>해당 페이지를 찾을 수 없습니다.</h1>
       <p>
         <strong>{seconds}초</strong> 뒤 Home 화면으로 이동합니다.
       </p>
