@@ -265,8 +265,8 @@ function Header() {
             ></path>
           </SearchIcon>
           <SearchInput
-            {...register("keyword", { required: true, minLength: 2 })}
-            minLength={2}
+            {...register("keyword", { required: true, minLength: 1 })}
+            minLength={1}
             placeholder="검색어를 입력하세요."
             animate={{ scaleX: searchOpen ? 1 : 0 }}
             transition={{ type: "linear" }}

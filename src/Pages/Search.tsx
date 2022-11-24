@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
@@ -69,6 +69,14 @@ function Search() {
   const keyword = new URLSearchParams(location.search).get("keyword");
   const section = new URLSearchParams(location.search).get("section");
   const id = new URLSearchParams(location.search).get("id");
+
+  // Redirect when there's no keyword
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (keyword === "") {
+      navigate("/");
+    }
+  }, []);
 
   // Open Tab
   const [isMovieTab, setIsMovieTab] = useState(true);
