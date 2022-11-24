@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { getImgPath, getRating, noPoster } from "../Api/utils";
+import { getDate, getImgPath, getRating, noPoster } from "../Api/utils";
 import { IMyListGridProps } from "../Api/interface";
 import { useNavigate } from "react-router-dom";
 
@@ -126,9 +126,7 @@ function MyListGrid({ title, contents, section }: IMyListGridProps) {
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>
               <div>
-                {section === "movie"
-                  ? "개봉일: " + content.release_date
-                  : "첫방영: " + content.first_air_date}
+                {getDate(section, content.release_date, content.first_air_date)}
               </div>
               <div>{getRating(content.vote_average)}</div>
             </Info>

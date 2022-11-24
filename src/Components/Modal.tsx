@@ -20,7 +20,13 @@ import MainVideo from "./MainVideo";
 import Videos from "./Videos";
 import CastGrid from "./CastGrid";
 import ContentsGrid from "./ContentsGrid";
-import { getImgPath, getRating, getRuntime, noBackdrop } from "../Api/utils";
+import {
+  getDate,
+  getImgPath,
+  getRating,
+  getRuntime,
+  noBackdrop,
+} from "../Api/utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -249,9 +255,11 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
                     </Number>
                     <DateAndRating>
                       <span>
-                        {section === "movie"
-                          ? `개봉일: ${details?.release_date}`
-                          : `첫방영: ${details?.first_air_date}`}
+                        {getDate(
+                          section!,
+                          details?.release_date!,
+                          details?.first_air_date!
+                        )}
                       </span>
                       <span>{getRating(details?.vote_average!)}</span>
                     </DateAndRating>

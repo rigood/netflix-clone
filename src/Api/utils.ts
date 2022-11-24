@@ -13,9 +13,9 @@ export function getYoutubeUrl(key: string) {
 export function getRating(rating: number) {
   if (rating) {
     const rounded = Math.round(rating * 10) / 10;
-    return `⭐${rounded}점`;
+    return `평점: ⭐${rounded}점`;
   } else {
-    return `⭐없음`;
+    return `평점: ⭐없음`;
   }
 }
 
@@ -27,6 +27,16 @@ export function getRuntime(runtime: number) {
     return `${runtime}분 (${hour}${formattedMin})`;
   } else {
     return `미정`;
+  }
+}
+
+export function getDate(section: string, movieDate: string, tvDate: string) {
+  if (section === "movie") {
+    return `개봉일: ${movieDate}`;
+  } else if (section === "tv") {
+    return `첫방영: ${tvDate}`;
+  } else {
+    return "";
   }
 }
 

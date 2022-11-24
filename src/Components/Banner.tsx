@@ -11,7 +11,7 @@ import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { getRating } from "../Api/utils";
+import { getDate, getRating } from "../Api/utils";
 
 /* Styling */
 const Container = styled.div`
@@ -135,11 +135,9 @@ function Banner({ section, title, content }: IBannerProps) {
           </Overview>
           <DateAndRating>
             <span>
-              {section === "movie"
-                ? `개봉일: ${content.release_date}`
-                : `첫방영: ${content.first_air_date}`}
+              {getDate(section, content.release_date, content.first_air_date)}
             </span>
-            <span>평점: {getRating(content.vote_average)}</span>
+            <span>{getRating(content.vote_average)}</span>
           </DateAndRating>
           <Button onClick={() => onButtonClick(content.id)}>
             <FontAwesomeIcon icon={faInfoCircle} />

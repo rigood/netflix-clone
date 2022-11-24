@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ISearchGridProps } from "../Api/interface";
-import { getImgPath, getRating, noPoster } from "../Api/utils";
+import { getDate, getImgPath, getRating, noPoster } from "../Api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -109,35 +109,31 @@ function SearchGrid(
 
   return (
     <GridWrapper>
-      {contents?.map((content, index) => {
-        return (
-          <ContentWrapper
-            key={content.id}
-            ref={contents?.length === index + 1 ? ref : null}
+      {contents?.map((content, index) => (
+        <ContentWrapper
+          key={content.id}
+          ref={contents?.length === index + 1 ? ref : null}
+        >
+          <Poster
+            bg={
+              content.poster_path
+                ? getImgPath(content.poster_path, "w500")
+                : noPoster
+            }
+            onClick={() => onPosterClick(content.id)}
           >
-            <Poster
-              bg={
-                content.poster_path
-                  ? getImgPath(content.poster_path, "w500")
-                  : noPoster
-              }
-              onClick={() => onPosterClick(content.id)}
-            >
-              <PosterOverlay />
-              <PosterButton icon={faChevronRight} />
-            </Poster>
-            <Info>
-              <h1>{section === "movie" ? content.title : content.name}</h1>
-              <div>
-                {section === "movie"
-                  ? "개봉일: " + content.release_date
-                  : "첫방영: " + content.first_air_date}
-              </div>
-              <div>{getRating(content.vote_average)}</div>
-            </Info>
-          </ContentWrapper>
-        );
-      })}
+            <PosterOverlay />
+            <PosterButton icon={faChevronRight} />
+          </Poster>
+          <Info>
+            <h1>{section === "movie" ? content.title : content.name}</h1>
+            <div>
+              {getDate(section, content.release_date, content.first_air_date)}
+            </div>
+            <div>{getRating(content.vote_average)}</div>
+          </Info>
+        </ContentWrapper>
+      ))}
     </GridWrapper>
   );
 }

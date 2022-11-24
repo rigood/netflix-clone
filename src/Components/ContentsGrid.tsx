@@ -6,7 +6,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { IContent, IContentsGridProps } from "../Api/interface";
-import { getImgPath, getRating, noPoster } from "../Api/utils";
+import { getDate, getImgPath, getRating, noPoster } from "../Api/utils";
 import { useNavigate } from "react-router-dom";
 // import { useRecoilState } from "recoil";
 // import { myMovieAtom, myTvAtom } from "../atom";
@@ -156,9 +156,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>
               <div>
-                {section === "movie"
-                  ? "개봉일: " + content.release_date
-                  : "첫방영: " + content.first_air_date}
+                {getDate(section, content.release_date, content.first_air_date)}
               </div>
               <div>{getRating(content.vote_average)}</div>
             </Info>
