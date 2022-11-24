@@ -21,9 +21,10 @@ export function getRating(rating: number) {
 
 export function getRuntime(runtime: number) {
   if (runtime) {
-    const hour = Math.floor(runtime / 60);
+    const hour = Math.floor(runtime / 60) + "시간";
     const min = runtime % 60;
-    return `${runtime}분 (${hour}시간 ${min}분)`;
+    const formattedMin = min === 0 ? "" : ` ${min}분`;
+    return `${runtime}분 (${hour}${formattedMin})`;
   } else {
     return `미정`;
   }
