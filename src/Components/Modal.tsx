@@ -31,6 +31,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 import useList from "../hook/useList";
+import { toastMsg } from "../Api/toast";
 
 // Styled-components
 
@@ -174,13 +175,20 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
   const { data: details, isLoading: detailsLoading } = useQuery<IContent>(
     ["detailsContent", id],
     () => getDetails(section!, id!),
-    { enabled: !!id }
+    {
+      enabled: !!id,
+      onError: (error) => {
+        toastMsg("ERROR", "해당 콘텐츠를 찾을 수 없습니다.");
+      },
+    }
   );
-  const { data: cast, isLoading: castLoading } = useQuery<ICast[]>(
-    ["castContent", id],
-    () => getCast(section!, id!),
-    { enabled: !!id }
-  );
+  const {
+    data: cast,
+    isLoading: castLoading,
+    isError,
+  } = useQuery<ICast[]>(["castContent", id], () => getCast(section!, id!), {
+    enabled: !!id,
+  });
   const { data: videos, isLoading: videosLoading } = useQuery<IVideo[]>(
     ["videoContent", id],
     () => getVideos(section!, id!),
@@ -272,10 +280,12 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
                     </DateAndRating>
                   </div>
                   <div>
-                    <ListButton
-                      icon={checkDuplicate(details?.id!) ? faCheck : faPlus}
-                      onClick={() => onPosterClick(details!)}
-                    />
+                    {isError ? null : (
+                      <ListButton
+                        icon={checkDuplicate(details?.id!) ? faCheck : faPlus}
+                        onClick={() => onPosterClick(details!)}
+                      />
+                    )}
                   </div>
                 </Row>
                 <Overview>
