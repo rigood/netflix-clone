@@ -16,6 +16,9 @@ import { theme } from "./theme";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
+/* Toast */
+import { ToastContainer } from "react-toastify";
+
 /* Components */
 import App from "./App";
 
@@ -46,7 +49,9 @@ a {
 
 const client = new QueryClient();
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 
 root.render(
   <RecoilRoot>
@@ -54,6 +59,7 @@ root.render(
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <App />
+        <ToastContainer theme="colored" />
       </ThemeProvider>
       <ReactQueryDevtools position="bottom-right" />
     </QueryClientProvider>

@@ -1,6 +1,7 @@
 import { useRecoilState } from "recoil";
 import { myMovieAtom, myTvAtom } from "../atom";
 import { IContent } from "../Api/interface";
+import { toastMsg } from "../Api/toast";
 
 type useListType = [
   (id: number) => boolean | undefined,
@@ -36,12 +37,12 @@ function useList(section: string): useListType {
     } else if (section === "tv") {
       setMyTv((prev) => prev.filter((tv) => tv.id !== content.id));
     }
-    alert(`My List에서 삭제되었습니다!`);
+    toastMsg("WARN", `My List에서 삭제되었습니다.`);
   };
 
   const addToList = (content: IContent) => {
     if (checkExceedLimit()) {
-      alert(`최대 ${MAX_NUM_OF_LIST}개까지 담을 수 있습니다.`);
+      toastMsg("ERROR", `최대 ${MAX_NUM_OF_LIST}개까지 담을 수 있습니다.`);
       return;
     }
     if (section === "movie") {
@@ -49,13 +50,13 @@ function useList(section: string): useListType {
     } else if (section === "tv") {
       setMyTv([content, ...myTv]);
     }
-    alert(`My List에 추가되었습니다!`);
+    toastMsg("SUCCESS", `My List에 추가되었습니다.`);
   };
 
   const onPosterClick = (content: IContent) => {
     const isDuplicate = checkDuplicate(content.id);
     if (isDuplicate === undefined) {
-      alert("잘못된 접근입니다.");
+      toastMsg("ERROR", "잘못된 접근입니다.");
     }
     checkDuplicate(content.id) ? removeFromList(content) : addToList(content);
   };
