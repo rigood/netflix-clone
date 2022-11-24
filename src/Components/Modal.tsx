@@ -24,7 +24,7 @@ import {
   getDate,
   getImgPath,
   getRating,
-  getRuntime,
+  getRuntimeOrEpisodes,
   noBackdrop,
 } from "../Api/utils";
 
@@ -245,13 +245,20 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
                     <span key={genre.id}>{genre.name}</span>
                   ))}
                 </Genres>
-                <Title>{details?.title || details?.name}</Title>
+                <Title>
+                  {details?.title ||
+                    details?.name ||
+                    "존재하지 않는 콘텐츠입니다."}
+                </Title>
                 <Row>
                   <div className="info">
                     <Number>
-                      {section === "movie"
-                        ? `상영시간: ${getRuntime(details?.runtime!)}`
-                        : `시즌 ${details?.number_of_seasons}개 에피소드 ${details?.number_of_episodes}개`}
+                      {getRuntimeOrEpisodes(
+                        section!,
+                        details?.runtime!,
+                        details?.number_of_seasons!,
+                        details?.number_of_episodes!
+                      )}
                     </Number>
                     <DateAndRating>
                       <span>
@@ -272,7 +279,7 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
                   </div>
                 </Row>
                 <Overview>
-                  {details?.overview || "줄거리 정보 준비중입니다."}
+                  {details?.overview || "등록된 줄거리 정보가 없습니다."}
                 </Overview>
                 <CastGrid title="출연진" cast={cast!} />
                 <Videos title="관련 영상" videos={videos!} />

@@ -130,9 +130,7 @@ function Banner({ section, title, content }: IBannerProps) {
             />
             <h2>오늘의 {title} 순위 1위</h2>
           </Ranking>
-          <Overview>
-            {content.overview || "등록된 Overview 정보가 없습니다."}
-          </Overview>
+          <Overview>{content.overview}</Overview>
           <DateAndRating>
             <span>
               {getDate(section, content.release_date, content.first_air_date)}
