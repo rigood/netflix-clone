@@ -163,7 +163,7 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
 
   useEffect(() => {
     setIsModalOpen(id ? true : false);
-  }, [location]);
+  }, [location, id, setIsModalOpen]);
 
   // Close Modal
   const navigate = useNavigate();
