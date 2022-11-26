@@ -4,7 +4,7 @@ import { IVideo } from "./interface";
 const db = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   params: {
-    api_key: "5836da8588c0e9fe7dc6f7c56764dae7",
+    api_key: process.env.REACT_APP_API_KEY,
     language: "ko-KR",
     region: "kr",
   },
