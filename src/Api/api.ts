@@ -3,15 +3,17 @@ import { IVideo } from "./interface";
 
 const db = axios.create({
   baseURL: "https://api.themoviedb.org/3",
+  params: {
+    api_key: "5836da8588c0e9fe7dc6f7c56764dae7",
+    language: "ko-KR",
+    region: "kr",
+  },
 });
-
-const API_KEY = "5836da8588c0e9fe7dc6f7c56764dae7";
 
 export async function getList(section: string, category: string) {
   console.log(`getlist ${section} ${category} 시작`);
-  const response = await db.get(
-    `${section}/${category}?api_key=${API_KEY}&language=ko-KR&region=kr`
-  );
+
+  const response = await db.get(`${section}/${category}`);
   console.log(`getlist ${section} ${category} 끝`);
 
   return response.data.results;
@@ -20,9 +22,7 @@ export async function getList(section: string, category: string) {
 export async function getDetails(section: string, id: string) {
   console.log(`detail ${section} ${id} 시작`);
 
-  const response = await db.get(
-    `${section}/${id}?api_key=${API_KEY}&language=ko-KR&region=kr`
-  );
+  const response = await db.get(`${section}/${id}`);
   console.log(`detail ${section}  ${id} 끝`);
 
   return response.data;
@@ -31,9 +31,7 @@ export async function getDetails(section: string, id: string) {
 export async function getCast(section: string, id: string) {
   console.log(`cast ${section}  ${id} 시작`);
 
-  const response = await db.get(
-    `${section}/${id}/credits?api_key=${API_KEY}&language=ko-KR&region=kr`
-  );
+  const response = await db.get(`${section}/${id}/credits`);
   console.log(`cast ${section}  ${id} 끝`);
 
   return response.data.cast;
@@ -42,12 +40,11 @@ export async function getCast(section: string, id: string) {
 export async function getVideos(section: string, id: string) {
   console.log(`video ${section}  ${id} 시작`);
 
-  const response = await db.get(
-    `${section}/${id}/videos?api_key=${API_KEY}&language=ko-KR&region=kr`
-  );
+  const response = await db.get(`${section}/${id}/videos`);
   const youtubeVideos = response.data.results.filter(
     (video: IVideo) => video.site === "youtube" || "Youtube"
   );
+
   console.log(`video ${section}  ${id} 끝`);
 
   return youtubeVideos;
@@ -56,9 +53,7 @@ export async function getVideos(section: string, id: string) {
 export async function getRecommendations(section: string, id: string) {
   console.log(`reco ${section}  ${id} 시작`);
 
-  const response = await db.get(
-    `${section}/${id}/recommendations?api_key=${API_KEY}&language=ko-KR&region=kr&page=1`
-  );
+  const response = await db.get(`${section}/${id}/recommendations`);
   console.log(`reco ${section}  ${id} 끝`);
 
   return response.data.results;
@@ -67,9 +62,7 @@ export async function getRecommendations(section: string, id: string) {
 export async function getSimilar(section: string, id: string) {
   console.log(`similar ${section}  ${id} 시작`);
 
-  const response = await db.get(
-    `${section}/${id}/similar?api_key=${API_KEY}&language=ko-KR&region=kr&page=1`
-  );
+  const response = await db.get(`${section}/${id}/similar`);
   console.log(`similar ${section}  ${id} 끝`);
 
   return response.data.results;
@@ -78,9 +71,9 @@ export async function getSimilar(section: string, id: string) {
 export async function getMovieSearch(keyword: string, pageParam: number) {
   console.log(`movie search ${keyword} ${pageParam} 시작`);
 
-  const response = await db.get(
-    `search/movie?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr&page=${pageParam}`
-  );
+  const params = { page: pageParam, query: keyword };
+  const response = await db.get("search/movie", { params });
+
   console.log(`movie search ${keyword} ${pageParam} 끝`);
 
   return response;
@@ -89,9 +82,9 @@ export async function getMovieSearch(keyword: string, pageParam: number) {
 export async function getTvSearch(keyword: string, pageParam: number) {
   console.log(`tv search ${keyword} ${pageParam} 시작`);
 
-  const response = await db.get(
-    `search/tv?api_key=${API_KEY}&query=${keyword}&language=ko-KR&region=kr&page=${pageParam}`
-  );
+  const params = { page: pageParam, query: keyword };
+  const response = await db.get("search/tv", { params });
+
   console.log(`tv search ${keyword} ${pageParam} 끝`);
 
   return response;
