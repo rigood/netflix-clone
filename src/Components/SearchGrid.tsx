@@ -103,7 +103,7 @@ function SearchGrid(
 
   /* Routing */
   const navigate = useNavigate();
-  const onPosterClick = (id: number) => {
+  const openModal = (id: number) => {
     navigate(`?q=${keyword}&id=${id}`);
   };
 
@@ -120,7 +120,7 @@ function SearchGrid(
                 ? getImgPath(content.poster_path, "w500")
                 : noPoster
             }
-            onClick={() => onPosterClick(content.id)}
+            onClick={() => openModal(content.id)}
           >
             <PosterOverlay />
             <PosterButton icon={faChevronRight} />

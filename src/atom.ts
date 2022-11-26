@@ -11,13 +11,13 @@ export const modalState = atom({
   default: false,
 });
 
-export const myMovieAtom = atom<IContent[]>({
+export const myMovieAtom = atom<number[]>({
   key: "myMovie",
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
 
-export const myTvAtom = atom<IContent[]>({
+export const myTvAtom = atom<number[]>({
   key: "myTv",
   default: [],
   effects_UNSTABLE: [persistAtom],

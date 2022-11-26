@@ -3,26 +3,23 @@ import { myMovieAtom, myTvAtom } from "../atom";
 import { IContent } from "../api/interface";
 import { toastMsg } from "../api/toast";
 
-type useListType = [
-  (id: number) => boolean | undefined,
-  (content: IContent) => void
-];
+type useListType = [(id: number) => boolean | undefined, (id: number) => void];
 
 function useList(section: string): useListType {
-  const [myMovie, setMyMovie] = useRecoilState<IContent[]>(myMovieAtom);
-  const [myTv, setMyTv] = useRecoilState<IContent[]>(myTvAtom);
+  const [myMovie, setMyMovie] = useRecoilState<number[]>(myMovieAtom);
+  const [myTv, setMyTv] = useRecoilState<number[]>(myTvAtom);
   const MAX_NUM_OF_LIST = 8;
 
-  const checkDuplicate = (id: number) => {
-    let isDuplicate;
+  const checkIsInList = (id: number) => {
+    let isInList;
     if (section === "movie") {
-      isDuplicate = myMovie.some((movie) => movie.id === id);
+      isInList = myMovie.some((prevId) => prevId === id);
     } else if (section === "tv") {
-      isDuplicate = myTv.some((tv) => tv.id === id);
+      isInList = myTv.some((prevId) => prevId === id);
     } else {
       return undefined;
     }
-    return isDuplicate;
+    return isInList;
   };
 
   const checkExceedLimit = () => {
@@ -31,37 +28,37 @@ function useList(section: string): useListType {
       : myTv.length >= MAX_NUM_OF_LIST;
   };
 
-  const removeFromList = (content: IContent) => {
+  const removeFromList = (id: number) => {
     if (section === "movie") {
-      setMyMovie((prev) => prev.filter((movie) => movie.id !== content.id));
+      setMyMovie((prev) => prev.filter((prevId) => prevId !== id));
     } else if (section === "tv") {
-      setMyTv((prev) => prev.filter((tv) => tv.id !== content.id));
+      setMyTv((prev) => prev.filter((prevId) => prevId !== id));
     }
     toastMsg("WARN", `My List에서 삭제되었습니다.`);
   };
 
-  const addToList = (content: IContent) => {
+  const addToList = (id: number) => {
     if (checkExceedLimit()) {
       toastMsg("ERROR", `최대 ${MAX_NUM_OF_LIST}개까지 담을 수 있습니다.`);
       return;
     }
     if (section === "movie") {
-      setMyMovie([content, ...myMovie]);
+      setMyMovie([id, ...myMovie]);
     } else if (section === "tv") {
-      setMyTv([content, ...myTv]);
+      setMyTv([id, ...myTv]);
     }
     toastMsg("SUCCESS", `My List에 추가되었습니다.`);
   };
 
-  const onPosterClick = (content: IContent) => {
-    const isDuplicate = checkDuplicate(content.id);
-    if (isDuplicate === undefined) {
+  const toggleList = (id: number) => {
+    const isInList = checkIsInList(id);
+    if (isInList === undefined) {
       toastMsg("ERROR", "잘못된 접근입니다.");
     }
-    checkDuplicate(content.id) ? removeFromList(content) : addToList(content);
+    isInList ? removeFromList(id) : addToList(id);
   };
 
-  return [checkDuplicate, onPosterClick];
+  return [checkIsInList, toggleList];
 }
 
 export default useList;

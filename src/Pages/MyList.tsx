@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { myMovieAtom, myTvAtom } from "../atom";
+import { useQueries, UseQueryResult } from "@tanstack/react-query";
+import { getDetails } from "../api/api";
 import MyListGrid from "../components/MyListGrid";
-import Modal from "../components/Modal";
 
 const Wrapper = styled.div`
   padding: 100px 60px 60px 60px;
@@ -11,14 +12,37 @@ const Wrapper = styled.div`
 `;
 
 function MyList() {
-  const [myMovie, setMyMovie] = useRecoilState(myMovieAtom);
-  const [myTv, setMyTv] = useRecoilState(myTvAtom);
+  const myMovie = useRecoilValue(myMovieAtom);
+  const myTv = useRecoilValue(myTvAtom);
+
+  const myMovieQuery = useQueries({
+    queries: myMovie.map((movieId) => {
+      return {
+        queryKey: ["myMovie", String(movieId)],
+        queryFn: () => getDetails("movie", String(movieId)),
+      };
+    }),
+  });
+
+  const myTvQuery = useQueries({
+    queries: myTv.map((tvId) => {
+      return {
+        queryKey: ["myTv", String(tvId)],
+        queryFn: () => getDetails("tv", String(tvId)),
+      };
+    }),
+  });
+
+  const myMovieData = myMovieQuery?.map((myMovie) => myMovie.data);
+  const myTvData = myTvQuery?.map((myTv) => myTv.data);
+
+  console.log(myMovieData);
 
   return (
     <>
       <Wrapper>
-        <MyListGrid title="영화" contents={myMovie} section="movie" />
-        <MyListGrid title="TV Show" contents={myTv} section="tv" />
+        <MyListGrid title="영화" contents={myMovieData} section="movie" />
+        <MyListGrid title="TV Show" contents={myTvData} section="tv" />
       </Wrapper>
     </>
   );

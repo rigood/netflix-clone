@@ -102,37 +102,43 @@ const Info = styled.div`
 
 function MyListGrid({ title, contents, section }: IMyListGridProps) {
   const navigate = useNavigate();
-  const onPosterClick = (id: number) => {
+  const openModal = (id: number) => {
     navigate(`${section}?id=${id}`);
   };
 
   return (
     <>
       <Title>{title}</Title>
+
       <GridWrapper>
         {contents?.map((content) => (
-          <ContentWrapper key={content.id}>
+          <ContentWrapper key={content?.id}>
             <Poster
               bg={
-                content.poster_path
-                  ? getImgPath(content.poster_path, "w500")
+                content?.poster_path
+                  ? getImgPath(content?.poster_path, "w500")
                   : noPoster
               }
-              onClick={() => onPosterClick(content.id)}
+              onClick={() => openModal(content?.id)}
             >
               <PosterOverlay />
               <PosterButton icon={faChevronRight} />
             </Poster>
             <Info>
-              <h1>{section === "movie" ? content.title : content.name}</h1>
+              <h1>{section === "movie" ? content?.title : content?.name}</h1>
               <div>
-                {getDate(section, content.release_date, content.first_air_date)}
+                {getDate(
+                  section,
+                  content?.release_date,
+                  content?.first_air_date
+                )}
               </div>
-              <div>{getRating(content.vote_average)}</div>
+              <div>{getRating(content?.vote_average)}</div>
             </Info>
           </ContentWrapper>
         ))}
       </GridWrapper>
+
       {contents?.length === 0 ? "목록이 비어있습니다." : null}
     </>
   );

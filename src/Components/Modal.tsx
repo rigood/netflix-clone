@@ -134,7 +134,7 @@ const DateAndRating = styled.div`
   }
 `;
 
-const ListButton = styled(FontAwesomeIcon)`
+const AddButton = styled(FontAwesomeIcon)`
   width: 28px;
   height: 28px;
   padding: 5px;
@@ -229,7 +229,7 @@ function Modal() {
   const mainVideoKey = videos?.[0]?.key;
 
   // Add/Remove content from MyList
-  const [checkDuplicate, onPosterClick] = useList(section!);
+  const [checkIsInList, toggleList] = useList(section!);
 
   // Loading
   const isLoading =
@@ -302,9 +302,9 @@ function Modal() {
                   </div>
                   <div>
                     {isError ? null : (
-                      <ListButton
-                        icon={checkDuplicate(details?.id!) ? faCheck : faPlus}
-                        onClick={() => onPosterClick(details!)}
+                      <AddButton
+                        icon={checkIsInList(details?.id!) ? faCheck : faPlus}
+                        onClick={() => toggleList(details?.id!)}
                       />
                     )}
                   </div>

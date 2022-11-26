@@ -129,7 +129,7 @@ const MoreButton = styled(FontAwesomeIcon)`
 `;
 
 function ContentsGrid({ title, contents, section }: IContentsGridProps) {
-  const [checkDuplicate, onPosterClick] = useList(section);
+  const [checkIsInList, toggleList] = useList(section);
 
   const offset = 8;
   const [index, setIndex] = useState(offset);
@@ -146,11 +146,11 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
                   ? getImgPath(content.poster_path, "w500")
                   : noPoster
               }
-              onClick={() => onPosterClick(content)}
+              onClick={() => toggleList(content.id)}
             >
               <PosterOverlay />
               <PosterButton
-                icon={checkDuplicate(content.id) ? faCheck : faPlus}
+                icon={checkIsInList(content.id) ? faCheck : faPlus}
               />
             </Poster>
             <Info>
