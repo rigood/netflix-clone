@@ -9,7 +9,7 @@ import router from "./Router";
 import GlobalStyle from "./styles/GlobalStyle";
 import { theme } from "./styles/theme";
 
-const client = new QueryClient();
+const client = new QueryClient({ defaultOptions: { queries: { retry: 1 } } });
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

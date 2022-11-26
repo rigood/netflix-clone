@@ -66,7 +66,7 @@ const Tab = styled.span<{ isActive: boolean }>`
 function Search() {
   // Extract keyword
   const location = useLocation();
-  const keyword = new URLSearchParams(location.search).get("keyword");
+  const keyword = new URLSearchParams(location.search).get("q");
   const section = new URLSearchParams(location.search).get("section");
   const id = new URLSearchParams(location.search).get("id");
 
@@ -101,6 +101,7 @@ function Search() {
           lastPage.data.page + 1
         );
       },
+      enabled: !!keyword,
     }
   );
 
@@ -119,6 +120,7 @@ function Search() {
           lastPage.data.page + 1
         );
       },
+      enabled: !!keyword,
     }
   );
 

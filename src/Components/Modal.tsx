@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useMatch,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
@@ -152,10 +158,35 @@ const CloseBtn = styled(Button)`
 `;
 
 function Modal() {
-  // Extract section, id
-  const { section, id } = useParams();
+  // Close Modal
+  const navigate = useNavigate();
+  const closeModal = () => {
+    navigate(-1);
+  };
 
-  console.log(`section ${section} id ${id}`);
+  // Extract section, id
+  let section: string;
+  let id: string | null;
+  const pathname = window.location.pathname;
+  const { section: sectionParam } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  if (
+    pathname.startsWith("/movie/") ||
+    sectionParam === "movie" ||
+    searchParams.get("section") === "movie"
+  ) {
+    section = "movie";
+  } else if (
+    pathname.startsWith("/tv/") ||
+    sectionParam === "tv" ||
+    searchParams.get("section") === "tv"
+  ) {
+    section = "tv";
+  }
+
+  const { id: idParam } = useParams();
+  id = idParam || searchParams.get("id");
 
   // Open Modal
   const location = useLocation();
@@ -164,12 +195,6 @@ function Modal() {
   useEffect(() => {
     setIsModalOpen(id ? true : false);
   }, [location, id, setIsModalOpen]);
-
-  // Close Modal
-  const navigate = useNavigate();
-  const closeModal = () => {
-    navigate(-1);
-  };
 
   // Change body scroll
   const stopBodyScroll = () => {
@@ -192,7 +217,8 @@ function Modal() {
     {
       enabled: !!id,
       onError: (error) => {
-        toastMsg("ERROR", "해당 콘텐츠를 찾을 수 없습니다.");
+        setIsModalOpen(false);
+        navigate(-1);
       },
     }
   );
