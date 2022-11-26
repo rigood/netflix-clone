@@ -70,12 +70,12 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 function Search() {
   // Extract keyword and section
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const keyword = searchParams.get("q");
   const { section } = useParams();
 
   // Redirect when there's no keyword or movie/tv section
+  const navigate = useNavigate();
   useEffect(() => {
     if (keyword === "" || (section !== "movie" && section !== "tv")) {
       navigate("/");
@@ -84,13 +84,16 @@ function Search() {
 
   // Set Tab
   const [tab, setTab] = useState(section);
+  const handleTabClick = (section: string) => {
+    setTab(section);
+    navigate(`/search/${section}?q=${keyword}`);
+  };
+
+  // Initialize tab and scroll as keyword changes
   useEffect(() => {
     setTab("movie");
     window.scrollTo({ top: 0 });
   }, [keyword]);
-  const handleTabClick = (section: string) => {
-    setTab(section);
-  };
 
   // Fetch search-data
   const {
