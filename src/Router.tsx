@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Root from "./Root";
-import Home from "./pages/Home";
-import Tv from "./pages/Tv";
+import Browse from "./pages/Browse";
 import MyList from "./pages/MyList";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
@@ -12,30 +11,14 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Navigate to="movie" />,
+        element: <Navigate to="browse/movie" />,
       },
       {
-        path: "movie",
-        element: <Home />,
-        children: [
-          {
-            path: ":id",
-            element: <Home />,
-          },
-        ],
+        path: "browse/:section",
+        element: <Browse />,
       },
       {
-        path: "tv",
-        element: <Tv />,
-        children: [
-          {
-            path: ":id",
-            element: <Tv />,
-          },
-        ],
-      },
-      {
-        path: "search",
+        path: "search/:section",
         element: <Search />,
       },
       {
@@ -43,7 +26,7 @@ const router = createBrowserRouter([
         element: <MyList />,
         children: [
           {
-            path: ":section/:id",
+            path: ":section",
             element: <MyList />,
           },
         ],

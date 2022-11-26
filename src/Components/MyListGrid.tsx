@@ -103,7 +103,7 @@ const Info = styled.div`
 function MyListGrid({ title, contents, section }: IMyListGridProps) {
   const navigate = useNavigate();
   const onPosterClick = (id: number) => {
-    navigate(`/mylist/${section}/${id}`);
+    navigate(`${section}?id=${id}`);
   };
 
   return (

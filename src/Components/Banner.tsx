@@ -115,7 +115,7 @@ function Banner({ section, title, content }: IBannerProps) {
   /* Routing */
   const navigate = useNavigate();
   const onButtonClick = (id: number) => {
-    navigate(`/${section}/${id}`);
+    navigate(`?id=${id}`);
   };
 
   return (

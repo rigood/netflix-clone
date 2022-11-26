@@ -161,8 +161,8 @@ interface IForm {
 
 function Header() {
   // Routing
-  const homeMatch: PathMatch<string> | null = useMatch("movie");
-  const tvMatch: PathMatch<string> | null = useMatch("tv");
+  const homeMatch: PathMatch<string> | null = useMatch("browse/movie");
+  const tvMatch: PathMatch<string> | null = useMatch("browse/tv");
   const mylistMatch: PathMatch<string> | null = useMatch("mylist");
   const location = useLocation();
 
@@ -183,7 +183,7 @@ function Header() {
   const { register, handleSubmit, setFocus, setValue } = useForm<IForm>();
   const navigate = useNavigate();
   const onSearch = (data: IForm) => {
-    navigate(`/search?q=${data.keyword}`);
+    navigate(`/search/movie?q=${data.keyword}`);
   };
 
   // Toggle Search-input
@@ -220,7 +220,7 @@ function Header() {
         </Link>
         <Menus>
           <Menu>
-            <Link to="/">
+            <Link to="browse/movie">
               Home
               <AnimatePresence>
                 {homeMatch && <Circle layoutId="circle" />}
@@ -228,7 +228,7 @@ function Header() {
             </Link>
           </Menu>
           <Menu>
-            <Link to="tv">
+            <Link to="browse/tv">
               TV Shows
               <AnimatePresence>
                 {tvMatch && <Circle layoutId="circle" />}

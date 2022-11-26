@@ -162,7 +162,7 @@ function Slider({ section, title, list, isFirst }: ISliderProps) {
   /* Routing */
   const navigate = useNavigate();
   const onBoxClick = (id: number) => {
-    navigate(`/${section}/${id}`);
+    navigate(`?id=${id}`);
   };
 
   /* Remove content from Slider for Banner */

@@ -104,7 +104,7 @@ function SearchGrid(
   /* Routing */
   const navigate = useNavigate();
   const onPosterClick = (id: number) => {
-    navigate(`?q=${keyword}&section=${section}&id=${id}`);
+    navigate(`?q=${keyword}&id=${id}`);
   };
 
   return (

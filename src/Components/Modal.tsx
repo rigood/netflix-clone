@@ -158,43 +158,24 @@ const CloseBtn = styled(Button)`
 `;
 
 function Modal() {
-  // Close Modal
   const navigate = useNavigate();
-  const closeModal = () => {
-    navigate(-1);
-  };
+  const location = useLocation();
 
   // Extract section, id
-  let section: string;
-  let id: string | null;
-  const pathname = window.location.pathname;
-  const { section: sectionParam } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  if (
-    pathname.startsWith("/movie/") ||
-    sectionParam === "movie" ||
-    searchParams.get("section") === "movie"
-  ) {
-    section = "movie";
-  } else if (
-    pathname.startsWith("/tv/") ||
-    sectionParam === "tv" ||
-    searchParams.get("section") === "tv"
-  ) {
-    section = "tv";
-  }
-
-  const { id: idParam } = useParams();
-  id = idParam || searchParams.get("id");
+  const { section } = useParams();
+  const id = new URLSearchParams(location.search).get("id");
 
   // Open Modal
-  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
   useEffect(() => {
     setIsModalOpen(id ? true : false);
   }, [location, id, setIsModalOpen]);
+
+  // Close Modal
+  const closeModal = () => {
+    navigate(-1);
+  };
 
   // Change body scroll
   const stopBodyScroll = () => {

@@ -1,7 +1,12 @@
 import styled from "styled-components";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
@@ -64,26 +69,28 @@ const Tab = styled.span<{ isActive: boolean }>`
 `;
 
 function Search() {
-  // Extract keyword
-  const location = useLocation();
-  const keyword = new URLSearchParams(location.search).get("q");
-  const section = new URLSearchParams(location.search).get("section");
-  const id = new URLSearchParams(location.search).get("id");
-
-  // Redirect when there's no keyword
+  // Extract keyword and section
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const keyword = searchParams.get("q");
+  const { section } = useParams();
+
+  // Redirect when there's no keyword or movie/tv section
   useEffect(() => {
-    if (keyword === "") {
+    if (keyword === "" || (section !== "movie" && section !== "tv")) {
       navigate("/");
     }
   }, []);
 
-  // Open Tab
-  const [isMovieTab, setIsMovieTab] = useState(true);
+  // Set Tab
+  const [tab, setTab] = useState(section);
   useEffect(() => {
-    setIsMovieTab(true);
+    setTab("movie");
     window.scrollTo({ top: 0 });
   }, [keyword]);
+  const handleTabClick = (section: string) => {
+    setTab(section);
+  };
 
   // Fetch search-data
   const {
@@ -191,18 +198,21 @@ function Search() {
           <strong>{keyword}</strong> 에 대한 검색 결과
         </Title>
         <TabWrapper>
-          <Tab isActive={isMovieTab} onClick={() => setIsMovieTab(true)}>
+          <Tab
+            isActive={tab === "movie"}
+            onClick={() => handleTabClick("movie")}
+          >
             영화({movieCount})
           </Tab>
-          <Tab isActive={!isMovieTab} onClick={() => setIsMovieTab(false)}>
+          <Tab isActive={tab === "tv"} onClick={() => handleTabClick("tv")}>
             TV 프로그램({tvCount})
           </Tab>
         </TabWrapper>
         <SearchGrid
           keyword={keyword!}
-          section={isMovieTab ? "movie" : "tv"}
-          contents={isMovieTab ? filteredMovieSearch! : filteredTvSearch!}
-          ref={isMovieTab ? movieRef : tvRef}
+          section={tab!}
+          contents={tab === "movie" ? filteredMovieSearch! : filteredTvSearch!}
+          ref={tab === "movie" ? movieRef : tvRef}
         />
       </Wrapper>
     </>
