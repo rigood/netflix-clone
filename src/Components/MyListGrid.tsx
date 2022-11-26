@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { getDate, getImgPath, getRating, noPoster } from "../Api/utils";
-import { IMyListGridProps } from "../Api/interface";
+import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
+import { IMyListGridProps } from "../api/interface";
 import { useNavigate } from "react-router-dom";
 
 const Title = styled.h1`

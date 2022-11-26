@@ -1,8 +1,8 @@
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-import { IVideosProps } from "../Api/interface";
-import { getThumbnailPath, getYoutubeUrl } from "../Api/utils";
+import { IVideosProps } from "../api/interface";
+import { getThumbnailPath, getYoutubeUrl } from "../api/utils";
 
 const Title = styled.h1`
   font-size: 1.3rem;

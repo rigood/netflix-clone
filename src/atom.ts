@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
-import { IContent } from "./Api/interface";
+import { IContent } from "./api/interface";
 
 const { persistAtom } = recoilPersist({
   key: "myList",

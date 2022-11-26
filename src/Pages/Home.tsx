@@ -11,11 +11,11 @@ import {
   getRecommendations,
   getSimilar,
   getVideos,
-} from "../Api/api";
-import { getImgPath } from "../Api/utils";
+} from "../api/api";
+import { getImgPath } from "../api/utils";
 
 /* Interface */
-import { ICast, IContent, IVideo } from "../Api/interface";
+import { ICast, IContent, IVideo } from "../api/interface";
 
 /* Routing */
 import { useLocation, useMatch, useParams } from "react-router-dom";
@@ -25,9 +25,9 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 
 /* Components */
-import Slider from "../Components/Slider";
-import Modal from "../Components/Modal";
-import Banner from "../Components/Banner";
+import Slider from "../components/Slider";
+import Modal from "../components/Modal";
+import Banner from "../components/Banner";
 import { useEffect } from "react";
 
 /* Styling */
@@ -55,13 +55,13 @@ function Home() {
   /* Slider Data-fectching */
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
     IContent[]
-  >(["nowPlayingMovieList"], () => getList("movie", "now_playing"));
+  >(["movie", "nowplaying"], () => getList("movie", "now_playing"));
   const { data: topRatedMovieList, isLoading: loadingTopRated } = useQuery<
     IContent[]
-  >(["topRatedMovieList"], () => getList("movie", "top_rated"));
+  >(["movie", "toprated"], () => getList("movie", "top_rated"));
   const { data: upcomingMovieList, isLoading: loadingUpcoming } = useQuery<
     IContent[]
-  >(["upcomingMovieList"], () => getList("movie", "upcoming"));
+  >(["movie", "upcoming"], () => getList("movie", "upcoming"));
 
   /* Loading */
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
@@ -98,7 +98,6 @@ function Home() {
           />
         </SliderWrapper>
       </Background>
-      <Modal section="movie" />
     </>
   );
 }

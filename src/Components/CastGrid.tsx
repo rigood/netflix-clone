@@ -2,8 +2,8 @@ import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import styled from "styled-components";
-import { ICastGridProps } from "../Api/interface";
-import { getImgPath, noProfile } from "../Api/utils";
+import { ICastGridProps } from "../api/interface";
+import { getImgPath, noProfile } from "../api/utils";
 
 const Title = styled.h1`
   font-size: 1.3rem;

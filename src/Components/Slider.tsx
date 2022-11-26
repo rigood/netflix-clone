@@ -5,13 +5,13 @@ import styled, { css } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 /* Interface */
-import { IRowVariantsProps, ISliderProps } from "../Api/interface";
+import { IRowVariantsProps, ISliderProps } from "../api/interface";
 
 /* Motion */
 import { motion, AnimatePresence } from "framer-motion";
 
 /* Data-fetching */
-import { getImgPath, noBackdrop } from "../Api/utils";
+import { getImgPath, noBackdrop } from "../api/utils";
 
 /* State-management */
 import { useSetRecoilState } from "recoil";
@@ -22,7 +22,7 @@ import { useState } from "react";
 
 /* Set slider-height */
 import { useRef, useEffect } from "react";
-import useWindowDimensions from "../useWindowDimensions";
+import useWindowDimensions from "../hook/useWindowDimensions";
 
 /* Icons */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

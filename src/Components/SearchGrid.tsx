@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ISearchGridProps } from "../Api/interface";
-import { getDate, getImgPath, getRating, noPoster } from "../Api/utils";
+import { ISearchGridProps } from "../api/interface";
+import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 

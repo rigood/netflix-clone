@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 /* Interface */
-import { IBannerProps } from "../Api/interface";
+import { IBannerProps } from "../api/interface";
 
 /* Routing */
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import { useSetRecoilState } from "recoil";
 import { modalState } from "../atom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { getDate, getRating } from "../Api/utils";
+import { getDate, getRating } from "../api/utils";
 
 /* Styling */
 const Container = styled.div`

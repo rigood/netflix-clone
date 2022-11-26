@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import { IMainVideoProps } from "../Api/interface";
+import { IMainVideoProps } from "../api/interface";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeXmark, faVolumeUp } from "@fortawesome/free-solid-svg-icons";
 

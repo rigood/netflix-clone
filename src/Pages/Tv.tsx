@@ -11,11 +11,11 @@ import {
   getRecommendations,
   getSimilar,
   getVideos,
-} from "../Api/api";
-import { getImgPath } from "../Api/utils";
+} from "../api/api";
+import { getImgPath } from "../api/utils";
 
 /* Interface */
-import { ICast, IContent, IVideo } from "../Api/interface";
+import { ICast, IContent, IVideo } from "../api/interface";
 
 /* Routing */
 import { useLocation, useMatch, useParams } from "react-router-dom";
@@ -25,9 +25,9 @@ import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 
 /* Components */
-import Slider from "../Components/Slider";
-import Modal from "../Components/Modal";
-import Banner from "../Components/Banner";
+import Slider from "../components/Slider";
+import Modal from "../components/Modal";
+import Banner from "../components/Banner";
 import { useEffect } from "react";
 
 /* Styling */
@@ -94,7 +94,6 @@ function Tv() {
           />
         </SliderWrapper>
       </Background>
-      <Modal section="tv" />
     </>
   );
 }

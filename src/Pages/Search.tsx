@@ -6,7 +6,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atom";
 
-import { ICast, IContent, IVideo } from "../Api/interface";
+import { ICast, IContent, IVideo } from "../api/interface";
 import {
   getCast,
   getDetails,
@@ -15,10 +15,10 @@ import {
   getSimilar,
   getMovieSearch,
   getTvSearch,
-} from "../Api/api";
+} from "../api/api";
 
-import SearchGrid from "../Components/SearchGrid";
-import Modal from "../Components/Modal";
+import SearchGrid from "../components/SearchGrid";
+import Modal from "../components/Modal";
 
 /* Styling */
 const Loader = styled.div`
@@ -203,7 +203,6 @@ function Search() {
           ref={isMovieTab ? movieRef : tvRef}
         />
       </Wrapper>
-      <Modal section={section!} id={id!} />
     </>
   );
 }

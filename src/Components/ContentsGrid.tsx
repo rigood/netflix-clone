@@ -5,8 +5,8 @@ import {
   faChevronDown,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { IContent, IContentsGridProps } from "../Api/interface";
-import { getDate, getImgPath, getRating, noPoster } from "../Api/utils";
+import { IContent, IContentsGridProps } from "../api/interface";
+import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import { useNavigate } from "react-router-dom";
 // import { useRecoilState } from "recoil";
 // import { myMovieAtom, myTvAtom } from "../atom";

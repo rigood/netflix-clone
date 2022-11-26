@@ -7,31 +7,31 @@ import { modalState } from "../atom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-import { ICast, IContent, IModalProps, IVideo } from "../Api/interface";
+import { ICast, IContent, IModalProps, IVideo } from "../api/interface";
 import {
   getCast,
   getDetails,
   getRecommendations,
   getSimilar,
   getVideos,
-} from "../Api/api";
+} from "../api/api";
 
-import MainVideo from "./MainVideo";
-import Videos from "./Videos";
-import CastGrid from "./CastGrid";
-import ContentsGrid from "./ContentsGrid";
 import {
   getDate,
   getImgPath,
   getRating,
   getRuntimeOrEpisodes,
   noBackdrop,
-} from "../Api/utils";
+} from "../api/utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 import useList from "../hook/useList";
-import { toastMsg } from "../Api/toast";
+import { toastMsg } from "../api/toast";
+import MainVideo from "./MainVideo";
+import CastGrid from "./CastGrid";
+import Videos from "./Videos";
+import ContentsGrid from "./ContentsGrid";
 
 // Styled-components
 
@@ -48,7 +48,7 @@ const Overlay = styled(motion.div)`
   inset: 0;
   overflow-y: scroll;
   z-index: 8;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
 `;
 
@@ -151,11 +151,11 @@ const CloseBtn = styled(Button)`
   right: 20px;
 `;
 
-function Modal({ section: sectionProp, id: idProp }: IModalProps) {
+function Modal() {
   // Extract section, id
-  const { section: sectionParam, id: idParam } = useParams();
-  const section = sectionParam || sectionProp;
-  const id = idParam || idProp;
+  const { section, id } = useParams();
+
+  console.log(`section ${section} id ${id}`);
 
   // Open Modal
   const location = useLocation();
@@ -170,6 +170,20 @@ function Modal({ section: sectionProp, id: idProp }: IModalProps) {
   const closeModal = () => {
     navigate(-1);
   };
+
+  // Change body scroll
+  const stopBodyScroll = () => {
+    document.body.classList.add("no-scroll", "scroll-width");
+    document.getElementsByTagName("nav")[0].classList.add("scroll-width");
+  };
+  const restoreBodyScroll = () => {
+    document.body.classList.remove("no-scroll", "scroll-width");
+    document.getElementsByTagName("nav")[0].classList.remove("scroll-width");
+  };
+
+  useEffect(() => {
+    isModalOpen ? stopBodyScroll() : restoreBodyScroll();
+  }, [isModalOpen]);
 
   // Fetch data
   const { data: details, isLoading: detailsLoading } = useQuery<IContent>(
