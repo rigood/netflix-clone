@@ -1,23 +1,9 @@
-import styled from "styled-components";
+import { useQueries } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 import { myMovieAtom, myTvAtom } from "../atom";
-import { useQueries, UseQueryResult } from "@tanstack/react-query";
 import { getDetails } from "../api/queryFn";
 import MyListGrid from "../components/MyListGrid";
-
-const Wrapper = styled.div`
-  padding: 100px 60px 60px 60px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
 
 function MyList() {
   const myMovie = useRecoilValue(myMovieAtom);
@@ -63,3 +49,17 @@ function MyList() {
 }
 
 export default MyList;
+
+const Wrapper = styled.div`
+  padding: 100px 60px 60px 60px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+`;

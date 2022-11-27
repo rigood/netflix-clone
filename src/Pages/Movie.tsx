@@ -1,58 +1,12 @@
-import styled from "styled-components";
-
-/* Data-fetching */
 import { useQuery } from "@tanstack/react-query";
-
-/* Fetcher function */
-import {
-  getCast,
-  getDetails,
-  getList,
-  getRecommendations,
-  getSimilar,
-  getVideos,
-} from "../api/queryFn";
+import styled from "styled-components";
+import { IContent } from "../api/interface";
+import { getList } from "../api/queryFn";
 import { getImgPath } from "../api/utils";
-
-/* Interface */
-import { ICast, IContent, IVideo } from "../api/interface";
-
-/* Routing */
-import { useLocation, useMatch, useParams } from "react-router-dom";
-
-/* State-management for Modal */
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { modalState } from "../atom";
-
-/* Components */
-import Slider from "../components/Slider";
-import Modal from "../components/Modal";
 import Banner from "../components/Banner";
-import { useEffect } from "react";
-
-/* Styling */
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
-
-const Background = styled.div<{ bg: string }>`
-  width: 100%;
-  height: 56.25vw;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bg});
-  background-size: cover;
-`;
-
-const SliderWrapper = styled.div`
-  padding-block: 5vw;
-`;
+import Slider from "../components/Slider";
 
 function Home() {
-  /* Slider Data-fectching */
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
     IContent[]
   >(["movie", "nowplaying"], () => getList("movie", "now_playing"));
@@ -63,7 +17,6 @@ function Home() {
     IContent[]
   >(["movie", "upcoming"], () => getList("movie", "upcoming"));
 
-  /* Loading */
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
   if (isLoading) {
     return <Loader>로딩중</Loader>;
@@ -103,3 +56,23 @@ function Home() {
 }
 
 export default Home;
+
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+`;
+
+const Background = styled.div<{ bg: string }>`
+  width: 100%;
+  height: 56.25vw;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(${(props) => props.bg});
+  background-size: cover;
+`;
+
+const SliderWrapper = styled.div`
+  padding-block: 5vw;
+`;

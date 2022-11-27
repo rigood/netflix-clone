@@ -21,7 +21,7 @@ interface IForm {
 
 function Header() {
   // Routing
-  const homeMatch: PathMatch<string> | null = useMatch("browse/movie");
+  const MovieMatch: PathMatch<string> | null = useMatch("browse/movie");
   const tvMatch: PathMatch<string> | null = useMatch("browse/tv");
   const mylistMatch: PathMatch<string> | null = useMatch("mylist");
   const location = useLocation();
@@ -81,9 +81,9 @@ function Header() {
         <Menus>
           <Menu>
             <Link to="browse/movie">
-              Home
+              Movie
               <AnimatePresence>
-                {homeMatch && <Circle layoutId="circle" />}
+                {MovieMatch && <Circle layoutId="circle" />}
               </AnimatePresence>
             </Link>
           </Menu>
