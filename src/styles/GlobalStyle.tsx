@@ -7,7 +7,6 @@ ${reset};
   box-sizing: border-box;
 }
 body {
-  overflow-x: hidden;
   background-color: black;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700; // (300light, 500medium, 700bold)
@@ -17,12 +16,6 @@ body {
 a {
   text-decoration: none;
   color: inherit;
-}
-.no-scroll{
-  overflow-y: hidden;
-}
-.scroll-width{
-  width: calc(100% - 17px);
 }
 `;
 

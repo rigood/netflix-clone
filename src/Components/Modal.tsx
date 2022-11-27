@@ -27,6 +27,7 @@ import MainVideo from "./MainVideo";
 import Videos from "./Videos";
 import ContentsGrid from "./ContentsGrid";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
+import useBodyScroll from "../hook/useBodyScroll";
 
 function Modal() {
   // Extract section, id
@@ -34,7 +35,6 @@ function Modal() {
   const location = useLocation();
   const id = new URLSearchParams(location.search).get("id");
 
-  console.log("모달 진입");
   // Open Modal
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
@@ -49,15 +49,7 @@ function Modal() {
   };
 
   // Change body scroll as Modal changes
-  const stopBodyScroll = () => {
-    document.body.classList.add("no-scroll", "scroll-width");
-    document.getElementsByTagName("nav")[0].classList.add("scroll-width");
-  };
-  const restoreBodyScroll = () => {
-    document.body.classList.remove("no-scroll", "scroll-width");
-    document.getElementsByTagName("nav")[0].classList.remove("scroll-width");
-  };
-
+  const [stopBodyScroll, restoreBodyScroll] = useBodyScroll();
   useEffect(() => {
     isModalOpen ? stopBodyScroll() : restoreBodyScroll();
   }, [isModalOpen]);
