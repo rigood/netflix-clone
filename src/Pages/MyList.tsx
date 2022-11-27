@@ -11,6 +11,14 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+`;
+
 function MyList() {
   const myMovie = useRecoilValue(myMovieAtom);
   const myTv = useRecoilValue(myTvAtom);
@@ -36,7 +44,13 @@ function MyList() {
   const myMovieData = myMovieQuery?.map((myMovie) => myMovie.data);
   const myTvData = myTvQuery?.map((myTv) => myTv.data);
 
-  console.log(myMovieData);
+  const isMyMovieLoading = myMovieQuery.some((myMovie) => myMovie.isLoading);
+  const isMyTvLoading = myTvQuery.some((myTv) => myTv.isLoading);
+  const isLoading = isMyMovieLoading || isMyTvLoading;
+
+  if (isLoading) {
+    return <Loader>로딩중</Loader>;
+  }
 
   return (
     <>

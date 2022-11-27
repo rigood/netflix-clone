@@ -129,7 +129,7 @@ const MoreButton = styled(FontAwesomeIcon)`
 `;
 
 function ContentsGrid({ title, contents, section }: IContentsGridProps) {
-  const [checkIsInList, toggleList] = useList(section);
+  const [checkIsNewContent, toggleList] = useList(section);
 
   const offset = 8;
   const [index, setIndex] = useState(offset);
@@ -150,7 +150,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
             >
               <PosterOverlay />
               <PosterButton
-                icon={checkIsInList(content.id) ? faCheck : faPlus}
+                icon={checkIsNewContent(content.id) ? faCheck : faPlus}
               />
             </Poster>
             <Info>

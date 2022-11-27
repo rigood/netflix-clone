@@ -82,10 +82,19 @@ const Backdrop = styled.div<{ bg: string }>`
 `;
 
 const Button = styled(FontAwesomeIcon)`
-  position: absolute;
-  font-size: 24px;
-  color: white;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: white;
+    color: white;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -134,7 +143,7 @@ const DateAndRating = styled.div`
   }
 `;
 
-const AddButton = styled(FontAwesomeIcon)`
+const CloseBtn = styled(FontAwesomeIcon)`
   width: 28px;
   height: 28px;
   padding: 5px;
@@ -148,22 +157,25 @@ const AddButton = styled(FontAwesomeIcon)`
     border-color: white;
     color: white;
   }
-`;
-
-const Overview = styled.p``;
-
-const CloseBtn = styled(Button)`
   top: 20px;
   right: 20px;
 `;
 
-function Modal() {
-  const navigate = useNavigate();
-  const location = useLocation();
+const Overview = styled.p``;
 
+function Modal() {
   // Extract section, id
+  const location = useLocation();
   const { section } = useParams();
   const id = new URLSearchParams(location.search).get("id");
+
+  // Redirect if section is not movie and tv
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (section !== "movie" && section !== "tv") {
+      navigate("/");
+    }
+  }, []);
 
   // Open Modal
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
@@ -229,7 +241,7 @@ function Modal() {
   const mainVideoKey = videos?.[0]?.key;
 
   // Add/Remove content from MyList
-  const [checkIsInList, toggleList] = useList(section!);
+  const [checkIsNewContent, addToList, removeFromList] = useList(section!);
 
   // Loading
   const isLoading =
@@ -301,10 +313,15 @@ function Modal() {
                     </DateAndRating>
                   </div>
                   <div>
-                    {isError ? null : (
-                      <AddButton
-                        icon={checkIsInList(details?.id!) ? faCheck : faPlus}
-                        onClick={() => toggleList(details?.id!)}
+                    {!isError && checkIsNewContent(details?.id!) ? (
+                      <Button
+                        icon={faPlus}
+                        onClick={() => addToList(details?.id!)}
+                      />
+                    ) : (
+                      <Button
+                        icon={faCheck}
+                        onClick={() => removeFromList(details?.id!)}
                       />
                     )}
                   </div>
