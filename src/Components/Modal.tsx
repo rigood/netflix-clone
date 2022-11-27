@@ -30,31 +30,25 @@ import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Modal() {
   // Extract section, id
-  const location = useLocation();
   const { section } = useParams();
+  const location = useLocation();
   const id = new URLSearchParams(location.search).get("id");
 
-  // Redirect if section is not movie and tv
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (section !== "movie" && section !== "tv") {
-      navigate("/");
-    }
-  }, []);
-
+  console.log("모달 진입");
   // Open Modal
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalState);
 
   useEffect(() => {
     setIsModalOpen(id ? true : false);
-  }, [location, id, setIsModalOpen]);
+  }, [location]);
 
   // Close Modal
+  const navigate = useNavigate();
   const closeModal = () => {
     navigate(-1);
   };
 
-  // Change body scroll
+  // Change body scroll as Modal changes
   const stopBodyScroll = () => {
     document.body.classList.add("no-scroll", "scroll-width");
     document.getElementsByTagName("nav")[0].classList.add("scroll-width");
