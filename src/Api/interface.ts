@@ -1,28 +1,49 @@
-/* API interface */
+export interface IContent {
+  // common
+  id: number;
+  backdrop_path: string;
+  poster_path: string;
+  status: string;
+  genres: IGenre[];
+  overview: string;
+  vote_average: number;
+  original_language: string;
+  // movie
+  title: string;
+  runtime: number;
+  release_date: string;
+  imdb_id: string;
+  adult: boolean;
+  video: boolean;
+  // tv
+  name: string;
+  episode_run_time: number;
+  first_air_date: string;
+  last_air_date: string;
+  homepage: string;
+  networks: INetwork[];
+  seasons: ISeason[];
+  number_of_seasons: number;
+  number_of_episodes: number;
+}
 
-/////////////////////////////////////
+export interface ICast {
+  name: string;
+  original_name: string;
+  profile_path: string;
+  character: string;
+}
 
-// export interface IContent {
-//   id: number;
-//   backdrop_path: string;
-//   poster_path: string;
-//   overview: string;
-//   vote_average: number;
-// }
-
-// /* for Movie */
-// export interface IContent {
-//   title: string;
-//   release_date: string;
-// }
-
-// /* for Tv */
-// export interface IContent {
-//   name: string;
-//   first_air_date: string;
-// }
-
-/////////////////////////////////////
+export interface IVideo {
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+}
 
 export interface IGenre {
   id: number;
@@ -43,121 +64,4 @@ export interface ISeason {
   overview: string;
   poster_path: string;
   season_number: number;
-}
-
-/////////////////////////////////////
-
-export interface IContent {
-  id: number;
-  backdrop_path: string;
-  poster_path: string;
-  status: string;
-  genres: IGenre[];
-  overview: string;
-  vote_average: number;
-  original_language: string;
-}
-
-/* for Movie */
-export interface IContent {
-  title: string;
-  runtime: number;
-  release_date: string;
-  imdb_id: string;
-  adult: boolean;
-  video: boolean;
-}
-
-/* for Tv */
-export interface IContent {
-  name: string;
-  episode_run_time: number;
-  first_air_date: string;
-  last_air_date: string;
-  homepage: string;
-  networks: INetwork[];
-  seasons: ISeason[];
-  number_of_seasons: number;
-  number_of_episodes: number;
-}
-
-/////////////////////////////////////
-
-export interface ICast {
-  name: string;
-  original_name: string;
-  profile_path: string;
-  character: string;
-}
-
-/////////////////////////////////////
-
-export interface IVideo {
-  name: string;
-  key: string;
-  site: string;
-  size: number;
-  type: string;
-  official: boolean;
-  published_at: string;
-  id: string;
-}
-
-/////////////////////////////////////
-
-/* Props interface */
-
-export interface IBannerProps {
-  section: string;
-  title: string;
-  content?: IContent;
-}
-
-export interface ISliderProps {
-  section: string;
-  title: string;
-  list?: IContent[];
-  isFirst: boolean;
-}
-
-export interface IModalProps {
-  section?: string;
-  id?: string;
-}
-
-export interface IRowVariantsProps {
-  movingBack: boolean;
-  windowWidth: number;
-}
-
-export interface IMainVideoProps {
-  videoKey: string;
-}
-
-export interface IVideosProps {
-  title: string;
-  videos: IVideo[];
-}
-
-export interface IContentsGridProps {
-  title: string;
-  contents: IContent[];
-  section: string;
-}
-
-export interface ICastGridProps {
-  title: string;
-  cast: ICast[];
-}
-
-export interface ISearchGridProps {
-  keyword: string;
-  section: string;
-  contents?: IContent[];
-}
-
-export interface IMyListGridProps {
-  title: string;
-  contents: IContent[];
-  section: string;
 }

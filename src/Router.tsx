@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Root from "./Root";
+import Layout from "./Layout";
 import Browse from "./pages/Browse";
 import MyList from "./pages/MyList";
 import Search from "./pages/Search";
@@ -7,7 +7,7 @@ import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
-    element: <Root />,
+    element: <Layout />,
     children: [
       {
         path: "/",

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { myMovieAtom, myTvAtom } from "../atom";
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
-import { getDetails } from "../api/api";
+import { getDetails } from "../api/queryFn";
 import MyListGrid from "../components/MyListGrid";
 
 const Wrapper = styled.div`

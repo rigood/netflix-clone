@@ -1,17 +1,72 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IContent } from "../api/interface";
+import useList from "../hook/useList";
+import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import {
   faCheck,
   faChevronDown,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { IContent, IContentsGridProps } from "../api/interface";
-import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
-import { useNavigate } from "react-router-dom";
-// import { useRecoilState } from "recoil";
-// import { myMovieAtom, myTvAtom } from "../atom";
-import { useState } from "react";
-import useList from "../hook/useList";
+
+interface IContentsGridProps {
+  title: string;
+  contents: IContent[];
+  section: string;
+}
+
+function ContentsGrid({ title, contents, section }: IContentsGridProps) {
+  const offset = 8;
+  const [index, setIndex] = useState(offset);
+
+  const [checkIsNewContent, addToList, removeFromList] = useList(section!);
+
+  return (
+    <>
+      <Title>{title}</Title>
+      <GridWrapper>
+        {contents?.slice(0, index).map((content) => (
+          <ContentWrapper key={content.id}>
+            <Poster
+              bg={
+                content.poster_path
+                  ? getImgPath(content.poster_path, "w500")
+                  : noPoster
+              }
+              onClick={() =>
+                checkIsNewContent(content.id)
+                  ? addToList(content.id)
+                  : removeFromList(content.id)
+              }
+            >
+              <PosterOverlay />
+              <PosterButton
+                icon={checkIsNewContent(content.id) ? faCheck : faPlus}
+              />
+            </Poster>
+            <Info>
+              <h1>{section === "movie" ? content.title : content.name}</h1>
+              <div>
+                {getDate(section, content.release_date, content.first_air_date)}
+              </div>
+              <div>{getRating(content.vote_average)}</div>
+            </Info>
+          </ContentWrapper>
+        ))}
+        {index < contents?.length ? (
+          <MoreButton
+            icon={faChevronDown}
+            onClick={() => setIndex((prev) => prev + offset)}
+          />
+        ) : null}
+      </GridWrapper>
+      {contents?.length === 0 ? "준비중입니다." : null}
+    </>
+  );
+}
+
+export default ContentsGrid;
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -127,51 +182,3 @@ const MoreButton = styled(FontAwesomeIcon)`
     color: white;
   }
 `;
-
-function ContentsGrid({ title, contents, section }: IContentsGridProps) {
-  const [checkIsNewContent, toggleList] = useList(section);
-
-  const offset = 8;
-  const [index, setIndex] = useState(offset);
-
-  return (
-    <>
-      <Title>{title}</Title>
-      <GridWrapper>
-        {contents?.slice(0, index).map((content) => (
-          <ContentWrapper key={content.id}>
-            <Poster
-              bg={
-                content.poster_path
-                  ? getImgPath(content.poster_path, "w500")
-                  : noPoster
-              }
-              onClick={() => toggleList(content.id)}
-            >
-              <PosterOverlay />
-              <PosterButton
-                icon={checkIsNewContent(content.id) ? faCheck : faPlus}
-              />
-            </Poster>
-            <Info>
-              <h1>{section === "movie" ? content.title : content.name}</h1>
-              <div>
-                {getDate(section, content.release_date, content.first_air_date)}
-              </div>
-              <div>{getRating(content.vote_average)}</div>
-            </Info>
-          </ContentWrapper>
-        ))}
-        {index < contents?.length ? (
-          <MoreButton
-            icon={faChevronDown}
-            onClick={() => setIndex((prev) => prev + offset)}
-          />
-        ) : null}
-      </GridWrapper>
-      {contents?.length === 0 ? "준비중입니다." : null}
-    </>
-  );
-}
-
-export default ContentsGrid;

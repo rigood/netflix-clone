@@ -1,10 +1,58 @@
-import styled from "styled-components";
 import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ISearchGridProps } from "../api/interface";
-import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IContent } from "../api/interface";
+import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
+interface ISearchGridProps {
+  keyword: string;
+  section: string;
+  contents?: IContent[];
+}
+
+function SearchGrid(
+  { keyword, section, contents }: ISearchGridProps,
+  ref: any
+) {
+  const navigate = useNavigate();
+  const openModal = (id: number) => {
+    navigate(`?q=${keyword}&id=${id}`);
+  };
+
+  return (
+    <GridWrapper>
+      {contents?.map((content, index) => (
+        <ContentWrapper
+          key={content.id}
+          ref={contents?.length === index + 1 ? ref : null}
+        >
+          <Poster
+            bg={
+              content.poster_path
+                ? getImgPath(content.poster_path, "w500")
+                : noPoster
+            }
+            onClick={() => openModal(content.id)}
+          >
+            <PosterOverlay />
+            <PosterButton icon={faChevronRight} />
+          </Poster>
+          <Info>
+            <h1>{section === "movie" ? content.title : content.name}</h1>
+            <div>
+              {getDate(section, content.release_date, content.first_air_date)}
+            </div>
+            <div>{getRating(content.vote_average)}</div>
+          </Info>
+        </ContentWrapper>
+      ))}
+    </GridWrapper>
+  );
+}
+
+export default forwardRef(SearchGrid);
 
 const GridWrapper = styled.div`
   width: 100%;
@@ -94,48 +142,3 @@ const Info = styled.div`
     color: rgba(255, 255, 255, 0.5);
   }
 `;
-
-function SearchGrid(
-  { keyword, section, contents }: ISearchGridProps,
-  ref: any
-) {
-  /* State-management for Modal scroll */
-
-  /* Routing */
-  const navigate = useNavigate();
-  const openModal = (id: number) => {
-    navigate(`?q=${keyword}&id=${id}`);
-  };
-
-  return (
-    <GridWrapper>
-      {contents?.map((content, index) => (
-        <ContentWrapper
-          key={content.id}
-          ref={contents?.length === index + 1 ? ref : null}
-        >
-          <Poster
-            bg={
-              content.poster_path
-                ? getImgPath(content.poster_path, "w500")
-                : noPoster
-            }
-            onClick={() => openModal(content.id)}
-          >
-            <PosterOverlay />
-            <PosterButton icon={faChevronRight} />
-          </Poster>
-          <Info>
-            <h1>{section === "movie" ? content.title : content.name}</h1>
-            <div>
-              {getDate(section, content.release_date, content.first_air_date)}
-            </div>
-            <div>{getRating(content.vote_average)}</div>
-          </Info>
-        </ContentWrapper>
-      ))}
-    </GridWrapper>
-  );
-}
-
-export default forwardRef(SearchGrid);

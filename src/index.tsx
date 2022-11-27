@@ -2,12 +2,8 @@ import ReactDOM from "react-dom/client";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ThemeProvider } from "styled-components";
 import { RouterProvider } from "react-router-dom";
-
 import router from "./Router";
-import GlobalStyle from "./styles/GlobalStyle";
-import { theme } from "./styles/theme";
 
 const client = new QueryClient({ defaultOptions: { queries: { retry: 1 } } });
 
@@ -18,10 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <RecoilRoot>
     <QueryClientProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <RouterProvider router={router} />
       <ReactQueryDevtools position="bottom-right" />
     </QueryClientProvider>
   </RecoilRoot>

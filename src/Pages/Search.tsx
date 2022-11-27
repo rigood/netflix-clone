@@ -20,7 +20,7 @@ import {
   getSimilar,
   getMovieSearch,
   getTvSearch,
-} from "../api/api";
+} from "../api/queryFn";
 
 import SearchGrid from "../components/SearchGrid";
 import Modal from "../components/Modal";

@@ -1,9 +1,57 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { IContent } from "../api/interface";
 import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
-import { IMyListGridProps } from "../api/interface";
-import { useNavigate } from "react-router-dom";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
+interface IMyListGridProps {
+  title: string;
+  contents: IContent[];
+  section: string;
+}
+
+function MyListGrid({ title, contents, section }: IMyListGridProps) {
+  const navigate = useNavigate();
+  const openModal = (id: number) => {
+    navigate(`${section}?id=${id}`);
+  };
+
+  return (
+    <>
+      <Title>{title}</Title>
+
+      <GridWrapper>
+        {contents?.map((content) => (
+          <ContentWrapper key={content.id}>
+            <Poster
+              bg={
+                content.poster_path
+                  ? getImgPath(content.poster_path, "w500")
+                  : noPoster
+              }
+              onClick={() => openModal(content.id)}
+            >
+              <PosterOverlay />
+              <PosterButton icon={faChevronRight} />
+            </Poster>
+            <Info>
+              <h1>{section === "movie" ? content.title : content.name}</h1>
+              <div>
+                {getDate(section, content.release_date, content.first_air_date)}
+              </div>
+              <div>{getRating(content.vote_average)}</div>
+            </Info>
+          </ContentWrapper>
+        ))}
+      </GridWrapper>
+
+      {contents?.length === 0 ? "목록이 비어있습니다." : null}
+    </>
+  );
+}
+
+export default MyListGrid;
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -99,45 +147,3 @@ const Info = styled.div`
     color: rgba(255, 255, 255, 0.5);
   }
 `;
-
-function MyListGrid({ title, contents, section }: IMyListGridProps) {
-  const navigate = useNavigate();
-  const openModal = (id: number) => {
-    navigate(`${section}?id=${id}`);
-  };
-
-  return (
-    <>
-      <Title>{title}</Title>
-
-      <GridWrapper>
-        {contents?.map((content) => (
-          <ContentWrapper key={content.id}>
-            <Poster
-              bg={
-                content.poster_path
-                  ? getImgPath(content.poster_path, "w500")
-                  : noPoster
-              }
-              onClick={() => openModal(content.id)}
-            >
-              <PosterOverlay />
-              <PosterButton icon={faChevronRight} />
-            </Poster>
-            <Info>
-              <h1>{section === "movie" ? content.title : content.name}</h1>
-              <div>
-                {getDate(section, content.release_date, content.first_air_date)}
-              </div>
-              <div>{getRating(content.vote_average)}</div>
-            </Info>
-          </ContentWrapper>
-        ))}
-      </GridWrapper>
-
-      {contents?.length === 0 ? "목록이 비어있습니다." : null}
-    </>
-  );
-}
-
-export default MyListGrid;

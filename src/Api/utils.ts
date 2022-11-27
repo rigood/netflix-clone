@@ -6,13 +6,13 @@ export function getThumbnailPath(key: string) {
   return `https://img.youtube.com/vi/${key}/0.jpg`;
 }
 
-export function getYoutubeUrl(key: string) {
-  return `https://www.youtube.com/watch?v=${key}`;
-}
-
 export const noBackdrop = process.env.PUBLIC_URL + "/assets/noBackdrop.png";
 export const noPoster = process.env.PUBLIC_URL + "/assets/noPoster.png";
 export const noProfile = process.env.PUBLIC_URL + "/assets/noProfile.png";
+
+export function getYoutubeUrl(key: string) {
+  return `https://www.youtube.com/watch?v=${key}`;
+}
 
 export function getDate(section: string, movieDate: string, tvDate: string) {
   if (section === "movie") {
@@ -33,7 +33,7 @@ export function getRating(rating: number) {
   }
 }
 
-function getRuntime(runtime: number) {
+export function getRuntime(runtime: number) {
   if (runtime) {
     const hour = Math.floor(runtime / 60) + "시간";
     const min = runtime % 60;
@@ -44,7 +44,7 @@ function getRuntime(runtime: number) {
   }
 }
 
-function getEpisodes(seasons: number, episodes: number) {
+export function getEpisodes(seasons: number, episodes: number) {
   if (seasons || episodes) {
     return `시즌 ${seasons || 0}개 에피소드 ${episodes || 0}개`;
   } else {

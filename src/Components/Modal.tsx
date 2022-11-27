@@ -1,27 +1,19 @@
 import { useEffect } from "react";
-import {
-  useLocation,
-  useMatch,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
-import { modalState } from "../atom";
-
 import styled from "styled-components";
 import { motion } from "framer-motion";
-
-import { ICast, IContent, IModalProps, IVideo } from "../api/interface";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRecoilState } from "recoil";
+import { ICast, IContent, IVideo } from "../api/interface";
+import { modalState } from "../atom";
 import {
   getCast,
   getDetails,
   getRecommendations,
   getSimilar,
   getVideos,
-} from "../api/api";
-
+} from "../api/queryFn";
 import {
   getDate,
   getImgPath,
@@ -29,139 +21,12 @@ import {
   getRuntimeOrEpisodes,
   noBackdrop,
 } from "../api/utils";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 import useList from "../hook/useList";
-import { toastMsg } from "../api/toast";
-import MainVideo from "./MainVideo";
 import CastGrid from "./CastGrid";
+import MainVideo from "./MainVideo";
 import Videos from "./Videos";
 import ContentsGrid from "./ContentsGrid";
-
-// Styled-components
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
-
-const Overlay = styled(motion.div)`
-  position: fixed;
-  inset: 0;
-  overflow-y: scroll;
-  z-index: 8;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-`;
-
-const Wrapper = styled(motion.div)`
-  width: min(90%, 900px);
-  margin: 30px auto;
-  padding-bottom: 30px;
-  background-color: black;
-  z-index: 9999;
-  position: relative; // CloseBtn 배치
-  border-radius: 20px;
-  overflow: hidden;
-`;
-
-const Backdrop = styled.div<{ bg: string }>`
-  width: 100%;
-  padding-top: 56.25%;
-  background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 1)
-    ),
-    url(${(props) => props.bg});
-  background-size: cover;
-`;
-
-const Button = styled(FontAwesomeIcon)`
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    border-color: white;
-    color: white;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  margin: 0 30px;
-  padding-bottom: 50px;
-`;
-
-const Genres = styled.div`
-  margin-bottom: 10px;
-  span {
-    margin-right: 10px;
-    padding: 3px 6px;
-    border-radius: 5px;
-    background-color: ${(props) => props.theme.red};
-    font-size: 14px;
-    font-weight: 400;
-  }
-`;
-
-const Number = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 10px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  .info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-`;
-
-const DateAndRating = styled.div`
-  font-size: 16px;
-  span:first-child {
-    margin-right: 10px;
-    color: ${(props) => props.theme.green};
-  }
-`;
-
-const CloseBtn = styled(FontAwesomeIcon)`
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    border-color: white;
-    color: white;
-  }
-  top: 20px;
-  right: 20px;
-`;
-
-const Overview = styled.p``;
+import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Modal() {
   // Extract section, id
@@ -352,3 +217,125 @@ function Modal() {
 }
 
 export default Modal;
+
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+`;
+
+const Overlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  overflow-y: scroll;
+  z-index: 8;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+`;
+
+const Wrapper = styled(motion.div)`
+  width: min(90%, 900px);
+  margin: 30px auto;
+  padding-bottom: 30px;
+  background-color: black;
+  z-index: 9999;
+  position: relative; // CloseBtn 배치
+  border-radius: 20px;
+  overflow: hidden;
+`;
+
+const Backdrop = styled.div<{ bg: string }>`
+  width: 100%;
+  padding-top: 56.25%;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 1)
+    ),
+    url(${(props) => props.bg});
+  background-size: cover;
+`;
+
+const Button = styled(FontAwesomeIcon)`
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: white;
+    color: white;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  margin: 0 30px;
+  padding-bottom: 50px;
+`;
+
+const Genres = styled.div`
+  margin-bottom: 10px;
+  span {
+    margin-right: 10px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background-color: ${(props) => props.theme.red};
+    font-size: 14px;
+    font-weight: 400;
+  }
+`;
+
+const Number = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 10px;
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+`;
+
+const DateAndRating = styled.div`
+  font-size: 16px;
+  span:first-child {
+    margin-right: 10px;
+    color: ${(props) => props.theme.green};
+  }
+`;
+
+const CloseBtn = styled(FontAwesomeIcon)`
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: white;
+    color: white;
+  }
+  top: 20px;
+  right: 20px;
+`;
+
+const Overview = styled.p``;

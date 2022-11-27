@@ -1,9 +1,41 @@
-import styled from "styled-components";
 import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import { IMainVideoProps } from "../api/interface";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeXmark, faVolumeUp } from "@fortawesome/free-solid-svg-icons";
+
+interface IMainVideoProps {
+  videoKey: string;
+}
+
+function MainVideo({ videoKey }: IMainVideoProps) {
+  const BASE_URL = "https://www.youtube.com/watch?v=";
+
+  const [isMute, setIsMute] = useState(true);
+  const toggleMute = () => {
+    setIsMute((prev) => !prev);
+  };
+
+  return (
+    <Wrapper>
+      <ReactPlayer
+        url={BASE_URL + videoKey}
+        width="100%"
+        height="100%"
+        playing={true}
+        muted={isMute}
+        loop={true}
+      />
+      <Overlay />
+      <VolumeBtn
+        icon={isMute ? faVolumeXmark : faVolumeUp}
+        onClick={toggleMute}
+      />
+    </Wrapper>
+  );
+}
+
+export default MainVideo;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -40,32 +72,3 @@ const VolumeBtn = styled(FontAwesomeIcon)`
     color: ${(props) => props.theme.white.lighter};
   }
 `;
-
-function MainVideo({ videoKey }: IMainVideoProps) {
-  const [isMute, setIsMute] = useState(true);
-  const toggleMute = () => {
-    setIsMute((prev) => !prev);
-  };
-
-  const BASE_URL = "https://www.youtube.com/watch?v=";
-
-  return (
-    <Wrapper>
-      <ReactPlayer
-        url={BASE_URL + videoKey}
-        width="100%"
-        height="100%"
-        playing={true}
-        muted={isMute}
-        loop={true}
-      />
-      <Overlay />
-      <VolumeBtn
-        icon={isMute ? faVolumeXmark : faVolumeUp}
-        onClick={toggleMute}
-      />
-    </Wrapper>
-  );
-}
-
-export default MainVideo;

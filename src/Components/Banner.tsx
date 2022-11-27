@@ -1,19 +1,53 @@
-import styled from "styled-components";
-
-/* Interface */
-import { IBannerProps } from "../api/interface";
-
-/* Routing */
 import { useNavigate } from "react-router-dom";
-
-/* State-management */
-import { useSetRecoilState } from "recoil";
-import { modalState } from "../atom";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { IContent } from "../api/interface";
 import { getDate, getRating } from "../api/utils";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
-/* Styling */
+interface IBannerProps {
+  section: string;
+  title: string;
+  content?: IContent;
+}
+
+function Banner({ section, title, content }: IBannerProps) {
+  const navigate = useNavigate();
+  const onButtonClick = (id: number) => {
+    navigate(`?id=${id}`);
+  };
+
+  return (
+    <>
+      {content && (
+        <Container>
+          <Title>{section === "movie" ? content.title : content.name}</Title>
+          <Ranking>
+            <img
+              src={process.env.PUBLIC_URL + "/assets/logo.png"}
+              alt="Netflix logo"
+            />
+            <h2>오늘의 {title} 순위 1위</h2>
+          </Ranking>
+          <Overview>{content.overview}</Overview>
+          <DateAndRating>
+            <span>
+              {getDate(section, content.release_date, content.first_air_date)}
+            </span>
+            <span>{getRating(content.vote_average)}</span>
+          </DateAndRating>
+          <Button onClick={() => onButtonClick(content.id)}>
+            <FontAwesomeIcon icon={faInfoCircle} />
+            <span>자세히 보기</span>
+          </Button>
+        </Container>
+      )}
+    </>
+  );
+}
+
+export default Banner;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -108,43 +142,3 @@ const Button = styled.div`
     margin-left: 0.4vw;
   }
 `;
-
-function Banner({ section, title, content }: IBannerProps) {
-  /* State-management for Modal scroll */
-
-  /* Routing */
-  const navigate = useNavigate();
-  const onButtonClick = (id: number) => {
-    navigate(`?id=${id}`);
-  };
-
-  return (
-    <>
-      {content && (
-        <Container>
-          <Title>{section === "movie" ? content.title : content.name}</Title>
-          <Ranking>
-            <img
-              src={process.env.PUBLIC_URL + "/assets/logo.png"}
-              alt="Netflix logo"
-            />
-            <h2>오늘의 {title} 순위 1위</h2>
-          </Ranking>
-          <Overview>{content.overview}</Overview>
-          <DateAndRating>
-            <span>
-              {getDate(section, content.release_date, content.first_air_date)}
-            </span>
-            <span>{getRating(content.vote_average)}</span>
-          </DateAndRating>
-          <Button onClick={() => onButtonClick(content.id)}>
-            <FontAwesomeIcon icon={faInfoCircle} />
-            <span>자세히 보기</span>
-          </Button>
-        </Container>
-      )}
-    </>
-  );
-}
-
-export default Banner;

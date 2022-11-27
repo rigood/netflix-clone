@@ -1,9 +1,48 @@
-import { faChevronDown, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import styled from "styled-components";
-import { ICastGridProps } from "../api/interface";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ICast } from "../api/interface";
 import { getImgPath, noProfile } from "../api/utils";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+
+interface ICastGridProps {
+  title: string;
+  cast: ICast[];
+}
+
+function CastGrid({ title, cast }: ICastGridProps) {
+  const offset = 5;
+  const [index, setIndex] = useState(offset);
+  return (
+    <>
+      <Title>{title}</Title>
+      <GridWrapper>
+        {cast?.slice(0, index).map((actor, index) => (
+          <Actor key={index}>
+            <Img
+              bg={
+                actor.profile_path
+                  ? getImgPath(actor.profile_path, "w200")
+                  : noProfile
+              }
+            />
+            <div className="name">{actor.name}</div>
+            <div className="character">{actor.character}</div>
+          </Actor>
+        ))}
+        {index < cast?.length ? (
+          <MoreButton
+            icon={faChevronDown}
+            onClick={() => setIndex((prev) => prev + offset)}
+          />
+        ) : null}
+      </GridWrapper>
+      <p>{cast?.length === 0 ? "준비중입니다." : null}</p>
+    </>
+  );
+}
+
+export default CastGrid;
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -55,38 +94,3 @@ const MoreButton = styled(FontAwesomeIcon)`
   color: lightgray;
   cursor: pointer;
 `;
-
-function CastGrid({ title, cast }: ICastGridProps) {
-  const offset = 5;
-  const [index, setIndex] = useState(offset);
-  return (
-    <>
-      <Title>{title}</Title>
-      <GridWrapper>
-        {cast?.slice(0, index).map((actor, index) => (
-          <Actor key={index}>
-            <Img
-              bg={
-                actor.profile_path
-                  ? getImgPath(actor.profile_path, "w200")
-                  : noProfile
-              }
-            />
-            <div className="name">{actor.name}</div>
-            <div className="character">{actor.character}</div>
-          </Actor>
-        ))}
-        {index < cast?.length ? (
-          <MoreButton
-            icon={faChevronDown}
-            onClick={() => setIndex((prev) => prev + offset)}
-          />
-        ) : null}
-      </GridWrapper>
-
-      <p>{cast?.length === 0 ? "준비중입니다." : null}</p>
-    </>
-  );
-}
-
-export default CastGrid;

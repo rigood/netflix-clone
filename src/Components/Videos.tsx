@@ -1,8 +1,40 @@
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-import { IVideosProps } from "../api/interface";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IVideo } from "../api/interface";
 import { getThumbnailPath, getYoutubeUrl } from "../api/utils";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+
+interface IVideosProps {
+  title: string;
+  videos: IVideo[];
+}
+
+function Videos({ title, videos }: IVideosProps) {
+  const onVideoClick = (key: string) =>
+    window.open(getYoutubeUrl(key), "_blank");
+  return (
+    <>
+      <Title>{title}</Title>
+      <Wrapper>
+        {videos?.slice(0, 3).map((video) => (
+          <Video key={video.id} onClick={() => onVideoClick(video.key)}>
+            <Thumbnail bg={getThumbnailPath(video.key)}>
+              <ThumbnailOverlay />
+              <ThumbnailButton icon={faPlay} />
+            </Thumbnail>
+            <div className="info">
+              <span className="name">{video.name}</span>
+              <span className="date">{video.published_at.slice(0, 10)}</span>
+            </div>
+          </Video>
+        ))}
+        {videos?.length === 0 ? "관련 영상이 없습니다." : null}
+      </Wrapper>
+    </>
+  );
+}
+
+export default Videos;
 
 const Title = styled.h1`
   font-size: 1.3rem;
@@ -90,30 +122,3 @@ const Thumbnail = styled.div<{ bg: string }>`
     display: block;
   }
 `;
-
-function Videos({ title, videos }: IVideosProps) {
-  const onVideoClick = (key: string) =>
-    window.open(getYoutubeUrl(key), "_blank");
-  return (
-    <>
-      <Title>{title}</Title>
-      <Wrapper>
-        {videos?.slice(0, 3).map((video) => (
-          <Video key={video.id} onClick={() => onVideoClick(video.key)}>
-            <Thumbnail bg={getThumbnailPath(video.key)}>
-              <ThumbnailOverlay />
-              <ThumbnailButton icon={faPlay} />
-            </Thumbnail>
-            <div className="info">
-              <span className="name">{video.name}</span>
-              <span className="date">{video.published_at.slice(0, 10)}</span>
-            </div>
-          </Video>
-        ))}
-        {videos?.length === 0 ? "관련 영상이 없습니다." : null}
-      </Wrapper>
-    </>
-  );
-}
-
-export default Videos;

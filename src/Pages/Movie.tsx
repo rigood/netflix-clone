@@ -11,7 +11,7 @@ import {
   getRecommendations,
   getSimilar,
   getVideos,
-} from "../api/api";
+} from "../api/queryFn";
 import { getImgPath } from "../api/utils";
 
 /* Interface */

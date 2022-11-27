@@ -1,34 +1,140 @@
 import React from "react";
-import styled, { css } from "styled-components";
-
-/* Routing */
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-/* Interface */
-import { IRowVariantsProps, ISliderProps } from "../api/interface";
-
-/* Motion */
-import { motion, AnimatePresence } from "framer-motion";
-
-/* Data-fetching */
-import { getImgPath, noBackdrop } from "../api/utils";
-
-/* State-management */
-import { useSetRecoilState } from "recoil";
-import { modalState } from "../atom";
-
-/* Slice list */
-import { useState } from "react";
-
-/* Set slider-height */
-import { useRef, useEffect } from "react";
-import useWindowDimensions from "../hook/useWindowDimensions";
-
-/* Icons */
+import styled, { css } from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IContent } from "../api/interface";
+import useWindowDimensions from "../hook/useWindowDimensions";
+import { getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
-/* Styling */
+interface ISliderProps {
+  section: string;
+  title: string;
+  list?: IContent[];
+  isFirst: boolean;
+}
+
+interface IRowVariantsProps {
+  movingBack: boolean;
+  windowWidth: number;
+}
+
+function Slider({ section, title, list, isFirst }: ISliderProps) {
+  // Remove Banner content from Slider
+  let sliceIndex;
+  if (isFirst) {
+    sliceIndex = 1;
+  } else {
+    sliceIndex = 0;
+  }
+
+  // Slider List
+  const offset = 6;
+  const [index, setIndex] = useState(0);
+  const listLength = list?.length!;
+  const maxIndex = Math.floor(listLength / offset) - 1;
+
+  // Slider Height
+  const windowWidth = useWindowDimensions();
+  const [rowWrapperHeight, setRowWrapperHeight] = useState(0);
+
+  const rowRef = useRef<any>();
+  useEffect(() => {
+    setRowWrapperHeight(rowRef?.current?.clientHeight);
+  }, [windowWidth]);
+
+  // Slider Moving
+  const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
+  const [moving, setMoving] = useState(false);
+  const [movingBack, setMovingBack] = useState(false);
+
+  const decreaseIndex = () => {
+    if (list) {
+      if (moving) return;
+      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+      setMoving(true);
+      setMovingBack(true);
+    }
+  };
+
+  const increaseIndex = () => {
+    if (list) {
+      if (moving) return;
+      setIsPrevBtnDisabled(false);
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+      setMoving(true);
+    }
+  };
+
+  const toggleMoving = () => {
+    setMoving((prev) => !prev);
+    setMovingBack(false);
+  };
+
+  const navigate = useNavigate();
+  const onBoxClick = (id: number) => {
+    navigate(`?id=${id}`);
+  };
+
+  return (
+    <Container>
+      <Title>{title}</Title>
+      <RowWrapper height={rowWrapperHeight}>
+        <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
+          <FontAwesomeIcon icon={faAngleLeft} />
+        </PrevBtn>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={toggleMoving}
+          custom={{ movingBack, windowWidth }}
+        >
+          <Row
+            key={index}
+            variants={rowVariants}
+            initial="enter"
+            animate="show"
+            exit="exit"
+            transition={{ type: "tween", duration: 0.5 }}
+            ref={rowRef}
+            custom={{ movingBack, windowWidth }}
+          >
+            {list
+              ?.slice(sliceIndex)
+              .slice(offset * index, offset * index + offset)
+              .map((content) => (
+                <React.Fragment key={content.id}>
+                  <Box
+                    bg={
+                      content.backdrop_path
+                        ? getImgPath(content.backdrop_path, "w500")
+                        : noBackdrop
+                    }
+                    onClick={() => onBoxClick(content.id)}
+                    variants={boxVariants}
+                    whileHover="hover"
+                    initial="initial"
+                  >
+                    <BoxInfo variants={infoVariants}>
+                      <p>
+                        {section === "movie" ? content.title : content.name}
+                      </p>
+                    </BoxInfo>
+                  </Box>
+                </React.Fragment>
+              ))}
+          </Row>
+        </AnimatePresence>
+        <NextBtn onClick={increaseIndex}>
+          <FontAwesomeIcon icon={faAngleRight} />
+        </NextBtn>
+      </RowWrapper>
+    </Container>
+  );
+}
+
+export default Slider;
 
 const Container = styled.div`
   width: 100%;
@@ -155,120 +261,3 @@ const infoVariants = {
     },
   },
 };
-
-function Slider({ section, title, list, isFirst }: ISliderProps) {
-  /* State-management for Modal scroll */
-
-  /* Routing */
-  const navigate = useNavigate();
-  const onBoxClick = (id: number) => {
-    navigate(`?id=${id}`);
-  };
-
-  /* Remove content from Slider for Banner */
-  let sliceIndex;
-  if (isFirst) {
-    sliceIndex = 1;
-  } else {
-    sliceIndex = 0;
-  }
-
-  /* Slider list */
-  const offset = 6;
-  const [index, setIndex] = useState(0);
-  const listLength = list?.length!;
-  const maxIndex = Math.floor(listLength / offset) - 1;
-
-  /* Slider movement */
-  const [moving, setMoving] = useState(false);
-  const [movingBack, setMovingBack] = useState(false);
-
-  /* Prev, Next */
-  const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
-
-  const decreaseIndex = () => {
-    if (list) {
-      if (moving) return;
-      setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
-      setMoving(true);
-      setMovingBack(true);
-    }
-  };
-  const increaseIndex = () => {
-    if (list) {
-      if (moving) return;
-      setIsPrevBtnDisabled(false);
-      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-      setMoving(true);
-    }
-  };
-  const toggleMoving = () => {
-    setMoving((prev) => !prev);
-    setMovingBack(false);
-  };
-
-  /* Set slider-height */
-  const windowWidth = useWindowDimensions();
-  const [rowWrapperHeight, setRowWrapperHeight] = useState(0);
-  const rowRef = useRef<any>();
-  useEffect(() => {
-    setRowWrapperHeight(rowRef?.current?.clientHeight);
-  }, [windowWidth]);
-
-  return (
-    <Container>
-      <Title>{title}</Title>
-      <RowWrapper height={rowWrapperHeight}>
-        <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
-          <FontAwesomeIcon icon={faAngleLeft} />
-        </PrevBtn>
-        <AnimatePresence
-          initial={false}
-          onExitComplete={toggleMoving}
-          custom={{ movingBack, windowWidth }}
-        >
-          <Row
-            key={index}
-            variants={rowVariants}
-            initial="enter"
-            animate="show"
-            exit="exit"
-            transition={{ type: "tween", duration: 0.5 }}
-            ref={rowRef}
-            custom={{ movingBack, windowWidth }}
-          >
-            {list
-              ?.slice(sliceIndex)
-              .slice(offset * index, offset * index + offset)
-              .map((content) => (
-                <React.Fragment key={content.id}>
-                  <Box
-                    bg={
-                      content.backdrop_path
-                        ? getImgPath(content.backdrop_path, "w500")
-                        : noBackdrop
-                    }
-                    onClick={() => onBoxClick(content.id)}
-                    variants={boxVariants}
-                    whileHover="hover"
-                    initial="initial"
-                  >
-                    <BoxInfo variants={infoVariants}>
-                      <p>
-                        {section === "movie" ? content.title : content.name}
-                      </p>
-                    </BoxInfo>
-                  </Box>
-                </React.Fragment>
-              ))}
-          </Row>
-        </AnimatePresence>
-        <NextBtn onClick={increaseIndex}>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </NextBtn>
-      </RowWrapper>
-    </Container>
-  );
-}
-
-export default Slider;
