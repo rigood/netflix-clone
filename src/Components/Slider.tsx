@@ -1,11 +1,11 @@
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import useWindowDimensions from "../hook/useWindowDimensions";
+import useWindowWidth from "../hook/useWindowWidth";
+import useElementHeight from "../hook/useElementHeight";
 import { getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -36,14 +36,9 @@ function Slider({ section, title, list, isFirst }: ISliderProps) {
   const listLength = list?.length!;
   const maxIndex = Math.floor(listLength / offset) - 1;
 
-  // Slider Height
-  const windowWidth = useWindowDimensions();
-  const [rowWrapperHeight, setRowWrapperHeight] = useState(0);
-
-  const rowRef = useRef<any>();
-  useEffect(() => {
-    setRowWrapperHeight(rowRef?.current?.clientHeight);
-  }, [windowWidth]);
+  // Slider css
+  const windowWidth = useWindowWidth();
+  const [sliderRef, sliderHeight] = useElementHeight();
 
   // Slider Moving
   const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
@@ -81,7 +76,7 @@ function Slider({ section, title, list, isFirst }: ISliderProps) {
   return (
     <Container>
       <Title>{title}</Title>
-      <RowWrapper height={rowWrapperHeight}>
+      <RowWrapper height={sliderHeight}>
         <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
@@ -97,7 +92,7 @@ function Slider({ section, title, list, isFirst }: ISliderProps) {
             animate="show"
             exit="exit"
             transition={{ type: "tween", duration: 0.5 }}
-            ref={rowRef}
+            ref={sliderRef!}
             custom={{ movingBack, windowWidth }}
           >
             {list
