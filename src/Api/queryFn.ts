@@ -10,11 +10,20 @@ const db = axios.create({
   },
 });
 
-export async function getList(section: string, category: string) {
-  console.log(`getlist ${section} ${category} 시작`);
+export async function getMovieList(category: string) {
+  console.log(`getMovielist ${category} 시작`);
 
-  const response = await db.get(`${section}/${category}`);
-  console.log(`getlist ${section} ${category} 끝`);
+  const response = await db.get(`movie/${category}`);
+  console.log(`getMovielist ${category} 끝`);
+
+  return response.data.results;
+}
+
+export async function getTvList(category: string) {
+  console.log(`getTvlist ${category} 시작`);
+
+  const response = await db.get(`tv/${category}`);
+  console.log(`getTvlist ${category} 끝`);
 
   return response.data.results;
 }

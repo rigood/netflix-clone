@@ -1,25 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { IContent } from "../api/interface";
-import { getList } from "../api/queryFn";
+import { getMovieList } from "../api/queryFn";
 import { getImgPath } from "../api/utils";
+import Loader from "../components/Loader";
 import Banner from "../components/Banner";
 import Slider from "../components/Slider";
 
 function Home() {
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
     IContent[]
-  >(["movie", "nowplaying"], () => getList("movie", "now_playing"));
+  >(["nowPlayingMovieList"], () => getMovieList("now_playing"));
   const { data: topRatedMovieList, isLoading: loadingTopRated } = useQuery<
     IContent[]
-  >(["movie", "toprated"], () => getList("movie", "top_rated"));
+  >(["topRatedMovieList"], () => getMovieList("top_rated"));
   const { data: upcomingMovieList, isLoading: loadingUpcoming } = useQuery<
     IContent[]
-  >(["movie", "upcoming"], () => getList("movie", "upcoming"));
+  >(["upcomingMovieList"], () => getMovieList("upcoming"));
 
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
   if (isLoading) {
-    return <Loader>로딩중</Loader>;
+    return <Loader />;
   }
 
   return (
@@ -56,14 +57,6 @@ function Home() {
 }
 
 export default Home;
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
 
 const Background = styled.div<{ bg: string }>`
   width: 100%;

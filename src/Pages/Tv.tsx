@@ -1,25 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { IContent } from "../api/interface";
-import { getList } from "../api/queryFn";
+import { getTvList } from "../api/queryFn";
 import { getImgPath } from "../api/utils";
+import Loader from "../components/Loader";
 import Banner from "../components/Banner";
 import Slider from "../components/Slider";
 
 function Tv() {
   const { data: airingTodayTvList, isLoading: loadingAiringToday } = useQuery<
     IContent[]
-  >(["airingTodayTvList"], () => getList("tv", "airing_today"));
+  >(["airingTodayTvList"], () => getTvList("airing_today"));
   const { data: popularTvList, isLoading: loadingPopular } = useQuery<
     IContent[]
-  >(["popularTvList"], () => getList("tv", "popular"));
+  >(["popularTvList"], () => getTvList("popular"));
   const { data: topRatedTvList, isLoading: loadingTopRated } = useQuery<
     IContent[]
-  >(["topRatedTvList"], () => getList("tv", "top_rated"));
+  >(["topRatedTvList"], () => getTvList("top_rated"));
 
   const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
   if (isLoading) {
-    return <Loader>로딩중</Loader>;
+    return <Loader />;
   }
 
   return (
@@ -52,14 +53,6 @@ function Tv() {
 }
 
 export default Tv;
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
 
 const Background = styled.div<{ bg: string }>`
   width: 100%;
