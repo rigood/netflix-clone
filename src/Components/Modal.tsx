@@ -21,13 +21,14 @@ import {
   getRuntimeOrEpisodes,
   noBackdrop,
 } from "../api/utils";
+import useBodyScroll from "../hook/useBodyScroll";
 import useList from "../hook/useList";
+import Loader from "./Loader";
 import CastGrid from "./CastGrid";
 import MainVideo from "./MainVideo";
 import Videos from "./Videos";
 import ContentsGrid from "./ContentsGrid";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
-import useBodyScroll from "../hook/useBodyScroll";
 
 function Modal() {
   // Extract section, id
@@ -112,7 +113,7 @@ function Modal() {
           transition={{ duration: 0.5 }}
         >
           {isLoading ? (
-            <Loader>로딩중</Loader>
+            <Loader />
           ) : (
             <Wrapper
               animate={{ opacity: 1 }}
@@ -203,14 +204,6 @@ function Modal() {
 }
 
 export default Modal;
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
 
 const Overlay = styled(motion.div)`
   position: fixed;

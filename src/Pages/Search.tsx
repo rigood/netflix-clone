@@ -1,72 +1,10 @@
-import styled from "styled-components";
-
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
-import { modalState } from "../atom";
-
-import { ICast, IContent, IVideo } from "../api/interface";
-import {
-  getCast,
-  getDetails,
-  getVideos,
-  getRecommendations,
-  getSimilar,
-  getMovieSearch,
-  getTvSearch,
-} from "../api/queryFn";
-
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import styled from "styled-components";
+import { getMovieSearch, getTvSearch } from "../api/queryFn";
+import Loader from "../components/Loader";
 import SearchGrid from "../components/SearchGrid";
-import Modal from "../components/Modal";
-
-/* Styling */
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
-`;
-
-const Wrapper = styled.div`
-  padding: 130px 60px 60px 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Title = styled.h1`
-  font-size: 20px;
-  font-weight: 500;
-  color: #808080;
-  strong {
-    font-size: 28px;
-    font-weight: 700;
-    color: ${(props) => props.theme.white.darker};
-  }
-`;
-
-const TabWrapper = styled.div`
-  display: flex;
-  gap: 40px;
-  margin-top: 30px;
-  margin-bottom: 60px;
-`;
-
-const Tab = styled.span<{ isActive: boolean }>`
-  font-size: 28px;
-  font-weight: bold;
-  padding-bottom: 3px;
-  cursor: pointer;
-  color: ${(props) => props.isActive && "#E51013"};
-  border-bottom: ${(props) => props.isActive && "3px solid #E51013"};
-`;
 
 function Search() {
   // Extract keyword and section
@@ -191,7 +129,7 @@ function Search() {
 
   // Loading
   if (isLoading) {
-    return <Loader>로딩중</Loader>;
+    return <Loader />;
   }
 
   return (
@@ -223,3 +161,37 @@ function Search() {
 }
 
 export default Search;
+
+const Wrapper = styled.div`
+  padding: 130px 60px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Title = styled.h1`
+  font-size: 20px;
+  font-weight: 500;
+  color: #808080;
+  strong {
+    font-size: 28px;
+    font-weight: 700;
+    color: ${(props) => props.theme.white.darker};
+  }
+`;
+
+const TabWrapper = styled.div`
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+  margin-bottom: 60px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  font-size: 28px;
+  font-weight: bold;
+  padding-bottom: 3px;
+  cursor: pointer;
+  color: ${(props) => props.isActive && "#E51013"};
+  border-bottom: ${(props) => props.isActive && "3px solid #E51013"};
+`;

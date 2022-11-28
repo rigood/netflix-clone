@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { myMovieAtom, myTvAtom } from "../atom";
 import { getDetails } from "../api/queryFn";
+import Loader from "../components/Loader";
 import MyListGrid from "../components/MyListGrid";
 
 function MyList() {
@@ -35,7 +36,7 @@ function MyList() {
   const isLoading = isMyMovieLoading || isMyTvLoading;
 
   if (isLoading) {
-    return <Loader>로딩중</Loader>;
+    return <Loader />;
   }
 
   return (
@@ -54,12 +55,4 @@ const Wrapper = styled.div`
   padding: 100px 60px 60px 60px;
   display: flex;
   flex-direction: column;
-`;
-
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 50px;
 `;
