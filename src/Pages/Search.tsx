@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { getMovieSearch, getTvSearch } from "../api/queryFn";
 import Loader from "../components/Loader";
 import SearchGrid from "../components/SearchGrid";
+import useInfiniteSearchQuery from "../hook/useInfiniteSearchQuery";
 
 function Search() {
   // Extract keyword and section
@@ -33,101 +33,19 @@ function Search() {
     window.scrollTo({ top: 0 });
   }, [keyword]);
 
-  // Fetch search-data
-  const {
-    data: movieData,
-    isLoading: loadingMovie,
-    hasNextPage: hasNextMoviePage,
-    fetchNextPage: fetchNextMoviePage,
-  } = useInfiniteQuery(
-    ["movieSearch", keyword],
-    ({ pageParam = 1 }) => getMovieSearch(keyword!, pageParam),
-    {
-      getNextPageParam: (lastPage) => {
-        return (
-          lastPage.data.page < lastPage.data.total_pages &&
-          lastPage.data.page + 1
-        );
-      },
-      enabled: !!keyword,
-    }
-  );
+  // Fetch data
+  const [movieLoading, movieCount, filteredMovieSearch, movieRef] =
+    useInfiniteSearchQuery("movie", keyword!, getMovieSearch);
 
-  const {
-    data: tvData,
-    isLoading: loadingTv,
-    hasNextPage: hasNextTvPage,
-    fetchNextPage: fetchNextTvPage,
-  } = useInfiniteQuery(
-    ["TvSearch", keyword],
-    ({ pageParam = 1 }) => getTvSearch(keyword!, pageParam),
-    {
-      getNextPageParam: (lastPage) => {
-        return (
-          lastPage.data.page < lastPage.data.total_pages &&
-          lastPage.data.page + 1
-        );
-      },
-      enabled: !!keyword,
-    }
-  );
-
-  // Filter search-results
-  const movieSearch = movieData?.pages.flatMap((page) => page.data.results);
-  const movieCount = movieData?.pages[0].data.total_results;
-  const filteredMovieSearch = movieSearch?.filter((movie, i) => {
-    return (
-      movieSearch.findIndex((movie2, j) => {
-        return movie.id === movie2.id;
-      }) === i
-    );
-  });
-
-  const tvSearch = tvData?.pages.flatMap((page) => page.data.results);
-  const tvCount = tvData?.pages[0].data.total_results;
-  const filteredTvSearch = tvSearch?.filter((tv, i) => {
-    return (
-      tvSearch.findIndex((tv2, j) => {
-        return tv.id === tv2.id;
-      }) === i
-    );
-  });
-
-  // Infinite Scroll
-  const isLoading = loadingMovie || loadingTv;
-  const movieObserver = useRef<IntersectionObserver>();
-  const movieRef = useCallback(
-    (node: any) => {
-      if (isLoading) return;
-      if (movieObserver.current) movieObserver.current.disconnect();
-      movieObserver.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          if (hasNextMoviePage) {
-            fetchNextMoviePage();
-          }
-        }
-      });
-      if (node) movieObserver.current.observe(node);
-    },
-    [isLoading, keyword, movieData]
-  );
-
-  const tvObserver = useRef<IntersectionObserver>();
-  const tvRef = useCallback(
-    (node: any) => {
-      if (isLoading) return;
-      if (tvObserver.current) tvObserver.current.disconnect();
-      tvObserver.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          hasNextTvPage && fetchNextTvPage();
-        }
-      });
-      if (node) tvObserver.current.observe(node);
-    },
-    [isLoading, keyword, tvData]
+  const [tvLoading, tvCount, filteredTvSearch, tvRef] = useInfiniteSearchQuery(
+    "tv",
+    keyword!,
+    getTvSearch
   );
 
   // Loading
+  const isLoading = movieLoading || tvLoading;
+
   if (isLoading) {
     return <Loader />;
   }
