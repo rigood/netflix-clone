@@ -23,11 +23,11 @@ import {
 } from "../api/utils";
 import useBodyScroll from "../hook/useBodyScroll";
 import useList from "../hook/useList";
-import Loader from "./Loader";
-import CastGrid from "./CastGrid";
-import MainVideo from "./MainVideo";
-import Videos from "./Videos";
-import ContentsGrid from "./ContentsGrid";
+import Loader from "../components/Loader";
+import CastGrid from "../components/CastGrid";
+import MainVideo from "../components/MainVideo";
+import Videos from "../components/Videos";
+import ContentsGrid from "../components/ContentsGrid";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Modal() {

@@ -7,7 +7,7 @@ import GlobalStyle from "./styles/GlobalStyle";
 import { theme } from "./styles/theme";
 
 import Header from "./components/Header";
-import Modal from "./components/Modal";
+import Modal from "./pages/Modal";
 
 function Layout() {
   return (
