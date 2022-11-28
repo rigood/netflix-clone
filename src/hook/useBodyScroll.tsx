@@ -5,7 +5,7 @@ function useBodyScroll() {
 
   function stopBodyScroll() {
     console.log(width);
-    document.body.style.overflow = "hidden";
+    document.body.style.overflowY = "hidden";
     document.body.style.width = `calc(100% - ${width}px)`;
     document.getElementsByTagName(
       "nav"
@@ -13,7 +13,7 @@ function useBodyScroll() {
   }
 
   function restoreBodyScroll() {
-    document.body.style.overflow = "visible";
+    document.body.style.overflowY = "visible";
     document.body.style.width = "unset";
     document.getElementsByTagName("nav")[0].style.width = `100%`;
   }

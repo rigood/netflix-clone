@@ -210,7 +210,7 @@ const Box = styled(motion.div)<{ bg: string }>`
 `;
 
 const BoxInfo = styled(motion.div)`
-  display: none;
+  opacity: 0;
   width: 100%;
   padding: 5%;
   border-bottom-left-radius: 0.2vw;
@@ -248,7 +248,7 @@ const boxVariants = {
 
 const infoVariants = {
   hover: {
-    display: "block",
+    opacity: 1,
     transition: {
       delay: 0.5,
       duaration: 0.3,
