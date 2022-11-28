@@ -20,13 +20,12 @@ interface IForm {
 }
 
 function Header() {
-  // Routing
+  // Nav-bar indicator animation
   const MovieMatch: PathMatch<string> | null = useMatch("browse/movie");
   const tvMatch: PathMatch<string> | null = useMatch("browse/tv");
   const mylistMatch: PathMatch<string> | null = useMatch("mylist");
-  const location = useLocation();
 
-  // Nav Scroll
+  // Nav-bar scroll animation
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   useEffect(() => {
@@ -39,24 +38,21 @@ function Header() {
     });
   }, []);
 
-  // Search-form
+  // Search-bar
   const { register, handleSubmit, setFocus, setValue } = useForm<IForm>();
+  const [searchBarOpen, setSearchBarOpen] = useState(false);
+  const toggleSearchBar = () => setSearchBarOpen((prev) => !prev);
+
   const navigate = useNavigate();
-  const onSearch = (data: IForm) => {
+  const handleSearch = (data: IForm) => {
     navigate(`/search/movie?q=${data.keyword}`);
   };
 
-  // Toggle Search-input
-  const [searchOpen, setSearchOpen] = useState(false);
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
-
+  // Reset Search-bar when url changes
+  const location = useLocation();
   useEffect(() => {
-    if (location.pathname === "/search") return;
+    searchBarOpen && setSearchBarOpen((prev) => !prev);
     setValue("keyword", "");
-
-    if (searchOpen) {
-      setSearchOpen((prev) => !prev);
-    }
   }, [location]);
 
   return (
@@ -106,13 +102,13 @@ function Header() {
         </Menus>
       </Col>
       <Col>
-        <SearchForm onSubmit={handleSubmit(onSearch)}>
+        <SearchForm onSubmit={handleSubmit(handleSearch)}>
           <SearchIcon
             onClick={() => {
-              toggleSearch();
+              toggleSearchBar();
               setFocus("keyword");
             }}
-            animate={{ x: searchOpen ? -185 : 0 }}
+            animate={{ x: searchBarOpen ? -185 : 0 }}
             transition={{ type: "linear" }}
             fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +124,7 @@ function Header() {
             {...register("keyword", { required: true, minLength: 1 })}
             minLength={1}
             placeholder="검색어를 입력하세요."
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            animate={{ scaleX: searchBarOpen ? 1 : 0 }}
             transition={{ type: "linear" }}
           />
         </SearchForm>
@@ -251,6 +247,7 @@ const SearchInput = styled(motion.input)`
     font-family: "Noto Sans KR", sans-serif;
     font-size: 12px;
   }
+  // Remove autofill
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
