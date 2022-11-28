@@ -22,10 +22,10 @@ function Videos({ title, videos }: IVideosProps) {
               <ThumbnailOverlay />
               <ThumbnailButton icon={faPlay} />
             </Thumbnail>
-            <div className="info">
+            <Info>
               <span className="name">{video.name}</span>
               <span className="date">{video.published_at.slice(0, 10)}</span>
-            </div>
+            </Info>
           </Video>
         ))}
         {videos?.length === 0 ? "관련 영상이 없습니다." : null}
@@ -46,32 +46,6 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-const Video = styled.div`
-  display: grid;
-  grid-template-columns: 160px auto;
-  cursor: pointer;
-  &:not(:last-child) {
-    margin-bottom: 30px;
-  }
-  .info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 20px;
-    .name {
-      font-style: 14px;
-    }
-    .date {
-      font-size: 13px;
-      font-weight: 400;
-      font-style: italic;
-    }
-    &:hover {
-      background-color: #202020;
-    }
-  }
 `;
 
 const ThumbnailButton = styled(FontAwesomeIcon)`
@@ -107,6 +81,21 @@ const ThumbnailOverlay = styled.div`
   display: none;
 `;
 
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 20px;
+  .name {
+    font-style: 14px;
+  }
+  .date {
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+  }
+`;
+
 const Thumbnail = styled.div<{ bg: string }>`
   width: 90%;
   aspect-ratio: 4 / 3;
@@ -115,10 +104,19 @@ const Thumbnail = styled.div<{ bg: string }>`
   background-repeat: no-repeat;
   position: relative;
   transition: all 0.3s ease;
-  &:hover ${ThumbnailOverlay} {
+`;
+
+const Video = styled.div`
+  display: grid;
+  grid-template-columns: 160px auto;
+  cursor: pointer;
+  &:not(:last-child) {
+    margin-bottom: 30px;
+  }
+  &:hover ${ThumbnailOverlay}, &:hover ${ThumbnailButton} {
     display: block;
   }
-  &:hover ${ThumbnailButton} {
-    display: block;
+  &:hover ${Info} {
+    background-color: #202020;
   }
 `;
