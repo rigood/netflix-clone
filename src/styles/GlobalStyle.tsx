@@ -16,6 +16,7 @@ body {
 }
 a {
   text-decoration: none;
+  font-size: inherit;
   color: inherit;
 }
 `;
