@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Link,
-  useMatch,
-  PathMatch,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -41,6 +35,7 @@ function Header() {
   // Search-bar
   const { register, handleSubmit, setFocus, setValue } = useForm<IForm>();
   const [searchBarOpen, setSearchBarOpen] = useState(false);
+
   const openSearchBar = () => {
     setSearchBarOpen((prev) => !prev);
     setFocus("keyword");
@@ -53,16 +48,9 @@ function Header() {
 
   // Go to search results page
   const navigate = useNavigate();
-  const handleSearch = (data: IForm) => {
+  const onSearchSubmit = (data: IForm) => {
     navigate(`/search/movie?q=${data.keyword}`);
   };
-
-  // Reset Search-bar when url changes
-  const location = useLocation();
-  useEffect(() => {
-    searchBarOpen && setSearchBarOpen((prev) => !prev);
-    setValue("keyword", "");
-  }, [location]);
 
   return (
     <>
@@ -112,7 +100,7 @@ function Header() {
           </MenuContainer>
         </Col>
         <Col>
-          <SearchForm onSubmit={handleSubmit(handleSearch)}>
+          <SearchForm onSubmit={handleSubmit(onSearchSubmit)}>
             <SearchIcon
               isHide={searchBarOpen ? true : false}
               onClick={openSearchBar}
@@ -159,9 +147,9 @@ const Nav = styled(motion.nav)`
   height: 80px;
   // 모달보다 아래, 슬라이더보다 위
   z-index: 995;
-  // 반응형 여백
+  // 반응형 패딩
   padding-inline: 60px;
-  @media (max-width: 748px) {
+  @media (max-width: 768px) {
     padding-inline: 40px;
   }
   @media (max-width: 480px) {
@@ -291,10 +279,10 @@ const SearchForm = styled.form`
 `;
 
 const SearchInput = styled(motion.input)`
-  // 반응형 여백
+  // 반응형 패딩
   position: absolute;
   right: 60px;
-  @media (max-width: 748px) {
+  @media (max-width: 768px) {
     right: 40px;
   }
   @media (max-width: 480px) {
@@ -306,7 +294,7 @@ const SearchInput = styled(motion.input)`
   // 스타일
   padding: 5px 10px;
   border: 1px solid white;
-  background-color: black;
+  background-color: ${({ theme }) => theme.gray};
   color: white;
   transform-origin: right center;
   // 반응형 폰트
@@ -339,10 +327,17 @@ const SearchInput = styled(motion.input)`
 `;
 
 const SearchIcon = styled(motion.svg)<{ isHide: boolean }>`
-  width: 20px;
   cursor: pointer;
   // searchBar 열리면 안보이게
   display: ${({ isHide }) => isHide && "none"};
+  // 반응형 크기
+  width: 20px;
+  @media (max-width: 480px) {
+    width: 17px;
+  }
+  @media (max-width: 320px) {
+    width: 14px;
+  }
 `;
 
 const Overlay = styled.div<{ isShow: boolean }>`

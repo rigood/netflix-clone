@@ -7,13 +7,12 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface IBannerProps {
   section: string;
-  title: string;
   content?: IContent;
 }
 
-function Banner({ section, title, content }: IBannerProps) {
+function Banner({ section, content }: IBannerProps) {
   const navigate = useNavigate();
-  const onButtonClick = (id: number) => {
+  const onMoreButtonClick = (id: number) => {
     navigate(`?id=${id}`);
   };
 
@@ -21,25 +20,29 @@ function Banner({ section, title, content }: IBannerProps) {
     <>
       {content && (
         <Container>
-          <Title>{section === "movie" ? content.title : content.name}</Title>
-          <Ranking>
-            <img
+          <RankingContainer>
+            <RankingLogo
               src={process.env.PUBLIC_URL + "/assets/logo.png"}
               alt="Netflix logo"
             />
-            <h2>오늘의 {title} 순위 1위</h2>
-          </Ranking>
-          <Overview>{content.overview}</Overview>
-          <DateAndRating>
-            <span>
+            <RankingText>
+              오늘의 {section === "movie" ? "영화" : "TV 쇼"} 순위 1위
+            </RankingText>
+          </RankingContainer>
+          <Title>{section === "movie" ? content.title : content.name}</Title>
+          <DateAndRatingContainer>
+            <Date>
               {getDate(section, content.release_date, content.first_air_date)}
-            </span>
-            <span>{getRating(content.vote_average)}</span>
-          </DateAndRating>
-          <Button onClick={() => onButtonClick(content.id)}>
+            </Date>
+            <Rating>{getRating(content.vote_average)}</Rating>
+          </DateAndRatingContainer>
+          <Overview hasText={Boolean(content.overview)}>
+            {content.overview}
+          </Overview>
+          <MoreBtn onClick={() => onMoreButtonClick(content.id)}>
             <FontAwesomeIcon icon={faInfoCircle} />
             <span>자세히 보기</span>
-          </Button>
+          </MoreBtn>
         </Container>
       )}
     </>
@@ -52,93 +55,174 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 40%;
-  height: 34vw;
-  padding-inline: 60px;
-  @media screen and (max-width: 1024px) {
-    width: 50%;
+  // 반응형
+  padding-top: 15vw;
+  padding-left: 60px;
+  @media (max-width: 1024px) {
+    padding-top: 25vw;
+    padding-left: 60px;
   }
-  @media screen and (max-width: 576px) {
-    width: 80%;
+  @media (max-width: 768px) {
+    padding-top: 25vw;
+    padding-left: 40px;
+  }
+  @media (max-width: 480px) {
+    width: 100%;
+    align-items: center;
+    padding-top: 35vw;
+    padding-left: 0;
+  }
+`;
+
+const RankingContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const RankingLogo = styled.img`
+  // 반응형
+  width: 32px;
+  margin-right: 5px;
+  @media (max-width: 1024px) {
+    width: 24px;
+    margin-right: 3px;
+  }
+  @media (max-width: 768px) {
+    width: 20px;
+    margin-right: 3px;
+  }
+  @media (max-width: 480px) {
+    width: 16px;
+    margin-right: 2px;
+  }
+`;
+
+const RankingText = styled.h1`
+  ${({ theme }) => theme.textShadow};
+  // 반응형
+  font-size: 32px;
+  @media (max-width: 1024px) {
+    font-size: 24px;
+  }
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+  @media (max-width: 480px) {
+    font-size: 16px;
   }
 `;
 
 const Title = styled.h1`
-  margin-bottom: 1vw;
-  font-size: 2.5vw;
-  text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);
+  // 반응형
+  width: 60%;
+  font-size: 72px;
+  margin-bottom: 10px;
+  @media (max-width: 1024px) {
+    width: 70%;
+    font-size: 48px;
+    margin-bottom: 5px;
+  }
+  @media (max-width: 768px) {
+    width: 80%;
+    font-size: 36px;
+    margin-bottom: 5px;
+  }
+  @media (max-width: 480px) {
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 3px;
+  }
+  ${({ theme }) => theme.textShadow};
+  ${({ theme }) => theme.MaxLines(1)}
 `;
 
-const Ranking = styled.div`
+const DateAndRatingContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 1vw;
-  img {
-    width: 1.6vw;
-    margin-right: 0.5vw;
+  width: fit-content;
+  font-weight: 500;
+  // 반응형
+  font-size: 16px;
+  margin-bottom: 10px;
+  @media (max-width: 1024px) {
+    font-size: 15px;
+    margin-bottom: 10px;
   }
-  h2 {
-    font-size: 1.6vw;
-    text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);
+  @media (max-width: 1024px) {
+    font-size: 14px;
+    margin-bottom: 8px;
   }
-  @media screen and (max-width: 576px) {
-    display: none;
+  @media (max-width: 480px) {
+    flex-direction: column;
+    font-size: 13px;
+    margin-bottom: 8px;
   }
 `;
 
-const Overview = styled.p`
-  margin-bottom: 1vw;
-  font-size: 1.2vw;
-  font-weight: 400;
-  text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);
+const Date = styled.span`
+  color: ${({ theme }) => theme.green};
+`;
+
+const Rating = styled.span`
+  margin-left: 10px;
+`;
+
+const Overview = styled.p<{ hasText: boolean }>`
+  font-weight: 500;
   word-wrap: break-word;
   word-break: keep-all;
-  --max-lines: 4;
-  display: -webkit-box;
-  -webkit-line-clamp: var(--max-lines);
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.8vw;
-  @media screen and (max-width: 960px) {
-    display: none;
+  ${({ theme }) => theme.textShadow};
+  ${({ theme }) => theme.MaxLines(3)};
+  // 반응형
+  width: 50%;
+  font-size: 24px;
+  margin-bottom: 20px;
+  @media (max-width: 1024px) {
+    width: 60%;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  @media (max-width: 768px) {
+    width: 70%;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 480px) {
+    width: 80%;
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 15px;
   }
 `;
 
-const DateAndRating = styled.div`
-  display: flex;
-  align-items: center;
+const MoreBtn = styled.div`
   width: fit-content;
-  flex-wrap: wrap;
-  font-size: 1vw;
-  font-weight: 500;
+  border-radius: 6px;
+  color: black;
   span {
-    padding: 0.2vw 0.6vw;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.3);
+    margin-left: 5px;
   }
-  span:first-child {
-    margin-right: 0.5vw;
-    color: ${(props) => props.theme.green};
+  // 반응형
+  font-size: 24px;
+  padding: 12px 36px;
+  @media (max-width: 1024px) {
+    font-size: 18px;
+    padding: 10px 30px;
   }
-  @media screen and (max-width: 768px) {
-    display: none;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 8px 24px;
   }
-`;
-
-const Button = styled.div`
-  width: fit-content;
-  padding: 0.6vw 1.8vw;
-  margin-top: 20px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: ${(props) => props.theme.black.darker};
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 8px 24px;
+  }
+  // hover
   cursor: pointer;
-  font-size: 1.2vw;
   transition: all 0.2s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.9);
   &:hover {
     background-color: rgba(255, 255, 255, 0.6);
-  }
-  span {
-    margin-left: 0.4vw;
   }
 `;
