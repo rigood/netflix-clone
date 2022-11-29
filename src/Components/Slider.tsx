@@ -27,8 +27,7 @@ function Slider({ section, title, list, shouldCutFirstContent }: ISliderProps) {
   const sliceIndex = shouldCutFirstContent ? 1 : 0;
 
   // Slider List
-  // const offset = useDynamicSliderOffset();
-  const offset = 6;
+  const offset = useDynamicSliderOffset();
   const [index, setIndex] = useState(0);
   const listLength = list?.length!;
   const maxIndex = Math.floor(listLength / offset) - 1;
@@ -186,6 +185,7 @@ const RowWrapper = styled.div<{ height: number }>`
 `;
 
 const Btn = styled.button`
+  z-index: 6;
   // 반응형 너비
   width: 60px;
   @media (max-width: 768px) {
@@ -279,6 +279,12 @@ const Box = styled(motion.div)<{ bg: string }>`
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
 
 const boxVariants = {
