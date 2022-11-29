@@ -7,7 +7,7 @@ import { IContent } from "../api/interface";
 import useDynamicSliderOffset from "../hook/useDynamicSliderOffset";
 import useWindowWidth from "../hook/useWindowWidth";
 import useElementHeight from "../hook/useElementHeight";
-import { getImgPath, noBackdrop } from "../api/utils";
+import { getDate, getRating, getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 interface ISliderProps {
@@ -27,20 +27,22 @@ function Slider({ section, title, list, shouldCutFirstContent }: ISliderProps) {
   const sliceIndex = shouldCutFirstContent ? 1 : 0;
 
   // Slider List
-  const offset = useDynamicSliderOffset();
+  // const offset = useDynamicSliderOffset();
+  const offset = 6;
   const [index, setIndex] = useState(0);
   const listLength = list?.length!;
   const maxIndex = Math.floor(listLength / offset) - 1;
 
   // Slider css
   const windowWidth = useWindowWidth();
-  const [thumbnailRef, thumbnailHeight] = useElementHeight();
+  const [rowRef, rowHeight] = useElementHeight();
 
   // Slider Moving
   const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
   const [moving, setMoving] = useState(false);
   const [movingBack, setMovingBack] = useState(false);
 
+  console.log("render");
   const decreaseIndex = () => {
     if (list) {
       if (moving) return;
@@ -53,9 +55,10 @@ function Slider({ section, title, list, shouldCutFirstContent }: ISliderProps) {
   const increaseIndex = () => {
     if (list) {
       if (moving) return;
-      setIsPrevBtnDisabled(false);
+      console.log("increase누름");
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
       setMoving(true);
+      setIsPrevBtnDisabled(false);
     }
   };
 
@@ -72,7 +75,7 @@ function Slider({ section, title, list, shouldCutFirstContent }: ISliderProps) {
   return (
     <Container>
       <Title>{title}</Title>
-      <RowWrapper height={thumbnailHeight}>
+      <RowWrapper height={rowHeight}>
         <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
@@ -95,22 +98,34 @@ function Slider({ section, title, list, shouldCutFirstContent }: ISliderProps) {
               ?.slice(sliceIndex)
               .slice(offset * index, offset * index + offset)
               .map((content) => (
-                <BoxWrapper key={content.id}>
-                  <Box
-                    bg={
-                      content.backdrop_path
-                        ? getImgPath(content.backdrop_path, "w500")
-                        : noBackdrop
-                    }
-                    onClick={() => onBoxClick(content.id)}
-                    ref={thumbnailRef!}
-                    variants={boxVariants}
-                    whileHover="hover"
-                  />
+                <Box
+                  key={content.id}
+                  bg={
+                    content.backdrop_path
+                      ? getImgPath(content.backdrop_path, "w500")
+                      : noBackdrop
+                  }
+                  onClick={() => onBoxClick(content.id)}
+                  ref={rowRef!}
+                  variants={boxVariants}
+                  whileHover="hover"
+                >
                   <BoxInfo variants={infoVariants}>
-                    {section === "movie" ? content.title : content.name}
+                    <BoxInfoTitle>
+                      {section === "movie" ? content.title : content.name}
+                    </BoxInfoTitle>
+                    <BoxInfoDateAndRatingContainer>
+                      <div>
+                        {getDate(
+                          section,
+                          content.release_date,
+                          content.first_air_date
+                        ) + `  `}
+                      </div>
+                      <div>{getRating(content.vote_average)}</div>
+                    </BoxInfoDateAndRatingContainer>
                   </BoxInfo>
-                </BoxWrapper>
+                </Box>
               ))}
           </Row>
         </AnimatePresence>
@@ -142,6 +157,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.h3`
+  z-index: 4;
   // 반응형 패딩
   font-size: 24px;
   margin-bottom: 20px;
@@ -214,6 +230,7 @@ const Btn = styled.button`
 const PrevBtn = styled(Btn)`
   left: 0;
 `;
+
 const NextBtn = styled(Btn)`
   right: 0;
 `;
@@ -266,8 +283,7 @@ const Box = styled(motion.div)<{ bg: string }>`
 
 const boxVariants = {
   hover: {
-    scale: 1.2,
-    y: -10,
+    scale: 1.5,
     transition: {
       delay: 0.5,
       duaration: 0.3,
@@ -284,6 +300,26 @@ const BoxInfo = styled(motion.div)`
   border-bottom-right-radius: 4px;
   background-color: ${({ theme }) => theme.gray};
   color: white;
+`;
+
+const BoxInfoTitle = styled.div``;
+
+const BoxInfoDateAndRatingContainer = styled.div`
+  font-weight: 500;
+  // 반응형
+  font-size: 12px;
+  @media (max-width: 1024px) {
+    font-size: 11px;
+  }
+  @media (max-width: 1024px) {
+    font-size: 10px;
+  }
+  @media (max-width: 480px) {
+    font-size: 9px;
+  }
+  div:first-child {
+    color: ${({ theme }) => theme.green};
+  }
 `;
 
 const infoVariants = {
