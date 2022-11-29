@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import styled from "styled-components";
 import { IContent } from "../api/interface";
 import { getMovieList } from "../api/queryFn";
 import { getImgPath } from "../api/utils";
 import Loader from "../components/Loader";
 import Banner from "../components/Banner";
 import Slider from "../components/Slider";
+import { BackgroundWrapper, SliderContainer } from "../styles/common";
 
 function Home() {
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
@@ -25,47 +25,34 @@ function Home() {
 
   return (
     <>
-      <Background bg={getImgPath(nowPlayingMovieList?.[0].backdrop_path!)}>
-        <Banner
-          section="movie"
-          title="영화"
-          content={nowPlayingMovieList?.[0]}
-        />
-        <SliderWrapper>
+      <BackgroundWrapper
+        backdropBg={getImgPath(nowPlayingMovieList?.[0].backdrop_path!)}
+        posterBg={getImgPath(nowPlayingMovieList?.[0].poster_path!)}
+      >
+        <Banner section="movie" content={nowPlayingMovieList?.[0]} />
+        <SliderContainer>
           <Slider
             section="movie"
             title="현재 상영 중인 영화"
             list={nowPlayingMovieList}
-            isFirst={true}
+            shouldCutFirstContent={true}
           />
           <Slider
             section="movie"
             title="최고 평점 영화"
             list={topRatedMovieList}
-            isFirst={false}
+            shouldCutFirstContent={false}
           />
           <Slider
             section="movie"
             title="개봉 예정 영화"
             list={upcomingMovieList}
-            isFirst={false}
+            shouldCutFirstContent={false}
           />
-        </SliderWrapper>
-      </Background>
+        </SliderContainer>
+      </BackgroundWrapper>
     </>
   );
 }
 
 export default Home;
-
-const Background = styled.div<{ bg: string }>`
-  width: 100%;
-  height: 56.25vw;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bg});
-  background-size: cover;
-`;
-
-const SliderWrapper = styled.div`
-  padding-block: 5vw;
-`;
