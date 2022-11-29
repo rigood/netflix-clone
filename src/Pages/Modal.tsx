@@ -56,7 +56,11 @@ function Modal() {
   }, [isModalOpen]);
 
   // Fetch data
-  const { data: details, isLoading: detailsLoading } = useQuery<IContent>(
+  const {
+    data: details,
+    isLoading: detailsLoading,
+    isError,
+  } = useQuery<IContent>(
     ["detailsContent", id],
     () => getDetails(section!, id!),
     {
@@ -67,33 +71,32 @@ function Modal() {
       },
     }
   );
-  const {
-    data: cast,
-    isLoading: castLoading,
-    isError,
-  } = useQuery<ICast[]>(["castContent", id], () => getCast(section!, id!), {
-    enabled: !!id,
-  });
+
+  const { data: cast, isLoading: castLoading } = useQuery<ICast[]>(
+    ["castContent", id],
+    () => getCast(section!, id!),
+    {
+      enabled: !!id,
+    }
+  );
+
   const { data: videos, isLoading: videosLoading } = useQuery<IVideo[]>(
     ["videoContent", id],
     () => getVideos(section!, id!),
     { enabled: !!id }
   );
+
   const { data: reco, isLoading: recoLoading } = useQuery<IContent[]>(
     ["recoContent", id],
     () => getRecommendations(section!, id!),
     { enabled: !!id }
   );
+
   const { data: similar, isLoading: similarLoading } = useQuery<IContent[]>(
     ["similarContent", id],
     () => getSimilar(section!, id!),
     { enabled: !!id }
   );
-
-  const mainVideoKey = videos?.[0]?.key;
-
-  // Add/Remove content from MyList
-  const [checkIsNewContent, addToList, removeFromList] = useList(section!);
 
   // Loading
   const isLoading =
@@ -102,6 +105,12 @@ function Modal() {
     videosLoading ||
     recoLoading ||
     similarLoading;
+
+  // Define main video
+  const mainVideoKey = videos?.[0]?.key;
+
+  // Add, Remove from MyList
+  const [checkIsNewContent, addToList, removeFromList] = useList(section!);
 
   return (
     <>
@@ -209,7 +218,7 @@ const Overlay = styled(motion.div)`
   position: fixed;
   inset: 0;
   overflow-y: scroll;
-  z-index: 8;
+  z-index: 9998;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
 `;
