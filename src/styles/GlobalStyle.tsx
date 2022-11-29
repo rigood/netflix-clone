@@ -11,7 +11,7 @@ body {
   background-color: black;
   font-family: 'Noto Sans KR', sans-serif;
   font-weight: 700; // (300light, 500medium, 700bold)
-  color: ${(props) => props.theme.white.darker};
+  color: white;
   line-height: 1.5;
 }
 a {

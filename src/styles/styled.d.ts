@@ -13,6 +13,7 @@ declare module "styled-components" {
   export interface DefaultTheme {
     red: string;
     green: string;
+    gray: string;
     black: {
       veryDark: string;
       darker: string;
@@ -29,10 +30,14 @@ declare module "styled-components" {
       alignItems?: string
     ) => string;
 
-    font: (
+    Font: (
       fontSize: number,
       fontWeight: number,
       color: fontColorType
     ) => string;
+
+    MaxLines: (maxLines: number, lineHeight?: string) => string;
+
+    textShadow: string;
   }
 }
