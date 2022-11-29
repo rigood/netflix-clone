@@ -4,7 +4,6 @@ function useBodyScroll() {
   const { width } = useScrollbarSize();
 
   function stopBodyScroll() {
-    console.log(width);
     document.body.style.overflowY = "hidden";
     document.body.style.width = `calc(100% - ${width}px)`;
     document.getElementsByTagName(
