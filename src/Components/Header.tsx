@@ -102,7 +102,7 @@ function Header() {
         <Col>
           <SearchForm onSubmit={handleSubmit(onSearchSubmit)}>
             <SearchIcon
-              isHide={searchBarOpen ? true : false}
+              isHiding={searchBarOpen ? true : false}
               onClick={openSearchBar}
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
@@ -326,10 +326,10 @@ const SearchInput = styled(motion.input)`
   }
 `;
 
-const SearchIcon = styled(motion.svg)<{ isHide: boolean }>`
+const SearchIcon = styled.svg<{ isHiding: boolean }>`
   cursor: pointer;
   // searchBar 열리면 안보이게
-  display: ${({ isHide }) => isHide && "none"};
+  display: ${({ isHiding }) => isHiding && "none"};
   // 반응형 크기
   width: 20px;
   @media (max-width: 480px) {
