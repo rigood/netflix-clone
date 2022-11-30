@@ -146,10 +146,9 @@ export default Slider;
 const Container = styled.div`
   width: 100%;
   // Modal, Header보다 아래
-  z-index: 5;
   // 반응형 마진
-  margin-block: 120px;
-  @media (max-width: 768px) {
+  margin-bottom: 80px;
+  /* @media (max-width: 768px) {
     margin-block: 80px;
   }
   @media (max-width: 480px) {
@@ -157,7 +156,7 @@ const Container = styled.div`
   }
   @media (max-width: 320px) {
     margin-block: 20px;
-  }
+  } */
 `;
 
 const Title = styled.h3`
@@ -274,29 +273,6 @@ const rowVariants = {
 
 const BoxContainer = styled.div``;
 
-const BoxThumbnail = styled(motion.div)<{ bg: string }>`
-  width: 100%;
-  padding-top: 56.25%;
-  border-radius: 2px;
-  background-image: url(${({ bg }) => bg});
-  background-size: contain;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-`;
-
-const boxVariants = {
-  hover: {
-    scale: 1.5,
-    transition: {
-      delay: 0.5,
-      duaration: 0.3,
-      type: "tween",
-    },
-  },
-};
-
 const BoxInfo = styled(motion.div)`
   display: none;
   width: 100%;
@@ -307,7 +283,9 @@ const BoxInfo = styled(motion.div)`
   color: white;
 `;
 
-const BoxInfoTitle = styled.div``;
+const BoxInfoTitle = styled.div`
+  ${({ theme }) => theme.MaxLines(1)};
+`;
 
 const BoxInfoDateAndRatingContainer = styled.div`
   font-weight: 500;
@@ -330,6 +308,33 @@ const BoxInfoDateAndRatingContainer = styled.div`
 const infoVariants = {
   hover: {
     display: "block",
+    transition: {
+      delay: 0.5,
+      duaration: 0.3,
+      type: "tween",
+    },
+  },
+};
+
+const BoxThumbnail = styled(motion.div)<{ bg: string }>`
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: 2px;
+  background-image: url(${({ bg }) => bg});
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  &:hover ${BoxInfo} {
+    position: relative;
+    z-index: 9;
+  }
+`;
+
+const boxVariants = {
+  hover: {
+    scale: 1.5,
     transition: {
       delay: 0.5,
       duaration: 0.3,

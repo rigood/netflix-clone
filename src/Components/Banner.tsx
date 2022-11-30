@@ -61,16 +61,20 @@ const Container = styled.div`
   justify-content: flex-end;
   // 반응형
   padding-top: 15vw;
+  padding-bottom: 7.5vw;
   padding-left: 60px;
   @media (max-width: 1024px) {
     padding-top: 25vw;
+    padding-bottom: 10vw;
     padding-left: 60px;
   }
   @media (max-width: 768px) {
     padding-top: 25vw;
+    padding-bottom: 7.5vw;
     padding-left: 40px;
   }
   @media (max-width: 480px) {
+    padding-bottom: 5vw;
     width: 100%;
     align-items: center;
     padding-top: 35vw;

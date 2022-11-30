@@ -21,6 +21,4 @@ export const BackgroundWrapper = styled.div<{
   }
 `;
 
-export const SliderContainer = styled.div`
-  padding-block: 5vw;
-`;
+export const SliderContainer = styled.div``;
