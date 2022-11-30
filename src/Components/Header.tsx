@@ -49,6 +49,7 @@ function Header() {
   // Go to search results page
   const navigate = useNavigate();
   const onSearchSubmit = (data: IForm) => {
+    closeSearchBar();
     navigate(`/search/movie?q=${data.keyword}`);
   };
 
