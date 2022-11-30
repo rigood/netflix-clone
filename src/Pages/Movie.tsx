@@ -11,14 +11,17 @@ function Home() {
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
     IContent[]
   >(["nowPlayingMovieList"], () => getMovieList("now_playing"));
+
   const { data: topRatedMovieList, isLoading: loadingTopRated } = useQuery<
     IContent[]
   >(["topRatedMovieList"], () => getMovieList("top_rated"));
+
   const { data: upcomingMovieList, isLoading: loadingUpcoming } = useQuery<
     IContent[]
   >(["upcomingMovieList"], () => getMovieList("upcoming"));
 
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
+
   if (isLoading) {
     return <Loader />;
   }

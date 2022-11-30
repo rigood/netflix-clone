@@ -11,14 +11,17 @@ function Tv() {
   const { data: airingTodayTvList, isLoading: loadingAiringToday } = useQuery<
     IContent[]
   >(["airingTodayTvList"], () => getTvList("airing_today"));
+
   const { data: popularTvList, isLoading: loadingPopular } = useQuery<
     IContent[]
   >(["popularTvList"], () => getTvList("popular"));
+
   const { data: topRatedTvList, isLoading: loadingTopRated } = useQuery<
     IContent[]
   >(["topRatedTvList"], () => getTvList("top_rated"));
 
   const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
+
   if (isLoading) {
     return <Loader />;
   }

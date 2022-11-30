@@ -3,9 +3,11 @@ import reset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
 ${reset};
+
 * {
   box-sizing: border-box;
 }
+
 body {
   overflow-x: hidden;
   background-color: black;
@@ -14,11 +16,13 @@ body {
   color: white;
   line-height: 1.5;
 }
+
 a {
   text-decoration: none;
   font-size: inherit;
   color: inherit;
 }
+
 `;
 
 export default GlobalStyle;

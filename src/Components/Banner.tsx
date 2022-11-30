@@ -29,16 +29,20 @@ function Banner({ section, content }: IBannerProps) {
               오늘의 {section === "movie" ? "영화" : "TV 쇼"} 순위 1위
             </RankingText>
           </RankingContainer>
+
           <Title>{section === "movie" ? content.title : content.name}</Title>
+
           <DateAndRatingContainer>
             <Date>
               {getDate(section, content.release_date, content.first_air_date)}
             </Date>
             <Rating>{getRating(content.vote_average)}</Rating>
           </DateAndRatingContainer>
+
           <Overview hasText={Boolean(content.overview)}>
             {content.overview}
           </Overview>
+
           <MoreBtn onClick={() => onMoreButtonClick(content.id)}>
             <FontAwesomeIcon icon={faInfoCircle} />
             <span>자세히 보기</span>
