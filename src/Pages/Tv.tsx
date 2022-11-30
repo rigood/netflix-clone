@@ -39,18 +39,21 @@ function Tv() {
             title="방영 중인 TV쇼"
             list={airingTodayTvList}
             hasBannerContent={true}
+            zindex={3}
           />
           <Slider
             section="tv"
             title="인기 TV 콘텐츠"
             list={popularTvList}
             hasBannerContent={false}
+            zindex={2}
           />
           <Slider
             section="tv"
             title="최고 평점 TV쇼"
             list={topRatedTvList}
             hasBannerContent={false}
+            zindex={1}
           />
         </SliderContainer>
       </BackgroundWrapper>

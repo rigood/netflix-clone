@@ -39,18 +39,21 @@ function Home() {
             title="현재 상영 중인 영화"
             list={nowPlayingMovieList}
             hasBannerContent={true}
+            zindex={3}
           />
           <Slider
             section="movie"
             title="최고 평점 영화"
             list={topRatedMovieList}
             hasBannerContent={false}
+            zindex={2}
           />
           <Slider
             section="movie"
             title="개봉 예정 영화"
             list={upcomingMovieList}
             hasBannerContent={false}
+            zindex={1}
           />
         </SliderContainer>
       </BackgroundWrapper>

@@ -15,6 +15,7 @@ interface ISliderProps {
   title: string;
   list?: IContent[];
   hasBannerContent: boolean;
+  zindex: number;
 }
 
 interface IRowVariantsProps {
@@ -22,7 +23,13 @@ interface IRowVariantsProps {
   windowWidth: number;
 }
 
-function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
+function Slider({
+  section,
+  title,
+  list,
+  hasBannerContent,
+  zindex,
+}: ISliderProps) {
   // Remove Banner content from Slider
   const sliceIndex = hasBannerContent ? 1 : 0;
 
@@ -79,7 +86,11 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
     <Container>
       <Title>{title}</Title>
       <RowWrapper height={thumbnailHeight}>
-        <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
+        <PrevBtn
+          onClick={decreaseIndex}
+          disabled={isPrevBtnDisabled}
+          zindex={zindex}
+        >
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
         <AnimatePresence
@@ -96,6 +107,7 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
             transition={{ type: "tween", duration: 0.5 }}
             custom={{ movingBack, windowWidth }}
             offset={offset}
+            zindex={zindex}
           >
             {list
               ?.slice(sliceIndex)
@@ -133,7 +145,7 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
               ))}
           </Row>
         </AnimatePresence>
-        <NextBtn onClick={increaseIndex}>
+        <NextBtn onClick={increaseIndex} zindex={zindex}>
           <FontAwesomeIcon icon={faAngleRight} />
         </NextBtn>
       </RowWrapper>
@@ -160,7 +172,6 @@ const Container = styled.div`
 `;
 
 const Title = styled.h3`
-  z-index: 4;
   font-weight: 500;
   // 반응형 패딩
   font-size: 24px;
@@ -190,7 +201,6 @@ const RowWrapper = styled.div<{ height: number }>`
 `;
 
 const Btn = styled.button`
-  z-index: 6;
   // 반응형 너비
   width: 60px;
   @media (max-width: 768px) {
@@ -232,16 +242,19 @@ const Btn = styled.button`
     `}
 `;
 
-const PrevBtn = styled(Btn)`
+const PrevBtn = styled(Btn)<{ zindex: number }>`
+  z-index: ${({ zindex }) => zindex};
   left: 0;
 `;
 
-const NextBtn = styled(Btn)`
+const NextBtn = styled(Btn)<{ zindex: number }>`
+  z-index: ${({ zindex }) => zindex};
   right: 0;
 `;
 
-const Row = styled(motion.div)<{ offset: number }>`
+const Row = styled(motion.div)<{ offset: number; zindex: number }>`
   position: absolute;
+  z-index: ${({ zindex }) => zindex};
   width: 100%;
   display: grid;
   grid-template-columns: ${(props) => `repeat(${props.offset}, 1fr)`};
@@ -326,10 +339,6 @@ const BoxThumbnail = styled(motion.div)<{ bg: string }>`
   cursor: pointer;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  &:hover ${BoxInfo} {
-    position: relative;
-    z-index: 9;
-  }
 `;
 
 const boxVariants = {
