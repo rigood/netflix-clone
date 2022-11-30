@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
 import useDynamicSliderOffset from "../hook/useDynamicSliderOffset";
@@ -72,6 +72,9 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
     navigate(`?id=${id}`);
   };
 
+  // box hover
+  const boxInfoHover = useAnimation();
+
   return (
     <Container>
       <Title>{title}</Title>
@@ -98,34 +101,35 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
               ?.slice(sliceIndex)
               .slice(offset * index, offset * index + offset)
               .map((content) => (
-                <Box
-                  key={content.id}
-                  bg={
-                    content.backdrop_path
-                      ? getImgPath(content.backdrop_path, "w500")
-                      : noBackdrop
-                  }
-                  onClick={() => onBoxClick(content.id)}
-                  ref={thumbnailRef!}
-                  variants={boxVariants}
-                  whileHover="hover"
-                >
-                  <BoxInfo variants={infoVariants}>
-                    <BoxInfoTitle>
-                      {section === "movie" ? content.title : content.name}
-                    </BoxInfoTitle>
-                    <BoxInfoDateAndRatingContainer>
-                      <div>
-                        {getDate(
-                          section,
-                          content.release_date,
-                          content.first_air_date
-                        ) + `  `}
-                      </div>
-                      <div>{getRating(content.vote_average)}</div>
-                    </BoxInfoDateAndRatingContainer>
-                  </BoxInfo>
-                </Box>
+                <BoxContainer key={content.id}>
+                  <BoxThumbnail
+                    bg={
+                      content.backdrop_path
+                        ? getImgPath(content.backdrop_path, "w500")
+                        : noBackdrop
+                    }
+                    onClick={() => onBoxClick(content.id)}
+                    ref={thumbnailRef!}
+                    variants={boxVariants}
+                    whileHover="hover"
+                  >
+                    <BoxInfo variants={infoVariants}>
+                      <BoxInfoTitle>
+                        {content.title || content.name}
+                      </BoxInfoTitle>
+                      <BoxInfoDateAndRatingContainer>
+                        <div>
+                          {getDate(
+                            section,
+                            content.release_date,
+                            content.first_air_date
+                          ) + `  `}
+                        </div>
+                        <div>{getRating(content.vote_average)}</div>
+                      </BoxInfoDateAndRatingContainer>
+                    </BoxInfo>
+                  </BoxThumbnail>
+                </BoxContainer>
               ))}
           </Row>
         </AnimatePresence>
@@ -268,12 +272,9 @@ const rowVariants = {
   }),
 };
 
-const BoxWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const BoxContainer = styled.div``;
 
-const Box = styled(motion.div)<{ bg: string }>`
+const BoxThumbnail = styled(motion.div)<{ bg: string }>`
   width: 100%;
   padding-top: 56.25%;
   border-radius: 2px;
@@ -281,17 +282,13 @@ const Box = styled(motion.div)<{ bg: string }>`
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 `;
 
 const boxVariants = {
   hover: {
-    scale: 1.2,
+    scale: 1.5,
     transition: {
       delay: 0.5,
       duaration: 0.3,
@@ -301,11 +298,11 @@ const boxVariants = {
 };
 
 const BoxInfo = styled(motion.div)`
-  opacity: 0;
+  display: none;
   width: 100%;
   padding: 5%;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
   background-color: ${({ theme }) => theme.gray};
   color: white;
 `;
@@ -332,7 +329,7 @@ const BoxInfoDateAndRatingContainer = styled.div`
 
 const infoVariants = {
   hover: {
-    opacity: 1,
+    display: "block",
     transition: {
       delay: 0.5,
       duaration: 0.3,
