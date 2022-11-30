@@ -108,33 +108,38 @@ function Slider({
             {list
               ?.slice(sliceIndex)
               .slice(offset * index, offset * index + offset)
-              .map((content) => (
-                <BoxThumbnail
-                  key={content.id}
-                  bg={
-                    content.backdrop_path
-                      ? getImgPath(content.backdrop_path, "w500")
-                      : noBackdrop
-                  }
-                  onClick={() => onBoxClick(content.id)}
-                  ref={thumbnailRef!}
-                  variants={boxVariants}
-                  whileHover="hover"
-                >
-                  <BoxInfo variants={infoVariants}>
-                    <BoxInfoTitle>{content.title || content.name}</BoxInfoTitle>
-                    <BoxInfoDateAndRatingContainer>
-                      <div>
-                        {getDate(
-                          section,
-                          content.release_date,
-                          content.first_air_date
-                        ) + `  `}
-                      </div>
-                      <div>{getRating(content.vote_average)}</div>
-                    </BoxInfoDateAndRatingContainer>
-                  </BoxInfo>
-                </BoxThumbnail>
+              .map((content, idx) => (
+                <BoxContainer key={content.id}>
+                  <BoxThumbnail
+                    bg={
+                      content.backdrop_path
+                        ? getImgPath(content.backdrop_path, "w500")
+                        : noBackdrop
+                    }
+                    idx={idx}
+                    offset={offset}
+                    onClick={() => onBoxClick(content.id)}
+                    ref={thumbnailRef!}
+                    variants={boxVariants}
+                    whileHover="hover"
+                  >
+                    <BoxInfo variants={infoVariants}>
+                      <BoxInfoTitle>
+                        {content.title || content.name}
+                      </BoxInfoTitle>
+                      <BoxInfoDateAndRatingContainer>
+                        <div>
+                          {getDate(
+                            section,
+                            content.release_date,
+                            content.first_air_date
+                          ) + `  `}
+                        </div>
+                        <div>{getRating(content.vote_average)}</div>
+                      </BoxInfoDateAndRatingContainer>
+                    </BoxInfo>
+                  </BoxThumbnail>
+                </BoxContainer>
               ))}
           </Row>
         </AnimatePresence>
@@ -320,7 +325,11 @@ const infoVariants = {
   },
 };
 
-const BoxThumbnail = styled(motion.div)<{ bg: string }>`
+const BoxThumbnail = styled(motion.div)<{
+  bg: string;
+  idx: number;
+  offset: number;
+}>`
   width: 100%;
   padding-top: 56.25%;
   border-radius: 2px;
@@ -330,13 +339,9 @@ const BoxThumbnail = styled(motion.div)<{ bg: string }>`
   cursor: pointer;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
+  transform-origin: center
+    ${({ idx, offset }) =>
+      idx === 0 ? "left" : idx === offset - 1 ? "right" : "center"};
 `;
 
 const boxVariants = {
