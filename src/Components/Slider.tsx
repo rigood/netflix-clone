@@ -86,11 +86,7 @@ function Slider({
     <Container>
       <Title>{title}</Title>
       <RowWrapper height={thumbnailHeight}>
-        <PrevBtn
-          onClick={decreaseIndex}
-          disabled={isPrevBtnDisabled}
-          zindex={zindex}
-        >
+        <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
         <AnimatePresence
@@ -145,7 +141,7 @@ function Slider({
               ))}
           </Row>
         </AnimatePresence>
-        <NextBtn onClick={increaseIndex} zindex={zindex}>
+        <NextBtn onClick={increaseIndex}>
           <FontAwesomeIcon icon={faAngleRight} />
         </NextBtn>
       </RowWrapper>
@@ -242,13 +238,11 @@ const Btn = styled.button`
     `}
 `;
 
-const PrevBtn = styled(Btn)<{ zindex: number }>`
-  z-index: ${({ zindex }) => zindex};
+const PrevBtn = styled(Btn)`
   left: 0;
 `;
 
-const NextBtn = styled(Btn)<{ zindex: number }>`
-  z-index: ${({ zindex }) => zindex};
+const NextBtn = styled(Btn)`
   right: 0;
 `;
 
