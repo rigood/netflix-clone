@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
 import useDynamicSliderOffset from "../hook/useDynamicSliderOffset";
 import useWindowWidth from "../hook/useWindowWidth";
-import useElementHeight from "../hook/useElementHeight";
+import useElementWidth from "../hook/useElementWidth";
 import { getDate, getRating, getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -34,7 +34,8 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
 
   // Slider css
   const windowWidth = useWindowWidth();
-  const [rowRef, rowHeight] = useElementHeight();
+  const [thumbnailRef, thumbnailWidth] = useElementWidth();
+  const thumbnailHeight = thumbnailWidth * (9 / 16);
 
   // Slider Moving
   const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
@@ -74,7 +75,7 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
   return (
     <Container>
       <Title>{title}</Title>
-      <RowWrapper height={rowHeight}>
+      <RowWrapper height={thumbnailHeight}>
         <PrevBtn onClick={decreaseIndex} disabled={isPrevBtnDisabled}>
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
@@ -105,7 +106,7 @@ function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
                       : noBackdrop
                   }
                   onClick={() => onBoxClick(content.id)}
-                  ref={rowRef!}
+                  ref={thumbnailRef!}
                   variants={boxVariants}
                   whileHover="hover"
                 >
@@ -143,20 +144,21 @@ const Container = styled.div`
   // Modal, Header보다 아래
   z-index: 5;
   // 반응형 마진
-  margin-block: 60px;
+  margin-block: 120px;
   @media (max-width: 768px) {
-    margin-block: 40px;
+    margin-block: 80px;
   }
   @media (max-width: 480px) {
-    margin-block: 20px;
+    margin-block: 40px;
   }
   @media (max-width: 320px) {
-    margin-block: 10px;
+    margin-block: 20px;
   }
 `;
 
 const Title = styled.h3`
   z-index: 4;
+  font-weight: 500;
   // 반응형 패딩
   font-size: 24px;
   margin-bottom: 20px;
@@ -274,7 +276,7 @@ const BoxWrapper = styled.div`
 const Box = styled(motion.div)<{ bg: string }>`
   width: 100%;
   padding-top: 56.25%;
-  border-radius: 4px;
+  border-radius: 2px;
   background-image: url(${({ bg }) => bg});
   background-size: contain;
   background-repeat: no-repeat;
@@ -289,7 +291,7 @@ const Box = styled(motion.div)<{ bg: string }>`
 
 const boxVariants = {
   hover: {
-    scale: 1.5,
+    scale: 1.2,
     transition: {
       delay: 0.5,
       duaration: 0.3,
