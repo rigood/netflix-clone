@@ -35,19 +35,19 @@ function Home() {
             section="movie"
             title="현재 상영 중인 영화"
             list={nowPlayingMovieList}
-            shouldCutFirstContent={true}
+            hasBannerContent={true}
           />
           <Slider
             section="movie"
             title="최고 평점 영화"
             list={topRatedMovieList}
-            shouldCutFirstContent={false}
+            hasBannerContent={false}
           />
           <Slider
             section="movie"
             title="개봉 예정 영화"
             list={upcomingMovieList}
-            shouldCutFirstContent={false}
+            hasBannerContent={false}
           />
         </SliderContainer>
       </BackgroundWrapper>

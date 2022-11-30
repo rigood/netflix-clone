@@ -35,19 +35,19 @@ function Tv() {
             section="tv"
             title="방영 중인 TV쇼"
             list={airingTodayTvList}
-            shouldCutFirstContent={true}
+            hasBannerContent={true}
           />
           <Slider
             section="tv"
             title="인기 TV 콘텐츠"
             list={popularTvList}
-            shouldCutFirstContent={false}
+            hasBannerContent={false}
           />
           <Slider
             section="tv"
             title="최고 평점 TV쇼"
             list={topRatedTvList}
-            shouldCutFirstContent={false}
+            hasBannerContent={false}
           />
         </SliderContainer>
       </BackgroundWrapper>

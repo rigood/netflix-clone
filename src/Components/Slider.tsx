@@ -14,7 +14,7 @@ interface ISliderProps {
   section: string;
   title: string;
   list?: IContent[];
-  shouldCutFirstContent: boolean;
+  hasBannerContent: boolean;
 }
 
 interface IRowVariantsProps {
@@ -22,9 +22,9 @@ interface IRowVariantsProps {
   windowWidth: number;
 }
 
-function Slider({ section, title, list, shouldCutFirstContent }: ISliderProps) {
+function Slider({ section, title, list, hasBannerContent }: ISliderProps) {
   // Remove Banner content from Slider
-  const sliceIndex = shouldCutFirstContent ? 1 : 0;
+  const sliceIndex = hasBannerContent ? 1 : 0;
 
   // Slider List
   const offset = useDynamicSliderOffset();
