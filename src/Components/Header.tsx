@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -8,6 +8,9 @@ import {
   useAnimation,
   AnimatePresence,
 } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { useRecoilState } from "recoil";
+import { myLangAtom } from "../atom";
 
 interface IForm {
   keyword: string;
@@ -53,6 +56,16 @@ function Header() {
     navigate(`/search/movie?q=${data.keyword}`);
   };
 
+  // lang
+  const { t, i18n } = useTranslation();
+  const [lang, setLang] = useRecoilState(myLangAtom);
+
+  const changeLang = (e: React.FormEvent<HTMLSelectElement>) => {
+    const selectedLang = e.currentTarget.value;
+    setLang(selectedLang);
+    i18n.changeLanguage(selectedLang);
+  };
+
   return (
     <>
       <Nav variants={navVariants} initial="top" animate={navAnimation}>
@@ -76,7 +89,7 @@ function Header() {
           <MenuContainer>
             <Menu>
               <Link to="browse/movie">
-                Movie
+                {t("menu.movie")}
                 <AnimatePresence>
                   {MovieMatch && <Circle layoutId="circle" />}
                 </AnimatePresence>
@@ -84,7 +97,7 @@ function Header() {
             </Menu>
             <Menu>
               <Link to="browse/tv">
-                TV Shows
+                {t("menu.tv")}
                 <AnimatePresence>
                   {tvMatch && <Circle layoutId="circle" />}
                 </AnimatePresence>
@@ -92,12 +105,16 @@ function Header() {
             </Menu>
             <Menu>
               <Link to="mylist">
-                My List
+                {t("menu.mylist")}
                 <AnimatePresence>
                   {mylistMatch && <Circle layoutId="circle" />}
                 </AnimatePresence>
               </Link>
             </Menu>
+            <select onInput={changeLang} value={lang}>
+              <option value="ko">{t("lang.ko")}</option>
+              <option value="en">{t("lang.en")}</option>
+            </select>
           </MenuContainer>
         </Col>
         <Col>

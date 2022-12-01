@@ -1,0 +1,11 @@
+{
+  "menu": {
+    "movie": "movie",
+    "tv": "TV shows",
+    "mylist": "My List"
+  },
+  "lang": {
+    "ko": "Korean",
+    "en": "English"
+  }
+}

@@ -2,7 +2,7 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist({
-  key: "myList",
+  key: "netflix",
 });
 
 export const modalState = atom({
@@ -19,5 +19,11 @@ export const myMovieAtom = atom<number[]>({
 export const myTvAtom = atom<number[]>({
   key: "myTv",
   default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const myLangAtom = atom<string>({
+  key: "myLang",
+  default: "ko",
   effects_UNSTABLE: [persistAtom],
 });
