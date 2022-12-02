@@ -7,9 +7,10 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 interface IVideosProps {
   title: string;
   videos: IVideo[];
+  altText: string;
 }
 
-function Videos({ title, videos }: IVideosProps) {
+function Videos({ title, videos, altText }: IVideosProps) {
   const onVideoClick = (key: string) =>
     window.open(getYoutubeUrl(key), "_blank");
   return (
@@ -28,7 +29,7 @@ function Videos({ title, videos }: IVideosProps) {
             </Info>
           </Video>
         ))}
-        {videos?.length === 0 ? "관련 영상이 없습니다." : null}
+        {videos?.length === 0 ? altText : null}
       </Wrapper>
     </>
   );

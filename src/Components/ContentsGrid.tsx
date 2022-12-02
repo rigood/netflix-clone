@@ -14,9 +14,15 @@ interface IContentsGridProps {
   title: string;
   contents: IContent[];
   section: string;
+  altText: string;
 }
 
-function ContentsGrid({ title, contents, section }: IContentsGridProps) {
+function ContentsGrid({
+  title,
+  contents,
+  section,
+  altText,
+}: IContentsGridProps) {
   const offset = 8;
   const [index, setIndex] = useState(offset);
 
@@ -61,7 +67,7 @@ function ContentsGrid({ title, contents, section }: IContentsGridProps) {
           />
         ) : null}
       </GridWrapper>
-      {contents?.length === 0 ? "준비중입니다." : null}
+      {contents?.length === 0 ? altText : null}
     </>
   );
 }

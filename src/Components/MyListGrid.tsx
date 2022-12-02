@@ -9,9 +9,10 @@ interface IMyListGridProps {
   title: string;
   contents: IContent[];
   section: string;
+  altText: string;
 }
 
-function MyListGrid({ title, contents, section }: IMyListGridProps) {
+function MyListGrid({ title, contents, section, altText }: IMyListGridProps) {
   const navigate = useNavigate();
   const openModal = (id: number) => {
     navigate(`${section}?id=${id}`);
@@ -46,7 +47,7 @@ function MyListGrid({ title, contents, section }: IMyListGridProps) {
         ))}
       </GridWrapper>
 
-      {contents?.length === 0 ? "목록이 비어있습니다." : null}
+      {contents?.length === 0 ? altText : null}
     </>
   );
 }

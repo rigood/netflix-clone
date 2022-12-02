@@ -8,9 +8,10 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 interface ICastGridProps {
   title: string;
   cast: ICast[];
+  altText: string;
 }
 
-function CastGrid({ title, cast }: ICastGridProps) {
+function CastGrid({ title, cast, altText }: ICastGridProps) {
   const offset = 5;
   const [index, setIndex] = useState(offset);
   return (
@@ -37,7 +38,7 @@ function CastGrid({ title, cast }: ICastGridProps) {
           />
         ) : null}
       </GridWrapper>
-      <p>{cast?.length === 0 ? "준비중입니다." : null}</p>
+      <p>{cast?.length === 0 ? altText : null}</p>
     </>
   );
 }

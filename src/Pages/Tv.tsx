@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
 import { myLangAtom } from "../atom";
 import { IContent } from "../api/interface";
 import { getTvList } from "../api/queryFn";
@@ -10,6 +11,9 @@ import Slider from "../components/Slider";
 import { BackgroundWrapper, SliderContainer } from "../styles/common";
 
 function Tv() {
+  // language translation
+  const { t } = useTranslation();
+
   const lang = useRecoilValue(myLangAtom);
 
   const { data: airingTodayTvList, isLoading: loadingAiringToday } = useQuery<
@@ -40,21 +44,21 @@ function Tv() {
         <SliderContainer>
           <Slider
             section="tv"
-            title="방영 중인 TV쇼"
+            title={t("category.tv.airingtoday")}
             list={airingTodayTvList}
             hasBannerContent={true}
             zindex={3}
           />
           <Slider
             section="tv"
-            title="인기 TV 콘텐츠"
+            title={t("category.tv.popular")}
             list={popularTvList}
             hasBannerContent={false}
             zindex={2}
           />
           <Slider
             section="tv"
-            title="최고 평점 TV쇼"
+            title={t("category.tv.topRated")}
             list={topRatedTvList}
             hasBannerContent={false}
             zindex={1}

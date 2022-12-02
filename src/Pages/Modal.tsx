@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -113,6 +114,9 @@ function Modal() {
   // Add, Remove from MyList
   const [checkIsNewContent, addToList, removeFromList] = useList(section!);
 
+  // language translation
+  const { t } = useTranslation();
+
   return (
     <>
       {isModalOpen && (
@@ -149,9 +153,7 @@ function Modal() {
                   ))}
                 </Genres>
                 <Title>
-                  {details?.title ||
-                    details?.name ||
-                    "존재하지 않는 콘텐츠입니다."}
+                  {details?.title || details?.name || t("modal.altText.title")}
                 </Title>
                 <Row>
                   <div className="info">
@@ -189,19 +191,29 @@ function Modal() {
                   </div>
                 </Row>
                 <Overview>
-                  {details?.overview || "등록된 줄거리 정보가 없습니다."}
+                  {details?.overview || t("modal.altText.overview")}
                 </Overview>
-                <CastGrid title="출연진" cast={cast!} />
-                <Videos title="관련 영상" videos={videos!} />
-                <ContentsGrid
-                  title="추천 콘텐츠"
-                  contents={reco!}
-                  section={section!}
+                <CastGrid
+                  title={t("modal.cast")}
+                  cast={cast!}
+                  altText={t("modal.altText.info")}
+                />
+                <Videos
+                  title={t("modal.video")}
+                  videos={videos!}
+                  altText={t("modal.altText.info")}
                 />
                 <ContentsGrid
-                  title="비슷한 콘텐츠"
+                  title={t("modal.recommend")}
+                  contents={reco!}
+                  section={section!}
+                  altText={t("modal.altText.prep")}
+                />
+                <ContentsGrid
+                  title={t("modal.similar")}
                   contents={similar!}
                   section={section!}
+                  altText={t("modal.altText.prep")}
                 />
               </ContentWrapper>
               <CloseBtn icon={faClose} onClick={closeModal} />

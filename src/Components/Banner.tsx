@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
@@ -16,6 +17,9 @@ function Banner({ section, content }: IBannerProps) {
     navigate(`?id=${id}`);
   };
 
+  // language translation
+  const { t } = useTranslation();
+
   return (
     <>
       {content && (
@@ -26,7 +30,7 @@ function Banner({ section, content }: IBannerProps) {
               alt="Netflix logo"
             />
             <RankingText>
-              오늘의 {section === "movie" ? "영화" : "TV 쇼"} 순위 1위
+              {section === "movie" ? t("banner.movie") : t("banner.tv")}
             </RankingText>
           </RankingContainer>
 
@@ -45,7 +49,7 @@ function Banner({ section, content }: IBannerProps) {
 
           <MoreBtn onClick={() => onMoreButtonClick(content.id)}>
             <FontAwesomeIcon icon={faInfoCircle} />
-            <span>자세히 보기</span>
+            <span>{t("banner.button")}</span>
           </MoreBtn>
         </Container>
       )}

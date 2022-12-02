@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -9,8 +9,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useRecoilState } from "recoil";
-import { myLangAtom } from "../atom";
+import LanguageSelect from "./LanguageSelect";
 
 interface IForm {
   keyword: string;
@@ -56,15 +55,9 @@ function Header() {
     navigate(`/search/movie?q=${data.keyword}`);
   };
 
-  // lang
-  const { t, i18n } = useTranslation();
-  const [lang, setLang] = useRecoilState(myLangAtom);
-
-  const changeLang = (e: React.FormEvent<HTMLSelectElement>) => {
-    const selectedLang = e.currentTarget.value;
-    setLang(selectedLang);
-    i18n.changeLanguage(selectedLang);
-  };
+  // Menu language translation
+  const { t } = useTranslation();
+  const searchBarText = t("search.placeholder");
 
   return (
     <>
@@ -111,10 +104,7 @@ function Header() {
                 </AnimatePresence>
               </Link>
             </Menu>
-            <select onInput={changeLang} value={lang}>
-              <option value="ko">{t("lang.ko")}</option>
-              <option value="en">{t("lang.en")}</option>
-            </select>
+            <LanguageSelect />
           </MenuContainer>
         </Col>
         <Col>
@@ -135,9 +125,9 @@ function Header() {
             <SearchInput
               {...register("keyword", { required: true, minLength: 1 })}
               minLength={1}
-              placeholder="입력 후 Enter를 누르세요."
               animate={{ scaleX: searchBarOpen ? 1 : 0 }}
               transition={{ type: "linear" }}
+              placeholder={searchBarText}
             ></SearchInput>
           </SearchForm>
         </Col>
@@ -265,13 +255,9 @@ const Menu = styled.li`
     font-size: 11px;
   }
   // 반응형 마진
-  &:not(:last-child) {
-    margin-right: 15px;
-  }
+  margin-right: 15px;
   @media (max-width: 480px) {
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
+    margin-right: 10px;
   }
 `;
 
@@ -310,6 +296,7 @@ const SearchInput = styled(motion.input)`
     right: 10px;
   }
   // 스타일
+  width: 200px;
   padding: 5px 10px;
   border: 1px solid white;
   background-color: ${({ theme }) => theme.gray};

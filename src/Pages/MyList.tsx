@@ -1,5 +1,6 @@
 import { useQueries } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { myLangAtom, myMovieAtom, myTvAtom } from "../atom";
 import { getDetails } from "../api/queryFn";
@@ -7,6 +8,9 @@ import Loader from "../components/Loader";
 import MyListGrid from "../components/MyListGrid";
 
 function MyList() {
+  // language translation
+  const { t } = useTranslation();
+
   const lang = useRecoilValue(myLangAtom);
   const myMovie = useRecoilValue(myMovieAtom);
   const myTv = useRecoilValue(myTvAtom);
@@ -43,8 +47,18 @@ function MyList() {
   return (
     <>
       <Wrapper>
-        <MyListGrid title="영화" contents={myMovieData} section="movie" />
-        <MyListGrid title="TV Show" contents={myTvData} section="tv" />
+        <MyListGrid
+          title={t("mylist.movie")}
+          contents={myMovieData}
+          section="movie"
+          altText={t("mylist.altText")}
+        />
+        <MyListGrid
+          title={t("mylist.tv")}
+          contents={myTvData}
+          section="tv"
+          altText={t("mylist.altText")}
+        />
       </Wrapper>
     </>
   );

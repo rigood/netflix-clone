@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
 import { myLangAtom } from "../atom";
 import { IContent } from "../api/interface";
 import { getMovieList } from "../api/queryFn";
@@ -10,6 +11,9 @@ import Slider from "../components/Slider";
 import { BackgroundWrapper, SliderContainer } from "../styles/common";
 
 function Home() {
+  // language translation
+  const { t } = useTranslation();
+
   const lang = useRecoilValue(myLangAtom);
 
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
@@ -40,21 +44,21 @@ function Home() {
         <SliderContainer>
           <Slider
             section="movie"
-            title="현재 상영 중인 영화"
+            title={t("category.movie.nowPlaying")}
             list={nowPlayingMovieList}
             hasBannerContent={true}
             zindex={3}
           />
           <Slider
             section="movie"
-            title="최고 평점 영화"
+            title={t("category.movie.topRated")}
             list={topRatedMovieList}
             hasBannerContent={false}
             zindex={2}
           />
           <Slider
             section="movie"
-            title="개봉 예정 영화"
+            title={t("category.movie.upcoming")}
             list={upcomingMovieList}
             hasBannerContent={false}
             zindex={1}

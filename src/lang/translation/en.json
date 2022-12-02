@@ -1,11 +1,45 @@
 {
   "menu": {
-    "movie": "movie",
+    "movie": "Movie",
     "tv": "TV shows",
     "mylist": "My List"
   },
-  "lang": {
-    "ko": "Korean",
-    "en": "English"
+  "banner": {
+    "movie": "Today's No.1 Movie",
+    "tv": "Today's No.1 TV Show",
+    "button": "Info"
+  },
+  "category": {
+    "movie": {
+      "nowPlaying": "Now Playing Movies",
+      "topRated": "Top Rated Movies",
+      "upcoming": "Upcoming Movies"
+    },
+    "tv": {
+      "airingtoday": "TV shows Airing Today",
+      "popular": "Popular TV shows",
+      "topRated": "Top Rated TV shows"
+    }
+  },
+  "modal": {
+    "cast": "Cast",
+    "video": "Videos",
+    "recommend": "Recommendations",
+    "similar": "Similar",
+    "altText": {
+      "title": "Content Not Found",
+      "overview": "No Overview Provided",
+      "info": "No Information Provided",
+      "prep": "Coming Soon"
+    }
+  },
+  "search": {
+    "placeholder": "Type a keyword and Press Enter.",
+    "title": "Search Results for "
+  },
+  "mylist": {
+    "altText": "Your list is empty.",
+    "movie": "Movie",
+    "tv": "TV Shows"
   }
 }
