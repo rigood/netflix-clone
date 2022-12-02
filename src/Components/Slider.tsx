@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
 import useDynamicSliderOffset from "../hook/useDynamicSliderOffset";
@@ -78,9 +78,6 @@ function Slider({
   const onBoxClick = (id: number) => {
     navigate(`?id=${id}`);
   };
-
-  // box hover
-  const boxInfoHover = useAnimation();
 
   return (
     <Container>

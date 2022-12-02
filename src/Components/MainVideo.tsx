@@ -67,8 +67,10 @@ const VolumeBtn = styled(FontAwesomeIcon)`
   border: 3px solid ${(props) => props.theme.white.darker};
   color: ${(props) => props.theme.white.darker};
   cursor: pointer;
-  &:hover {
-    border-color: ${(props) => props.theme.white.lighter};
-    color: ${(props) => props.theme.white.lighter};
+  @media (hover: hover) {
+    &:hover {
+      border-color: ${(props) => props.theme.white.lighter};
+      color: ${(props) => props.theme.white.lighter};
+    }
   }
 `;

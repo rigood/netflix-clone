@@ -65,9 +65,11 @@ const ThumbnailButton = styled(FontAwesomeIcon)`
   font-size: 24px;
   cursor: pointer;
   transition: all 0.3s ease;
-  &:hover {
-    border-color: white;
-    color: white;
+  @media (hover: hover) {
+    &:hover {
+      border-color: white;
+      color: white;
+    }
   }
   display: none;
 `;
@@ -114,10 +116,12 @@ const Video = styled.div`
   &:not(:last-child) {
     margin-bottom: 30px;
   }
-  &:hover ${ThumbnailOverlay}, &:hover ${ThumbnailButton} {
-    display: block;
-  }
-  &:hover ${Info} {
-    background-color: #202020;
+  @media (hover: hover) {
+    &:hover ${ThumbnailOverlay}, &:hover ${ThumbnailButton} {
+      display: block;
+    }
+    &:hover ${Info} {
+      background-color: #202020;
+    }
   }
 `;

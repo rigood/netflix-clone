@@ -234,7 +234,9 @@ const MoreBtn = styled.div`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   background-color: rgba(255, 255, 255, 0.9);
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.6);
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.6);
+    }
   }
 `;

@@ -269,9 +269,11 @@ const Button = styled(FontAwesomeIcon)`
   font-size: 28px;
   cursor: pointer;
   transition: all 0.3s ease;
-  &:hover {
-    border-color: white;
-    color: white;
+  @media (hover: hover) {
+    &:hover {
+      border-color: white;
+      color: white;
+    }
   }
 `;
 
@@ -331,9 +333,11 @@ const CloseBtn = styled(FontAwesomeIcon)`
   font-size: 28px;
   cursor: pointer;
   transition: all 0.3s ease;
-  &:hover {
-    border-color: white;
-    color: white;
+  @media (hover: hover) {
+    &:hover {
+      border-color: white;
+      color: white;
+    }
   }
   top: 20px;
   right: 20px;

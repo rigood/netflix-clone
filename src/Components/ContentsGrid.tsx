@@ -107,9 +107,11 @@ const PosterButton = styled(FontAwesomeIcon)`
   font-size: 36px;
   cursor: pointer;
   transition: all 0.3s ease;
-  &:hover {
-    border-color: white;
-    color: white;
+  @media (hover: hover) {
+    &:hover {
+      border-color: white;
+      color: white;
+    }
   }
   display: none;
 `;
@@ -134,14 +136,16 @@ const Poster = styled.div<{ bg: string }>`
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
-  &:hover {
-    transform: scale(1.05);
-  }
-  &:hover ${PosterOverlay} {
-    display: block;
-  }
-  &:hover ${PosterButton} {
-    display: block;
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:hover ${PosterOverlay} {
+      display: block;
+    }
+    &:hover ${PosterButton} {
+      display: block;
+    }
   }
 `;
 
@@ -182,9 +186,11 @@ const MoreButton = styled(FontAwesomeIcon)`
   border: 3px solid lightgray;
   color: lightgray;
   cursor: pointer;
-  &:hover {
-    background-color: gray;
-    border-color: white;
-    color: white;
+  @media (hover: hover) {
+    &:hover {
+      background-color: gray;
+      border-color: white;
+      color: white;
+    }
   }
 `;

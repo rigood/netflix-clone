@@ -243,8 +243,10 @@ const Menu = styled.li`
   position: relative;
   // 색상
   color: rgba(255, 255, 255, 0.9);
-  &:hover {
-    color: white;
+  @media (hover: hover) {
+    &:hover {
+      color: white;
+    }
   }
   // 반응형 폰트
   font-size: 13px;
