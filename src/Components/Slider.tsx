@@ -245,12 +245,12 @@ const Btn = styled.button`
 `;
 
 const PrevBtn = styled(Btn)<{ zindex: number }>`
-  z-index: ${({ zindex }) => zindex};
+  z-index: ${({ zindex }) => zindex + 1};
   left: 0;
 `;
 
 const NextBtn = styled(Btn)<{ zindex: number }>`
-  z-index: ${({ zindex }) => zindex};
+  z-index: ${({ zindex }) => zindex + 1};
   right: 0;
 `;
 
