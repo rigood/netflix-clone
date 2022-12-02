@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { myMovieAtom, myTvAtom } from "../atom";
-import { toastMsg } from "../Layout";
+import { toastMsg } from "../toast";
 
 type useListType = [
   (id: number) => boolean,
