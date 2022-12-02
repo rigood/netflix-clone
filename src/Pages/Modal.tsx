@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ICast, IContent, IVideo } from "../api/interface";
-import { modalState } from "../atom";
+import { modalState, myLangAtom } from "../atom";
 import {
   getCast,
   getDetails,
@@ -56,13 +56,14 @@ function Modal() {
   }, [isModalOpen]);
 
   // Fetch data
+  const lang = useRecoilValue(myLangAtom);
   const {
     data: details,
     isLoading: detailsLoading,
     isError,
   } = useQuery<IContent>(
-    ["detailsContent", id],
-    () => getDetails(section!, id!),
+    ["detailsContent", id, lang],
+    () => getDetails(section!, id!, lang),
     {
       enabled: !!id,
       onError: (error) => {
@@ -73,28 +74,28 @@ function Modal() {
   );
 
   const { data: cast, isLoading: castLoading } = useQuery<ICast[]>(
-    ["castContent", id],
-    () => getCast(section!, id!),
+    ["castContent", id, lang],
+    () => getCast(section!, id!, lang),
     {
       enabled: !!id,
     }
   );
 
   const { data: videos, isLoading: videosLoading } = useQuery<IVideo[]>(
-    ["videoContent", id],
-    () => getVideos(section!, id!),
+    ["videoContent", id, lang],
+    () => getVideos(section!, id!, lang),
     { enabled: !!id }
   );
 
   const { data: reco, isLoading: recoLoading } = useQuery<IContent[]>(
-    ["recoContent", id],
-    () => getRecommendations(section!, id!),
+    ["recoContent", id, lang],
+    () => getRecommendations(section!, id!, lang),
     { enabled: !!id }
   );
 
   const { data: similar, isLoading: similarLoading } = useQuery<IContent[]>(
-    ["similarContent", id],
-    () => getSimilar(section!, id!),
+    ["similarContent", id, lang],
+    () => getSimilar(section!, id!, lang),
     { enabled: !!id }
   );
 

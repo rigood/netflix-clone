@@ -1,20 +1,21 @@
 import { useQueries } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { myMovieAtom, myTvAtom } from "../atom";
+import { myLangAtom, myMovieAtom, myTvAtom } from "../atom";
 import { getDetails } from "../api/queryFn";
 import Loader from "../components/Loader";
 import MyListGrid from "../components/MyListGrid";
 
 function MyList() {
+  const lang = useRecoilValue(myLangAtom);
   const myMovie = useRecoilValue(myMovieAtom);
   const myTv = useRecoilValue(myTvAtom);
 
   const myMovieQuery = useQueries({
     queries: myMovie.map((movieId) => {
       return {
-        queryKey: ["myMovie", String(movieId)],
-        queryFn: () => getDetails("movie", String(movieId)),
+        queryKey: ["myMovie", String(movieId), lang],
+        queryFn: () => getDetails("movie", String(movieId), lang),
       };
     }),
   });
@@ -22,8 +23,8 @@ function MyList() {
   const myTvQuery = useQueries({
     queries: myTv.map((tvId) => {
       return {
-        queryKey: ["myTv", String(tvId)],
-        queryFn: () => getDetails("tv", String(tvId)),
+        queryKey: ["myTv", String(tvId), lang],
+        queryFn: () => getDetails("tv", String(tvId), lang),
       };
     }),
   });

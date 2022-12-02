@@ -1,11 +1,14 @@
 import { useCallback, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+import { useRecoilValue } from "recoil";
 import { IContent } from "../api/interface";
+import { myLangAtom } from "../atom";
 
 type queryFnType = (
   kewyword: string,
-  pageParam: number
+  pageParam: number,
+  lang: string
 ) => Promise<AxiosResponse<any, any>>;
 
 type useInfiniteSearchQueryType = (
@@ -19,10 +22,13 @@ const useInfiniteSearchQuery: useInfiniteSearchQueryType = (
   keyword,
   queryFn
 ) => {
+  // Load language
+  const lang = useRecoilValue(myLangAtom);
+
   // Fetch search-data
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    [section, keyword],
-    ({ pageParam = 1 }) => queryFn(keyword!, pageParam),
+    [section, keyword, lang],
+    ({ pageParam = 1 }) => queryFn(keyword!, pageParam, lang),
     {
       getNextPageParam: (lastPage) => {
         return (
@@ -30,7 +36,7 @@ const useInfiniteSearchQuery: useInfiniteSearchQueryType = (
           lastPage.data.page + 1
         );
       },
-      enabled: Boolean(section && keyword),
+      enabled: Boolean(section && keyword && lang),
     }
   );
 

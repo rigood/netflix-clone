@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRecoilValue } from "recoil";
+import { myLangAtom } from "../atom";
 import { IContent } from "../api/interface";
 import { getTvList } from "../api/queryFn";
 import { getImgPath } from "../api/utils";
@@ -8,17 +10,19 @@ import Slider from "../components/Slider";
 import { BackgroundWrapper, SliderContainer } from "../styles/common";
 
 function Tv() {
+  const lang = useRecoilValue(myLangAtom);
+
   const { data: airingTodayTvList, isLoading: loadingAiringToday } = useQuery<
     IContent[]
-  >(["airingTodayTvList"], () => getTvList("airing_today"));
+  >(["airingTodayTvList", lang], () => getTvList("airing_today", lang));
 
   const { data: popularTvList, isLoading: loadingPopular } = useQuery<
     IContent[]
-  >(["popularTvList"], () => getTvList("popular"));
+  >(["popularTvList", lang], () => getTvList("popular", lang));
 
   const { data: topRatedTvList, isLoading: loadingTopRated } = useQuery<
     IContent[]
-  >(["topRatedTvList"], () => getTvList("top_rated"));
+  >(["topRatedTvList", lang], () => getTvList("top_rated", lang));
 
   const isLoading = loadingAiringToday || loadingPopular || loadingTopRated;
 

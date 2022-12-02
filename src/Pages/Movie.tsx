@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRecoilValue } from "recoil";
+import { myLangAtom } from "../atom";
 import { IContent } from "../api/interface";
 import { getMovieList } from "../api/queryFn";
 import { getImgPath } from "../api/utils";
@@ -8,17 +10,19 @@ import Slider from "../components/Slider";
 import { BackgroundWrapper, SliderContainer } from "../styles/common";
 
 function Home() {
+  const lang = useRecoilValue(myLangAtom);
+
   const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
     IContent[]
-  >(["nowPlayingMovieList"], () => getMovieList("now_playing"));
+  >(["nowPlayingMovieList", lang], () => getMovieList("now_playing", lang));
 
   const { data: topRatedMovieList, isLoading: loadingTopRated } = useQuery<
     IContent[]
-  >(["topRatedMovieList"], () => getMovieList("top_rated"));
+  >(["topRatedMovieList", lang], () => getMovieList("top_rated", lang));
 
   const { data: upcomingMovieList, isLoading: loadingUpcoming } = useQuery<
     IContent[]
-  >(["upcomingMovieList"], () => getMovieList("upcoming"));
+  >(["upcomingMovieList", lang], () => getMovieList("upcoming", lang));
 
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
 
