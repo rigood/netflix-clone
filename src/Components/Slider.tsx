@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import useWindowWidth from "../hook/useWindowWidth";
+import useDebouncedResize from "../hook/useDebouncedResize";
 import useThumbnailHeight from "../hook/useThumbnailHeight";
 import { getDate, getRating, getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
@@ -31,7 +31,7 @@ function getSliderOffset(windowWidth: number) {
 
 function Slider({ section, title, list, zindex }: ISliderProps) {
   // Slider layout
-  const windowWidth = useWindowWidth();
+  const windowWidth = useDebouncedResize();
   const [thumbnailRef, thumbnailHeight] = useThumbnailHeight();
 
   // Slider List
@@ -104,8 +104,8 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
             exit="exit"
             transition={{ type: "tween", duration: 0.5 }}
             custom={{ movingBack, windowWidth }}
-            offset={offset}
             zindex={zindex}
+            offset={offset}
           >
             {list
               ?.slice(offset * index, offset * index + offset)
@@ -223,7 +223,7 @@ const Btn = styled.button`
   padding: 0;
   border: none;
   outline: none;
-  background: none;
+  background: pink;
   // 비활성화
   opacity: 0;
   // 활성화

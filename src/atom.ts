@@ -27,3 +27,8 @@ export const myLangAtom = atom<string>({
   default: "ko",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const windowWidthState = atom({
+  key: "windowWidth",
+  default: window.innerWidth,
+});

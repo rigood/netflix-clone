@@ -1,24 +1,24 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRecoilState } from "recoil";
+import { windowWidthState } from "../atom";
 
 type useThumbnailHeightType = [React.RefObject<HTMLDivElement>, number];
 
 function useThumbnailHeight(): useThumbnailHeightType {
   const [thumbnailHeight, setThumbnailHeight] = useState<number>(0);
+  const [windowWidth, setWindowWidth] = useRecoilState(windowWidthState);
   const thumbnailRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function updateThumbnailHeight() {
+    function handleResize() {
       if (!thumbnailRef.current) return;
       setThumbnailHeight(
-        thumbnailRef.current?.getBoundingClientRect().width * (9 / 16)
+        thumbnailRef.current?.getBoundingClientRect().width * (9 / 16)!
       );
     }
 
-    updateThumbnailHeight();
-
-    window.addEventListener("resize", updateThumbnailHeight);
-    return () => window.removeEventListener("resize", updateThumbnailHeight);
-  }, []);
+    handleResize();
+  }, [windowWidth]);
 
   return [thumbnailRef, thumbnailHeight];
 }
