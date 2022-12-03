@@ -6,7 +6,9 @@ import { RouterProvider } from "react-router-dom";
 import "./lang/i18n";
 import router from "./Router";
 
-const client = new QueryClient({ defaultOptions: { queries: { retry: 1 } } });
+const client = new QueryClient({
+  defaultOptions: { queries: { retry: 1, staleTime: 60 * 1000 } },
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

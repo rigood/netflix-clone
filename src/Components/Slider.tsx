@@ -1,12 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import useDynamicSliderOffset from "../hook/useDynamicSliderOffset";
 import useWindowWidth from "../hook/useWindowWidth";
-import useElementWidth from "../hook/useElementWidth";
+import useThumbnailHeight from "../hook/useThumbnailHeight";
 import { getDate, getRating, getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -22,26 +21,24 @@ interface IRowVariantsProps {
   windowWidth: number;
 }
 
-function Slider({
-  section,
-  title,
-  list,
-  hasBannerContent,
-  zindex,
-}: ISliderProps) {
-  // Remove Banner content from Slider
-  const sliceIndex = hasBannerContent ? 1 : 0;
+function getSliderOffset(windowWidth: number) {
+  if (windowWidth <= 320) return 1;
+  else if (windowWidth <= 768) return 2;
+  else if (windowWidth <= 1024) return 3;
+  else if (windowWidth <= 1440) return 4;
+  else return 6;
+}
+
+function Slider({ section, title, list, zindex }: ISliderProps) {
+  // Slider layout
+  const windowWidth = useWindowWidth();
+  const [thumbnailRef, thumbnailHeight] = useThumbnailHeight();
 
   // Slider List
-  const offset = useDynamicSliderOffset();
+  const offset = getSliderOffset(windowWidth);
   const [index, setIndex] = useState(0);
   const listLength = list?.length!;
   const maxIndex = Math.floor(listLength / offset) - 1;
-
-  // Slider css
-  const windowWidth = useWindowWidth();
-  const [thumbnailRef, thumbnailWidth] = useElementWidth();
-  const thumbnailHeight = thumbnailWidth * (9 / 16);
 
   // Slider Moving
   const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
@@ -64,7 +61,7 @@ function Slider({
       console.log("increase 문 진입");
       if (moving) return;
       console.log("increase 누름");
-      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+      setIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
       setMoving(true);
       setIsPrevBtnDisabled(false);
     }
