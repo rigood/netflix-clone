@@ -46,21 +46,18 @@ function Tv() {
             section="tv"
             title={t("category.tv.airingtoday")}
             list={airingTodayTvList}
-            hasBannerContent={true}
             zindex={3}
           />
           <Slider
             section="tv"
             title={t("category.tv.popular")}
             list={popularTvList}
-            hasBannerContent={false}
             zindex={2}
           />
           <Slider
             section="tv"
             title={t("category.tv.topRated")}
             list={topRatedTvList}
-            hasBannerContent={false}
             zindex={1}
           />
         </SliderContainer>

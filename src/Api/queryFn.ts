@@ -8,13 +8,15 @@ const db = axios.create({
   },
 });
 
+const SLICE_INDEX = 12;
+
 export async function getMovieList(category: string, lang: string) {
   console.log(`getMovielist ${category} 시작`);
 
   const response = await db.get(`movie/${category}?language=${lang}`);
   console.log(`getMovielist ${category} 끝`);
 
-  return response.data.results;
+  return response.data.results.slice(0, SLICE_INDEX);
 }
 
 export async function getTvList(category: string, lang: string) {
@@ -23,7 +25,7 @@ export async function getTvList(category: string, lang: string) {
   const response = await db.get(`tv/${category}?language=${lang}`);
   console.log(`getTvlist ${category} 끝`);
 
-  return response.data.results;
+  return response.data.results.slice(0, SLICE_INDEX);
 }
 
 export async function getDetails(section: string, id: string, lang: string) {

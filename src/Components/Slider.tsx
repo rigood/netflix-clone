@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,7 +14,6 @@ interface ISliderProps {
   section: string;
   title: string;
   list?: IContent[];
-  hasBannerContent: boolean;
   zindex: number;
 }
 
@@ -49,10 +48,11 @@ function Slider({
   const [moving, setMoving] = useState(false);
   const [movingBack, setMovingBack] = useState(false);
 
-  console.log("render");
   const decreaseIndex = () => {
     if (list) {
+      console.log("decrease 문 진입");
       if (moving) return;
+      console.log("decrease 누름");
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
       setMoving(true);
       setMovingBack(true);
@@ -61,8 +61,9 @@ function Slider({
 
   const increaseIndex = () => {
     if (list) {
+      console.log("increase 문 진입");
       if (moving) return;
-      console.log("increase누름");
+      console.log("increase 누름");
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
       setMoving(true);
       setIsPrevBtnDisabled(false);
@@ -82,6 +83,9 @@ function Slider({
   return (
     <Container>
       <Title>{title}</Title>
+      <Title>
+        {offset}개씩 index{index}/max{maxIndex}
+      </Title>
       <RowWrapper height={thumbnailHeight}>
         <PrevBtn
           onClick={decreaseIndex}
@@ -107,8 +111,7 @@ function Slider({
             zindex={zindex}
           >
             {list
-              ?.slice(sliceIndex)
-              .slice(offset * index, offset * index + offset)
+              ?.slice(offset * index, offset * index + offset)
               .map((content, idx) => (
                 <BoxContainer key={content.id}>
                   <BoxThumbnail

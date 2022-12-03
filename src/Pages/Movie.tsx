@@ -16,10 +16,6 @@ function Home() {
 
   const lang = useRecoilValue(myLangAtom);
 
-  const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
-    IContent[]
-  >(["nowPlayingMovieList", lang], () => getMovieList("now_playing", lang));
-
   const { data: topRatedMovieList, isLoading: loadingTopRated } = useQuery<
     IContent[]
   >(["topRatedMovieList", lang], () => getMovieList("top_rated", lang));
@@ -27,6 +23,10 @@ function Home() {
   const { data: upcomingMovieList, isLoading: loadingUpcoming } = useQuery<
     IContent[]
   >(["upcomingMovieList", lang], () => getMovieList("upcoming", lang));
+
+  const { data: nowPlayingMovieList, isLoading: loadingNowPlaying } = useQuery<
+    IContent[]
+  >(["nowPlayingMovieList", lang], () => getMovieList("now_playing", lang));
 
   const isLoading = loadingNowPlaying || loadingTopRated || loadingUpcoming;
 
@@ -44,23 +44,21 @@ function Home() {
         <SliderContainer>
           <Slider
             section="movie"
-            title={t("category.movie.nowPlaying")}
-            list={nowPlayingMovieList}
-            hasBannerContent={true}
-            zindex={3}
-          />
-          <Slider
-            section="movie"
             title={t("category.movie.topRated")}
             list={topRatedMovieList}
-            hasBannerContent={false}
-            zindex={2}
+            zindex={3}
           />
+
           <Slider
             section="movie"
             title={t("category.movie.upcoming")}
             list={upcomingMovieList}
-            hasBannerContent={false}
+            zindex={2}
+          />
+          <Slider
+            section="movie"
+            title={t("category.movie.nowPlaying")}
+            list={nowPlayingMovieList}
             zindex={1}
           />
         </SliderContainer>
