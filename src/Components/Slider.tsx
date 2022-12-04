@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styled, { css } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
 import useDebouncedResize from "../hook/useDebouncedResize";
-import useThumbnailHeight from "../hook/useThumbnailHeight";
-import { getDate, getRating, getImgPath, noBackdrop } from "../api/utils";
+import { getImgPath, noBackdrop } from "../api/utils";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 interface ISliderProps {
@@ -16,23 +16,20 @@ interface ISliderProps {
   zindex: number;
 }
 
-interface IRowVariantsProps {
+interface ISliderVariantsProps {
   movingBack: boolean;
   windowWidth: number;
 }
 
 function getSliderOffset(windowWidth: number) {
-  if (windowWidth <= 320) return 1;
-  else if (windowWidth <= 768) return 2;
+  if (windowWidth <= 480) return 2;
   else if (windowWidth <= 1024) return 3;
-  else if (windowWidth <= 1440) return 4;
   else return 6;
 }
 
 function Slider({ section, title, list, zindex }: ISliderProps) {
   // Slider layout
   const windowWidth = useDebouncedResize();
-  const [thumbnailRef, thumbnailHeight] = useThumbnailHeight();
 
   // Slider List
   const offset = getSliderOffset(windowWidth);
@@ -44,6 +41,10 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
   const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
   const [moving, setMoving] = useState(false);
   const [movingBack, setMovingBack] = useState(false);
+
+  useEffect(() => {
+    setIndex((prev) => (prev > maxIndex ? maxIndex : prev));
+  }, [windowWidth]);
 
   const decreaseIndex = () => {
     if (list) {
@@ -68,7 +69,7 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
   };
 
   const toggleMoving = () => {
-    setMoving((prev) => !prev);
+    setMoving(false);
     setMovingBack(false);
   };
 
@@ -77,13 +78,19 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
     navigate(`?id=${id}`);
   };
 
+  // language translation
+  const { t } = useTranslation();
+
   return (
     <Container>
-      <Title>{title}</Title>
-      <Title>
-        {offset}개씩 index{index}/max{maxIndex}
-      </Title>
-      <RowWrapper height={thumbnailHeight}>
+      <TitleAndIndicator>
+        <Title>{title}</Title>
+        <Indicator>
+          {index + 1}/{maxIndex + 1}
+        </Indicator>
+      </TitleAndIndicator>
+
+      <SliderContainer>
         <PrevBtn
           onClick={decreaseIndex}
           disabled={isPrevBtnDisabled}
@@ -91,27 +98,28 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
         >
           <FontAwesomeIcon icon={faAngleLeft} />
         </PrevBtn>
+
         <AnimatePresence
           initial={false}
           onExitComplete={toggleMoving}
           custom={{ movingBack, windowWidth }}
         >
-          <Row
+          <SliderWrapper
             key={index}
-            variants={rowVariants}
+            variants={sliderVariants}
             initial="enter"
             animate="show"
             exit="exit"
             transition={{ type: "tween", duration: 0.5 }}
             custom={{ movingBack, windowWidth }}
-            zindex={zindex}
             offset={offset}
+            zindex={zindex}
           >
             {list
               ?.slice(offset * index, offset * index + offset)
               .map((content, idx) => (
-                <BoxContainer key={content.id}>
-                  <BoxThumbnail
+                <Card key={content.id}>
+                  <CardThumbnail
                     bg={
                       content.backdrop_path
                         ? getImgPath(content.backdrop_path, "w500")
@@ -120,34 +128,40 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
                     idx={idx}
                     offset={offset}
                     onClick={() => onBoxClick(content.id)}
-                    ref={thumbnailRef!}
-                    variants={boxVariants}
+                    variants={cardVariants}
                     whileHover="hover"
                   >
-                    <BoxInfo variants={infoVariants}>
-                      <BoxInfoTitle>
+                    <CardInfo variants={infoVariants}>
+                      <CardInfoTitle>
                         {content.title || content.name}
-                      </BoxInfoTitle>
-                      <BoxInfoDateAndRatingContainer>
-                        <div>
-                          {getDate(
-                            section,
-                            content.release_date,
-                            content.first_air_date
-                          ) + `  `}
-                        </div>
-                        <div>{getRating(content.vote_average)}</div>
-                      </BoxInfoDateAndRatingContainer>
-                    </BoxInfo>
-                  </BoxThumbnail>
-                </BoxContainer>
+                      </CardInfoTitle>
+                      <CardInfoDateAndRating>
+                        <CardDate>
+                          {section === "movie"
+                            ? t("label.release") +
+                                ": " +
+                                content.release_date ?? t("label.none")
+                            : t("label.firstAir") +
+                                ": " +
+                                content.first_air_date ?? t("label.none")}
+                        </CardDate>
+                        <CardRating>
+                          {content.vote_average
+                            ? t("label.rating") + ": ⭐" + content.vote_average
+                            : t("label.rating") + ": ⭐" + t("label.none")}
+                        </CardRating>
+                      </CardInfoDateAndRating>
+                    </CardInfo>
+                  </CardThumbnail>
+                </Card>
               ))}
-          </Row>
+          </SliderWrapper>
         </AnimatePresence>
+
         <NextBtn onClick={increaseIndex} zindex={zindex}>
           <FontAwesomeIcon icon={faAngleRight} />
         </NextBtn>
-      </RowWrapper>
+      </SliderContainer>
     </Container>
   );
 }
@@ -156,87 +170,93 @@ export default Slider;
 
 const Container = styled.div`
   width: 100%;
-  // Modal, Header보다 아래
-  // 반응형 마진
-  margin-bottom: 80px;
-  /* @media (max-width: 768px) {
-    margin-block: 80px;
-  }
-  @media (max-width: 480px) {
-    margin-block: 40px;
-  }
-  @media (max-width: 320px) {
-    margin-block: 20px;
-  } */
-`;
+  position: relative;
+  top: -12.5vw;
+  margin-bottom: 70px;
 
-const Title = styled.h3`
-  font-weight: 500;
-  // 반응형 패딩
-  font-size: 24px;
-  margin-bottom: 20px;
-  padding-left: 60px;
-  @media (max-width: 768px) {
-    font-size: 20px;
-    margin-bottom: 15px;
-    padding-left: 40px;
+  @media (max-width: 1024px) {
+    margin-bottom: 60px;
   }
+
   @media (max-width: 480px) {
-    font-size: 20px;
-    margin-bottom: 10px;
-    padding-left: 20px;
-  }
-  @media (max-width: 320px) {
-    font-size: 16px;
-    margin-bottom: 10px;
-    padding-left: 10px;
+    margin-bottom: 50px;
   }
 `;
 
-const RowWrapper = styled.div<{ height: number }>`
+const TitleAndIndicator = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 60px;
+  margin-bottom: 10px;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 20px;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 1.6vw;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+`;
+
+const Indicator = styled.div`
+  font-size: 14px;
+`;
+
+const SliderContainer = styled.div`
   position: relative;
   width: 100%;
-  height: ${(props) => `${props.height}px`};
+  height: 8vw;
+
+  @media (max-width: 1024px) {
+    height: 16vw;
+  }
+
+  @media (max-width: 480px) {
+    height: 24vw;
+  }
 `;
 
 const Btn = styled.button`
-  // 반응형 너비
-  width: 60px;
-  @media (max-width: 768px) {
-    width: 40px;
-  }
-  @media (max-width: 480px) {
-    width: 20px;
-  }
-  @media (max-width: 320px) {
-    width: 10px;
-  }
-  // 가운데 정렬
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  // 위치 고정
   position: absolute;
   top: 0;
   bottom: 0;
-  // 스타일
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
   padding: 0;
   border: none;
   outline: none;
-  background: pink;
-  // 비활성화
+  background-color: transparent;
+  font-size: 1.6vw;
   opacity: 0;
-  // 활성화
+
+  @media (max-width: 1024px) {
+    width: 40px;
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+    width: 20px;
+    font-size: 16px;
+  }
+
   ${(props) =>
     !props.disabled &&
     css`
       color: white;
       opacity: 0.5;
-      font-size: max(1.5vw, 16px);
       &:hover {
         cursor: pointer;
         opacity: 1;
-        font-size: max(1.8vw, 18px);
       }
     `}
 `;
@@ -251,70 +271,57 @@ const NextBtn = styled(Btn)<{ zindex: number }>`
   right: 0;
 `;
 
-const Row = styled(motion.div)<{ offset: number; zindex: number }>`
+const SliderWrapper = styled(motion.div)<{ offset: number; zindex: number }>`
   position: absolute;
   z-index: ${({ zindex }) => zindex};
-  width: 100%;
   display: grid;
   grid-template-columns: ${(props) => `repeat(${props.offset}, 1fr)`};
   gap: 10px;
-  // 반응형 패딩
-  padding-inline: 60px;
-  @media (max-width: 768px) {
-    padding-inline: 40px;
+  width: 100%;
+  padding: 0 60px;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
   }
+
   @media (max-width: 480px) {
-    padding-inline: 20px;
-  }
-  @media (max-width: 320px) {
-    padding-inline: 10px;
+    padding: 0 20px;
   }
 `;
 
-const rowVariants = {
-  enter: ({ movingBack, windowWidth }: IRowVariantsProps) => ({
+const sliderVariants = {
+  enter: ({ movingBack, windowWidth }: ISliderVariantsProps) => ({
     x: movingBack ? -windowWidth + 10 : windowWidth - 10,
   }),
   show: {
     x: 0,
   },
-  exit: ({ movingBack, windowWidth }: IRowVariantsProps) => ({
+  exit: ({ movingBack, windowWidth }: ISliderVariantsProps) => ({
     x: movingBack ? windowWidth - 10 : -windowWidth + 10,
   }),
 };
 
-const BoxContainer = styled.div``;
+const Card = styled.div``;
 
-const BoxInfo = styled(motion.div)`
+const cardVariants = {
+  hover: {
+    scale: 1.3,
+    transition: {
+      delay: 0.5,
+      duaration: 0.3,
+      type: "tween",
+    },
+  },
+};
+
+const CardInfo = styled(motion.div)`
   display: none;
   width: 100%;
   padding: 5%;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   background-color: ${({ theme }) => theme.gray};
   color: white;
-`;
-
-const BoxInfoTitle = styled.div`
-  ${({ theme }) => theme.MaxLines(1)};
-`;
-
-const BoxInfoDateAndRatingContainer = styled.div`
-  font-weight: 500;
-  // 반응형
-  font-size: 12px;
-  @media (max-width: 1024px) {
-    font-size: 11px;
-  }
-  @media (max-width: 1024px) {
-    font-size: 10px;
-  }
-  @media (max-width: 480px) {
-    font-size: 9px;
-  }
-  div:first-child {
-    color: ${({ theme }) => theme.green};
-  }
 `;
 
 const infoVariants = {
@@ -328,32 +335,35 @@ const infoVariants = {
   },
 };
 
-const BoxThumbnail = styled(motion.div)<{
+const CardThumbnail = styled(motion.div)<{
   bg: string;
   idx: number;
   offset: number;
 }>`
   width: 100%;
   padding-top: 56.25%;
-  border-radius: 2px;
+  border-radius: 4px;
   background-image: url(${({ bg }) => bg});
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
   transform-origin: center
     ${({ idx, offset }) =>
       idx === 0 ? "left" : idx === offset - 1 ? "right" : "center"};
 `;
 
-const boxVariants = {
-  hover: {
-    scale: 1.5,
-    transition: {
-      delay: 0.5,
-      duaration: 0.3,
-      type: "tween",
-    },
-  },
-};
+const CardInfoTitle = styled.div`
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 5px;
+`;
+
+const CardInfoDateAndRating = styled.div`
+  font-size: 11px;
+`;
+
+const CardDate = styled.span`
+  color: ${({ theme }) => theme.green};
+`;
+
+const CardRating = styled.div``;

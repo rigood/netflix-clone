@@ -29,7 +29,7 @@ export function getRating(rating: number) {
     const rounded = Math.round(rating * 10) / 10;
     return `평점: ⭐${rounded}점`;
   } else {
-    return `평점: 없음`;
+    return `평점: ⭐없음`;
   }
 }
 

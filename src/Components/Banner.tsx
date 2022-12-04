@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import { getDate, getRating } from "../api/utils";
+import { getImgPath } from "../api/utils";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface IBannerProps {
@@ -23,7 +23,10 @@ function Banner({ section, content }: IBannerProps) {
   return (
     <>
       {content && (
-        <Container>
+        <Container
+          backdropBg={getImgPath(content.backdrop_path)}
+          posterBg={getImgPath(content.poster_path)}
+        >
           <RankingContainer>
             <RankingLogo
               src={process.env.PUBLIC_URL + "/assets/logo.png"}
@@ -38,14 +41,20 @@ function Banner({ section, content }: IBannerProps) {
 
           <DateAndRatingContainer>
             <Date>
-              {getDate(section, content.release_date, content.first_air_date)}
+              {section === "movie"
+                ? t("label.release") + ": " + content.release_date ??
+                  t("label.none")
+                : t("label.firstAir") + ": " + content.first_air_date ??
+                  t("label.none")}
             </Date>
-            <Rating>{getRating(content.vote_average)}</Rating>
+            <Rating>
+              {content.vote_average
+                ? t("label.rating") + ": ⭐" + content.vote_average
+                : t("label.rating") + ": ⭐" + t("label.none")}
+            </Rating>
           </DateAndRatingContainer>
 
-          <Overview hasText={Boolean(content.overview)}>
-            {content.overview}
-          </Overview>
+          <Overview>{content.overview || t("banner.altText")}</Overview>
 
           <MoreBtn onClick={() => onMoreButtonClick(content.id)}>
             <FontAwesomeIcon icon={faInfoCircle} />
@@ -59,30 +68,28 @@ function Banner({ section, content }: IBannerProps) {
 
 export default Banner;
 
-const Container = styled.div`
+const Container = styled.div<{ backdropBg: string; posterBg: string }>`
+  width: 100%;
+  height: 56.25vw;
+  padding: 0 60px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  // 반응형
-  padding-top: 15vw;
-  padding-bottom: 7.5vw;
-  padding-left: 60px;
+  justify-content: center;
+  background-size: cover;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(${(props) => props.backdropBg});
+
   @media (max-width: 1024px) {
-    padding-top: 25vw;
-    padding-bottom: 10vw;
-    padding-left: 60px;
+    height: 90vw;
+    padding: 0 40px;
   }
-  @media (max-width: 768px) {
-    padding-top: 25vw;
-    padding-bottom: 7.5vw;
-    padding-left: 40px;
-  }
+
   @media (max-width: 480px) {
-    padding-bottom: 5vw;
-    width: 100%;
     align-items: center;
-    padding-top: 35vw;
-    padding-left: 0;
+    height: 150vw;
+    padding: 0 20px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+      url(${(props) => props.posterBg});
   }
 `;
 
@@ -92,83 +99,44 @@ const RankingContainer = styled.div`
 `;
 
 const RankingLogo = styled.img`
-  // 반응형
-  width: 32px;
+  width: 1.6vw;
   margin-right: 5px;
+
   @media (max-width: 1024px) {
-    width: 24px;
-    margin-right: 3px;
-  }
-  @media (max-width: 768px) {
     width: 20px;
-    margin-right: 3px;
-  }
-  @media (max-width: 480px) {
-    width: 16px;
-    margin-right: 2px;
   }
 `;
 
 const RankingText = styled.h1`
+  font-size: 1.6vw;
+  font-weight: 700;
   ${({ theme }) => theme.textShadow};
-  // 반응형
-  font-size: 32px;
+
   @media (max-width: 1024px) {
-    font-size: 24px;
-  }
-  @media (max-width: 768px) {
     font-size: 20px;
-  }
-  @media (max-width: 480px) {
-    font-size: 16px;
   }
 `;
 
 const Title = styled.h1`
-  // 반응형
-  width: 60%;
-  font-size: 72px;
-  margin-bottom: 10px;
-  @media (max-width: 1024px) {
-    width: 70%;
-    font-size: 48px;
-    margin-bottom: 5px;
-  }
-  @media (max-width: 768px) {
-    width: 80%;
-    font-size: 36px;
-    margin-bottom: 5px;
-  }
-  @media (max-width: 480px) {
-    width: 100%;
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 3px;
-  }
+  font-size: 2.6vw;
+  font-weight: 700;
+  margin-bottom: 20px;
   ${({ theme }) => theme.textShadow};
-  ${({ theme }) => theme.MaxLines(1)}
+
+  @media (max-width: 1024px) {
+    font-size: 32px;
+  }
 `;
 
 const DateAndRatingContainer = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
-  font-weight: 500;
-  // 반응형
-  font-size: 16px;
   margin-bottom: 10px;
-  @media (max-width: 1024px) {
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
+  font-size: 0.9vw;
+
   @media (max-width: 1024px) {
     font-size: 14px;
-    margin-bottom: 8px;
-  }
-  @media (max-width: 480px) {
-    flex-direction: column;
-    font-size: 13px;
-    margin-bottom: 8px;
   }
 `;
 
@@ -180,63 +148,46 @@ const Rating = styled.span`
   margin-left: 10px;
 `;
 
-const Overview = styled.p<{ hasText: boolean }>`
-  font-weight: 500;
+const Overview = styled.p`
+  width: 40%;
+  margin-bottom: 20px;
+  font-size: 1.2vw;
   word-wrap: break-word;
   word-break: keep-all;
   ${({ theme }) => theme.textShadow};
   ${({ theme }) => theme.MaxLines(3)};
-  // 반응형
-  width: 50%;
-  font-size: 24px;
-  margin-bottom: 20px;
+
   @media (max-width: 1024px) {
     width: 60%;
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 16px;
   }
-  @media (max-width: 768px) {
-    width: 70%;
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
+
   @media (max-width: 480px) {
-    width: 80%;
-    text-align: center;
-    font-size: 13px;
-    margin-bottom: 15px;
+    display: none;
   }
 `;
 
 const MoreBtn = styled.div`
   width: fit-content;
-  border-radius: 6px;
+  padding: 10px 30px;
+  border-radius: 4px;
+  font-size: 1.2vw;
+  font-weight: 700;
   color: black;
   span {
-    margin-left: 5px;
+    margin-left: 10px;
   }
-  // 반응형
-  font-size: 24px;
-  padding: 12px 36px;
-  @media (max-width: 1024px) {
-    font-size: 18px;
-    padding: 10px 30px;
-  }
-  @media (max-width: 768px) {
-    font-size: 14px;
-    padding: 8px 24px;
-  }
-  @media (max-width: 480px) {
-    font-size: 14px;
-    padding: 8px 24px;
-  }
-  // hover
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease-in-out;
   background-color: rgba(255, 255, 255, 0.9);
+
   @media (hover: hover) {
     &:hover {
       background-color: rgba(255, 255, 255, 0.6);
     }
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
   }
 `;

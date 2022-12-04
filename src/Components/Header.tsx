@@ -158,12 +158,13 @@ const Nav = styled(motion.nav)`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  /* Responsive */
   padding: 20px 60px;
-  @media (max-width: 767px) {
+
+  @media (max-width: 1024px) {
     padding: 15px 40px;
   }
-  @media (max-width: 479px) {
+
+  @media (max-width: 480px) {
     padding: 10px 20px;
   }
 `;
@@ -218,8 +219,8 @@ const logoVariants = {
 const MenuContainer = styled.ul<{ $open: boolean }>`
   display: flex;
   align-items: center;
-  /* Responsive */
-  @media (max-width: 479px) {
+
+  @media (max-width: 480px) {
     display: none;
     ${(props) =>
       props.$open &&
@@ -249,6 +250,7 @@ const Menu = styled.li`
   position: relative;
   margin-right: 20px;
   font-size: 14px;
+
   @media (hover: hover) {
     &:hover {
       color: white;
@@ -266,8 +268,8 @@ const Circle = styled(motion.span)`
   height: 4px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.red};
-  /* Responsive */
-  @media (max-width: 479px) {
+
+  @media (max-width: 480px) {
     top: 0;
     bottom: 0;
     left: -10px;
@@ -286,24 +288,32 @@ const SearchForm = styled.form`
 const SearchInput = styled(motion.input)`
   position: absolute;
   right: 60px;
-  /* Responsive */
-  @media (max-width: 767px) {
-    right: 40px;
-  }
-  @media (max-width: 479px) {
-    right: 60px;
-  }
   width: 210px;
   padding: 5px 10px;
   background-color: ${({ theme }) => theme.gray};
   color: white;
   transform-origin: right center;
-  font-size: 15px;
+  font-size: 14px;
   &::placeholder {
     font-family: "Noto Sans KR", sans-serif;
-    font-size: 15px;
+    font-size: 13px;
   }
   ${({ theme }) => theme.RemoveAutoFill("white")}
+
+  @media (max-width: 1024px) {
+    font-size: 14px;
+    &::placeholder {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    right: 40px;
+  }
+
+  @media (max-width: 480px) {
+    right: 60px;
+  }
 `;
 
 const SearchIcon = styled(FontAwesomeIcon)<{ $hide: boolean }>`
@@ -314,7 +324,8 @@ const SearchIcon = styled(FontAwesomeIcon)<{ $hide: boolean }>`
 
 const MenuIcon = styled(FontAwesomeIcon)`
   display: none;
-  @media (max-width: 479px) {
+
+  @media (max-width: 480px) {
     cursor: pointer;
     display: block;
     width: 20px;

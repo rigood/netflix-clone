@@ -5,9 +5,10 @@
     "mylist": "보관함"
   },
   "banner": {
-    "movie": "오늘의 영화 순위 1위",
-    "tv": "오늘의 TV 쇼 순위 1위",
-    "button": "자세히 보기"
+    "movie": "오늘의 영화 1위",
+    "tv": "오늘의 TV 쇼 1위",
+    "button": "자세히 보기",
+    "altText": "제공된 줄거리 정보가 없습니다."
   },
   "category": {
     "movie": {
@@ -20,6 +21,14 @@
       "popular": "인기 TV 콘텐츠",
       "topRated": "최고 평점 TV 쇼"
     }
+  },
+  "label": {
+    "release": "개봉일",
+    "firstAir": "첫방영",
+    "rating": "평점",
+    "seasons": "시즌",
+    "episodes": "에피소드",
+    "none": "없음"
   },
   "modal": {
     "cast": "출연진",

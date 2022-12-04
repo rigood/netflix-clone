@@ -7,7 +7,8 @@
   "banner": {
     "movie": "Today's No.1 Movie",
     "tv": "Today's No.1 TV Show",
-    "button": "Info"
+    "button": "More Info",
+    "altText": "No Overview Provided."
   },
   "category": {
     "movie": {
@@ -20,6 +21,14 @@
       "popular": "Popular TV shows",
       "topRated": "Top Rated TV shows"
     }
+  },
+  "label": {
+    "release": "Released",
+    "firstAir": "First Aired",
+    "rating": "Rating",
+    "seasons": "Season",
+    "episodes": "Episodes",
+    "none": "None"
   },
   "modal": {
     "cast": "Cast",

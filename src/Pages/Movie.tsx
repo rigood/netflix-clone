@@ -4,16 +4,13 @@ import { useTranslation } from "react-i18next";
 import { myLangAtom } from "../atom";
 import { IContent } from "../api/interface";
 import { getMovieList } from "../api/queryFn";
-import { getImgPath } from "../api/utils";
 import Loader from "../components/Loader";
 import Banner from "../components/Banner";
 import Slider from "../components/Slider";
-import { BackgroundWrapper, SliderContainer } from "../styles/common";
 
-function Home() {
+function Movie() {
   // language translation
   const { t } = useTranslation();
-
   const lang = useRecoilValue(myLangAtom);
 
   const { data: topRatedMovieList, isLoading: loadingTopRated } = useQuery<
@@ -36,35 +33,29 @@ function Home() {
 
   return (
     <>
-      <BackgroundWrapper
-        backdropBg={getImgPath(nowPlayingMovieList?.[0].backdrop_path!)}
-        posterBg={getImgPath(nowPlayingMovieList?.[0].poster_path!)}
-      >
-        <Banner section="movie" content={nowPlayingMovieList?.[0]} />
-        <SliderContainer>
-          <Slider
-            section="movie"
-            title={t("category.movie.topRated")}
-            list={topRatedMovieList}
-            zindex={3}
-          />
-
-          <Slider
-            section="movie"
-            title={t("category.movie.upcoming")}
-            list={upcomingMovieList}
-            zindex={2}
-          />
-          <Slider
-            section="movie"
-            title={t("category.movie.nowPlaying")}
-            list={nowPlayingMovieList}
-            zindex={1}
-          />
-        </SliderContainer>
-      </BackgroundWrapper>
+      <Banner section="movie" content={nowPlayingMovieList?.[0]} />
+      <div>
+        <Slider
+          section="movie"
+          title={t("category.movie.topRated")}
+          list={topRatedMovieList}
+          zindex={3}
+        />
+        <Slider
+          section="movie"
+          title={t("category.movie.upcoming")}
+          list={upcomingMovieList}
+          zindex={2}
+        />
+        <Slider
+          section="movie"
+          title={t("category.movie.nowPlaying")}
+          list={nowPlayingMovieList}
+          zindex={1}
+        />
+      </div>
     </>
   );
 }
 
-export default Home;
+export default Movie;
