@@ -14,15 +14,8 @@ declare module "styled-components" {
     red: string;
     green: string;
     gray: string;
-    black: {
-      veryDark: string;
-      darker: string;
-      lighter: string;
-    };
-    white: {
-      darker: string;
-      lighter: string;
-    };
+    lightgray: string;
+    white: string;
 
     flexbox: (
       flexDirection: string,
@@ -39,5 +32,7 @@ declare module "styled-components" {
     MaxLines: (maxLines: number, lineHeight?: string) => string;
 
     textShadow: string;
+
+    RemoveAutoFill: (color: string) => string;
   }
 }

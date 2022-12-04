@@ -3,16 +3,9 @@ import { DefaultTheme } from "styled-components";
 export const theme: DefaultTheme = {
   red: "#E51013",
   green: "#46D369",
-  gray: "#2F2F2F",
-  black: {
-    veryDark: "#141414",
-    darker: "#181818",
-    lighter: "#2F2F2F",
-  },
-  white: {
-    lighter: "#fff",
-    darker: "#e5e5e5",
-  },
+  gray: "#333",
+  lightgray: "#777",
+  white: "#E5E5E5",
 
   flexbox: (flexDirection, justifyContent, alignItems) => {
     const justifyContentCss = justifyContent
@@ -49,4 +42,15 @@ export const theme: DefaultTheme = {
   },
 
   textShadow: `text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.7);`,
+
+  RemoveAutoFill: (color) => `
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    transition: background-color 5000s;
+    -webkit-text-fill-color: ${color} !important;
+    caret-color: ${color};
+  }
+  `,
 };

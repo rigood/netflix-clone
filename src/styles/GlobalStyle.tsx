@@ -12,8 +12,8 @@ body {
   overflow-x: hidden;
   background-color: black;
   font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 700; // (300light, 500medium, 700bold)
-  color: white;
+  font-weight: 500; // (300light, 500medium, 700bold)
+  color: ${({ theme }) => theme.white};
   line-height: 1.5;
 }
 

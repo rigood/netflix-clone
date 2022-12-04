@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   motion,
   useScroll,
@@ -10,18 +10,15 @@ import {
 } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "./LanguageSelect";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 interface IForm {
   keyword: string;
 }
 
 function Header() {
-  // Nav-bar indicator animation
-  const MovieMatch: PathMatch<string> | null = useMatch("browse/movie");
-  const tvMatch: PathMatch<string> | null = useMatch("browse/tv");
-  const mylistMatch: PathMatch<string> | null = useMatch("mylist");
-
-  // Nav-bar scroll animation
+  // Nav scroll animation
   const { scrollY } = useScroll();
   const navAnimation = useAnimation();
   useEffect(() => {
@@ -34,7 +31,23 @@ function Header() {
     });
   }, []);
 
-  // Search-bar
+  // Menu indicator animation
+  const MovieMatch: PathMatch<string> | null = useMatch("browse/movie");
+  const tvMatch: PathMatch<string> | null = useMatch("browse/tv");
+  const mylistMatch: PathMatch<string> | null = useMatch("mylist");
+
+  // MenuBar
+  const [menuBarOpen, setMenuBarOpen] = useState(false);
+
+  const openMenuBar = () => {
+    setMenuBarOpen(true);
+  };
+
+  const closeMenuBar = () => {
+    setMenuBarOpen(false);
+  };
+
+  // SearchBar
   const { register, handleSubmit, setFocus, setValue } = useForm<IForm>();
   const [searchBarOpen, setSearchBarOpen] = useState(false);
 
@@ -48,14 +61,13 @@ function Header() {
     setValue("keyword", "");
   };
 
-  // Go to search results page
   const navigate = useNavigate();
   const onSearchSubmit = (data: IForm) => {
     closeSearchBar();
     navigate(`/search/movie?q=${data.keyword}`);
   };
 
-  // Menu language translation
+  // Language Select
   const { t } = useTranslation();
   const searchBarText = t("search.placeholder");
 
@@ -79,9 +91,9 @@ function Header() {
               />
             </Logo>
           </Link>
-          <MenuContainer>
+          <MenuContainer isShow={menuBarOpen}>
             <Menu>
-              <Link to="browse/movie">
+              <Link to="browse/movie" onClick={closeMenuBar}>
                 {t("menu.movie")}
                 <AnimatePresence>
                   {MovieMatch && <Circle layoutId="circle" />}
@@ -89,7 +101,7 @@ function Header() {
               </Link>
             </Menu>
             <Menu>
-              <Link to="browse/tv">
+              <Link to="browse/tv" onClick={closeMenuBar}>
                 {t("menu.tv")}
                 <AnimatePresence>
                   {tvMatch && <Circle layoutId="circle" />}
@@ -97,31 +109,25 @@ function Header() {
               </Link>
             </Menu>
             <Menu>
-              <Link to="mylist">
+              <Link to="mylist" onClick={closeMenuBar}>
                 {t("menu.mylist")}
                 <AnimatePresence>
                   {mylistMatch && <Circle layoutId="circle" />}
                 </AnimatePresence>
               </Link>
             </Menu>
-            <LanguageSelect />
+            <Menu>
+              <LanguageSelect />
+            </Menu>
           </MenuContainer>
         </Col>
         <Col>
           <SearchForm onSubmit={handleSubmit(onSearchSubmit)}>
             <SearchIcon
+              icon={faMagnifyingGlass}
               isHiding={searchBarOpen ? true : false}
               onClick={openSearchBar}
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-              ></path>
-            </SearchIcon>
+            />
             <SearchInput
               {...register("keyword", { required: true, minLength: 1 })}
               minLength={1}
@@ -130,10 +136,11 @@ function Header() {
               placeholder={searchBarText}
             ></SearchInput>
           </SearchForm>
+          <MenuIcon icon={faBars} onClick={openMenuBar} />
         </Col>
         <Overlay
-          isShow={searchBarOpen ? true : false}
-          onClick={closeSearchBar}
+          isShow={searchBarOpen || menuBarOpen ? true : false}
+          onClick={searchBarOpen ? closeSearchBar : closeMenuBar}
         />
       </Nav>
     </>
@@ -143,32 +150,24 @@ function Header() {
 export default Header;
 
 const Nav = styled(motion.nav)`
-  // 양 사이드 정렬
+  position: fixed;
+  top: 0;
+  // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
+  z-index: 996;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // 상단 고정
-  position: fixed;
-  top: 0;
-  // 크기 고정
   width: 100%;
-  height: 80px;
-  // 모달보다 아래, 슬라이더보다 위
-  z-index: 995;
-  // 반응형 패딩
-  padding-inline: 60px;
-  @media (max-width: 768px) {
-    padding-inline: 40px;
+  /* Responsive */
+  padding: 20px 60px;
+  @media (max-width: 767px) {
+    padding: 15px 40px;
   }
-  @media (max-width: 480px) {
-    padding-inline: 20px;
-  }
-  @media (max-width: 320px) {
-    padding-inline: 10px;
+  @media (max-width: 479px) {
+    padding: 10px 20px;
   }
 `;
 
-// 스크롤 시 투명->검정 배경
 const navVariants = {
   top: {
     backgroundColor: "rgba(0, 0, 0, 0)",
@@ -184,28 +183,11 @@ const Col = styled.div`
 `;
 
 const Logo = styled.svg`
-  // 빨간점이랑 높이 맞추기
   position: relative;
   bottom: -10px;
-  // 반응형 크기
   width: 100px;
-  @media (max-width: 480px) {
-    width: 80px;
-  }
-  @media (max-width: 320px) {
-    width: 75px;
-  }
-  // 부모 영역 초과 X
   height: 100%;
-  // 반응형 마진
   margin-right: 30px;
-  @media (max-width: 480px) {
-    margin-right: 15px;
-  }
-  @media (max-width: 320px) {
-    margin-right: 10px;
-  }
-  // path 애니메이션
   path {
     stroke: ${({ theme }) => theme.red};
     stroke-width: 5px;
@@ -233,122 +215,117 @@ const logoVariants = {
   },
 };
 
-const MenuContainer = styled.ul`
+const MenuContainer = styled.ul<{ isShow: boolean }>`
   display: flex;
   align-items: center;
+  /* Responsive */
+  @media (max-width: 479px) {
+    display: none;
+    ${(props) =>
+      props.isShow &&
+      css`
+        position: fixed;
+        top: 0px;
+        right: 0;
+        // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 50%;
+        height: 100%;
+        padding: 20px;
+        background-color: ${({ theme }) => theme.gray};
+        transition: all 0.3s ease-in;
+        ${Menu} {
+          margin-bottom: 20px;
+          font-weight: 700;
+        }
+      `}
+  }
 `;
 
 const Menu = styled.li`
-  // 빨간점 배치
   position: relative;
-  // 색상
-  color: rgba(255, 255, 255, 0.9);
+  margin-right: 20px;
+  font-size: 14px;
   @media (hover: hover) {
     &:hover {
       color: white;
     }
   }
-  // 반응형 폰트
-  font-size: 13px;
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
-  @media (max-width: 320px) {
-    font-size: 11px;
-  }
-  // 반응형 마진
-  margin-right: 15px;
-  @media (max-width: 480px) {
-    margin-right: 10px;
-  }
 `;
 
 const Circle = styled(motion.span)`
-  // 메뉴 텍스트 아래에 위치
   position: absolute;
   bottom: -10px;
-  // 가운데 정렬
   left: 0;
   right: 0;
-  margin-inline: auto;
+  margin: 0 auto;
   width: 4px;
   height: 4px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.red};
+  /* Responsive */
+  @media (max-width: 479px) {
+    top: 0;
+    bottom: 0;
+    left: -10px;
+    right: 0;
+    margin: 0;
+  }
 `;
 
 const SearchForm = styled.form`
   display: flex;
   align-items: center;
-  // Nav 내에서 메뉴 텍스트보다 위
-  z-index: 997;
+  // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
+  z-index: 998;
 `;
 
 const SearchInput = styled(motion.input)`
-  // 반응형 패딩
   position: absolute;
   right: 60px;
-  @media (max-width: 768px) {
+  /* Responsive */
+  @media (max-width: 767px) {
     right: 40px;
   }
-  @media (max-width: 480px) {
-    right: 20px;
+  @media (max-width: 479px) {
+    right: 60px;
   }
-  @media (max-width: 320px) {
-    right: 10px;
-  }
-  // 스타일
-  width: 200px;
+  width: 300px;
   padding: 5px 10px;
-  border: 1px solid white;
   background-color: ${({ theme }) => theme.gray};
   color: white;
   transform-origin: right center;
-  // 반응형 폰트
-  font-size: 13px;
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
-  @media (max-width: 320px) {
-    font-size: 11px;
-  }
+  font-size: 15px;
   &::placeholder {
     font-family: "Noto Sans KR", sans-serif;
-    font-size: 12px;
+    font-size: 15px;
   }
-  @media (max-width: 480px) {
-    font-size: 11px;
-  }
-  @media (max-width: 320px) {
-    font-size: 10px;
-  }
-  // autofill 제거
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:active {
-    transition: background-color 5000s;
-    -webkit-text-fill-color: ${(porps) => porps.theme.white.darker} !important;
-    caret-color: ${(porps) => porps.theme.white.darker};
-  }
+  ${({ theme }) => theme.RemoveAutoFill("white")}
 `;
 
-const SearchIcon = styled.svg<{ isHiding: boolean }>`
+const SearchIcon = styled(FontAwesomeIcon)<{ isHiding: boolean }>`
   cursor: pointer;
-  // searchBar 열리면 안보이게
   display: ${({ isHiding }) => isHiding && "none"};
-  // 반응형 크기
   width: 20px;
-  @media (max-width: 480px) {
-    width: 17px;
-  }
-  @media (max-width: 320px) {
-    width: 14px;
+`;
+
+const MenuIcon = styled(FontAwesomeIcon)`
+  display: none;
+  @media (max-width: 479px) {
+    cursor: pointer;
+    display: block;
+    width: 20px;
+    margin-left: 20px;
   }
 `;
 
 const Overlay = styled.div<{ isShow: boolean }>`
   display: none;
+  // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
+  z-index: 997;
   position: fixed;
   top: 0;
   left: 0;
@@ -356,11 +333,7 @@ const Overlay = styled.div<{ isShow: boolean }>`
   height: 100%;
   margin: 0;
   background: rgba(0, 0, 0, 0.5);
-  // 클릭 시 searchBar 닫힘
   cursor: pointer;
-  // Nav 위, form 아래
-  z-index: 996;
-  // searchBar 열리면 보이게
   display: ${({ isShow }) => isShow && "block"};
   transition: all 0.3s ease-in;
 `;

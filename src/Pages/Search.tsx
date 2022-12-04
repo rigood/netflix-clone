@@ -94,7 +94,7 @@ const Title = styled.h1`
   strong {
     font-size: 28px;
     font-weight: 700;
-    color: ${(props) => props.theme.white.darker};
+    color: white;
   }
 `;
 
