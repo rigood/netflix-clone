@@ -293,7 +293,7 @@ const SearchInput = styled(motion.input)`
   @media (max-width: 479px) {
     right: 60px;
   }
-  width: 300px;
+  width: 210px;
   padding: 5px 10px;
   background-color: ${({ theme }) => theme.gray};
   color: white;
