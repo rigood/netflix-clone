@@ -30,6 +30,7 @@ import MainVideo from "../components/MainVideo";
 import Videos from "../components/Videos";
 import ContentsGrid from "../components/ContentsGrid";
 import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { DefaultButton } from "../styles/common";
 
 function Modal() {
   // Extract section, id
@@ -146,7 +147,7 @@ function Modal() {
                   }
                 />
               )}
-              <ContentWrapper>
+              <ContentContainer>
                 <Genres>
                   {details?.genres.map((genre) => (
                     <span key={genre.id}>{genre.name}</span>
@@ -156,15 +157,15 @@ function Modal() {
                   {details?.title || details?.name || t("modal.altText.title")}
                 </Title>
                 <Row>
-                  <div className="info">
-                    <Number>
+                  <InfoLeftCol>
+                    <TimeAndCount>
                       {getRuntimeOrEpisodes(
                         section!,
                         details?.runtime!,
                         details?.number_of_seasons!,
                         details?.number_of_episodes!
                       )}
-                    </Number>
+                    </TimeAndCount>
                     <DateAndRating>
                       <span>
                         {getDate(
@@ -175,20 +176,20 @@ function Modal() {
                       </span>
                       <span>{getRating(details?.vote_average!)}</span>
                     </DateAndRating>
-                  </div>
-                  <div>
+                  </InfoLeftCol>
+                  <ButtonRightCol>
                     {!isError && checkIsNewContent(details?.id!) ? (
-                      <Button
+                      <ListButton
                         icon={faPlus}
                         onClick={() => addToList(details?.id!)}
                       />
                     ) : (
-                      <Button
+                      <ListButton
                         icon={faCheck}
                         onClick={() => removeFromList(details?.id!)}
                       />
                     )}
-                  </div>
+                  </ButtonRightCol>
                 </Row>
                 <Overview>
                   {details?.overview || t("modal.altText.overview")}
@@ -215,8 +216,8 @@ function Modal() {
                   section={section!}
                   altText={t("modal.altText.prep")}
                 />
-              </ContentWrapper>
-              <CloseBtn icon={faClose} onClick={closeModal} />
+              </ContentContainer>
+              <CloseButton icon={faClose} onClick={closeModal} />
             </Wrapper>
           )}
         </Overlay>
@@ -239,11 +240,11 @@ const Overlay = styled(motion.div)`
 const Wrapper = styled(motion.div)`
   width: min(90%, 900px);
   margin: 30px auto;
-  padding-bottom: 30px;
+  padding-bottom: 50px;
   background-color: black;
   z-index: 9999;
   position: relative; // CloseBtn 배치
-  border-radius: 20px;
+  border-radius: 8px;
   overflow: hidden;
 `;
 
@@ -259,88 +260,77 @@ const Backdrop = styled.div<{ bg: string }>`
   background-size: cover;
 `;
 
-const Button = styled(FontAwesomeIcon)`
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  @media (hover: hover) {
-    &:hover {
-      border-color: white;
-      color: white;
-    }
-  }
-`;
-
-const ContentWrapper = styled.div`
+const ContentContainer = styled.div`
   margin: 0 30px;
-  padding-bottom: 50px;
+
+  @media (max-width: 1024px) {
+    margin: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    margin: 0 10px;
+  }
 `;
 
 const Genres = styled.div`
   margin-bottom: 10px;
   span {
     margin-right: 10px;
-    padding: 3px 6px;
-    border-radius: 5px;
+    padding: 3px 9px;
+    border-radius: 4px;
     background-color: ${(props) => props.theme.red};
     font-size: 14px;
-    font-weight: 400;
   }
-`;
-
-const Number = styled.div`
-  font-size: 14px;
-  font-weight: 400;
 `;
 
 const Title = styled.h1`
   font-size: 2rem;
+  font-weight: 700;
   margin-bottom: 10px;
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+  }
 `;
 
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
-  .info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
 `;
 
+const InfoLeftCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+const TimeAndCount = styled.div``;
+
 const DateAndRating = styled.div`
-  font-size: 16px;
   span:first-child {
     margin-right: 10px;
     color: ${(props) => props.theme.green};
   }
 `;
 
-const CloseBtn = styled(FontAwesomeIcon)`
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  @media (hover: hover) {
-    &:hover {
-      border-color: white;
-      color: white;
-    }
-  }
+const ButtonRightCol = styled.div``;
+
+const ListButton = styled(FontAwesomeIcon)`
+  ${DefaultButton}
+`;
+
+const Overview = styled.p`
+  color: ${({ theme }) => theme.white};
+  font-size: 14px;
+  font-weight: 300;
+`;
+
+const CloseButton = styled(FontAwesomeIcon)`
+  ${DefaultButton}
+  position: absolute;
   top: 20px;
   right: 20px;
 `;
-
-const Overview = styled.p``;
