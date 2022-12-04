@@ -91,7 +91,7 @@ function Header() {
               />
             </Logo>
           </Link>
-          <MenuContainer isShow={menuBarOpen}>
+          <MenuContainer $open={menuBarOpen}>
             <Menu>
               <Link to="browse/movie" onClick={closeMenuBar}>
                 {t("menu.movie")}
@@ -125,7 +125,7 @@ function Header() {
           <SearchForm onSubmit={handleSubmit(onSearchSubmit)}>
             <SearchIcon
               icon={faMagnifyingGlass}
-              isHiding={searchBarOpen ? true : false}
+              $hide={searchBarOpen}
               onClick={openSearchBar}
             />
             <SearchInput
@@ -139,7 +139,7 @@ function Header() {
           <MenuIcon icon={faBars} onClick={openMenuBar} />
         </Col>
         <Overlay
-          isShow={searchBarOpen || menuBarOpen ? true : false}
+          $open={searchBarOpen || menuBarOpen}
           onClick={searchBarOpen ? closeSearchBar : closeMenuBar}
         />
       </Nav>
@@ -215,14 +215,14 @@ const logoVariants = {
   },
 };
 
-const MenuContainer = styled.ul<{ isShow: boolean }>`
+const MenuContainer = styled.ul<{ $open: boolean }>`
   display: flex;
   align-items: center;
   /* Responsive */
   @media (max-width: 479px) {
     display: none;
     ${(props) =>
-      props.isShow &&
+      props.$open &&
       css`
         position: fixed;
         top: 0px;
@@ -306,9 +306,9 @@ const SearchInput = styled(motion.input)`
   ${({ theme }) => theme.RemoveAutoFill("white")}
 `;
 
-const SearchIcon = styled(FontAwesomeIcon)<{ isHiding: boolean }>`
+const SearchIcon = styled(FontAwesomeIcon)<{ $hide: boolean }>`
   cursor: pointer;
-  display: ${({ isHiding }) => isHiding && "none"};
+  display: ${({ $hide }) => $hide && "none"};
   width: 20px;
 `;
 
@@ -322,7 +322,7 @@ const MenuIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const Overlay = styled.div<{ isShow: boolean }>`
+const Overlay = styled.div<{ $open: boolean }>`
   display: none;
   // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
   z-index: 997;
@@ -334,6 +334,6 @@ const Overlay = styled.div<{ isShow: boolean }>`
   margin: 0;
   background: rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  display: ${({ isShow }) => isShow && "block"};
+  display: ${({ $open }) => $open && "block"};
   transition: all 0.3s ease-in;
 `;
