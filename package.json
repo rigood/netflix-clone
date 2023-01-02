@@ -37,7 +37,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +63,8 @@
     "@tanstack/react-query": "^4.3.9",
     "@tanstack/react-query-devtools": "^4.3.9",
     "@types/react-router-dom": "^5.3.3",
-    "@types/styled-components": "^5.1.26"
-  }
+    "@types/styled-components": "^5.1.26",
+    "gh-pages": "^4.0.0"
+  },
+  "homepage": "https://rigood.github.io/netflix-clone"
 }
