@@ -159,6 +159,7 @@ const Nav = styled(motion.nav)`
   align-items: center;
   width: 100%;
   padding: 20px 60px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7) 10%, transparent);
 
   @media (max-width: 1023px) {
     padding: 15px 40px;
