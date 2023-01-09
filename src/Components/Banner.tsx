@@ -79,12 +79,12 @@ const Container = styled.div<{ backdropBg: string; posterBg: string }>`
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.backdropBg});
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     height: 90vw;
     padding: 0 40px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     align-items: center;
     height: 150vw;
     padding: 0 20px;
@@ -102,7 +102,7 @@ const RankingLogo = styled.img`
   width: 1.6vw;
   margin-right: 5px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     width: 20px;
   }
 `;
@@ -112,7 +112,7 @@ const RankingText = styled.h1`
   font-weight: 700;
   ${({ theme }) => theme.textShadow};
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     font-size: 20px;
   }
 `;
@@ -123,8 +123,12 @@ const Title = styled.h1`
   margin-bottom: 20px;
   ${({ theme }) => theme.textShadow};
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     font-size: 32px;
+  }
+
+  @media (max-width: 479px) {
+    text-align: center;
   }
 `;
 
@@ -135,7 +139,7 @@ const DateAndRatingContainer = styled.div`
   margin-bottom: 10px;
   font-size: 0.9vw;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     font-size: 14px;
   }
 `;
@@ -157,12 +161,12 @@ const Overview = styled.p`
   ${({ theme }) => theme.textShadow};
   ${({ theme }) => theme.MaxLines(3)};
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     width: 60%;
     font-size: 16px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     display: none;
   }
 `;
@@ -187,7 +191,7 @@ const MoreBtn = styled.div`
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     font-size: 16px;
   }
 `;
