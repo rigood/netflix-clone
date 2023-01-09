@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import {
   motion,
   useScroll,
@@ -160,11 +160,11 @@ const Nav = styled(motion.nav)`
   width: 100%;
   padding: 20px 60px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     padding: 15px 40px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     padding: 10px 20px;
   }
 `;
@@ -216,36 +216,6 @@ const logoVariants = {
   },
 };
 
-const MenuContainer = styled.ul<{ $open: boolean }>`
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 480px) {
-    display: none;
-    ${(props) =>
-      props.$open &&
-      css`
-        position: fixed;
-        top: 0px;
-        right: 0;
-        // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
-        z-index: 999;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 50%;
-        height: 100%;
-        padding: 20px;
-        background-color: ${({ theme }) => theme.gray};
-        transition: all 0.3s ease-in;
-        ${Menu} {
-          margin-bottom: 20px;
-          font-weight: 700;
-        }
-      `}
-  }
-`;
-
 const Menu = styled.li`
   position: relative;
   margin-right: 20px;
@@ -255,6 +225,37 @@ const Menu = styled.li`
     &:hover {
       color: white;
     }
+  }
+`;
+
+const MenuContainer = styled.ul<{ $open: boolean }>`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 767px) {
+    position: fixed;
+    top: 0;
+    right: -200px;
+    // MenuContainer(mobile 999) > SearchForm(998) > Overlay(997) > Nav(996)
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 180px;
+    height: 100%;
+    padding: 20px;
+    background-color: ${({ theme }) => theme.gray};
+    ${Menu} {
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    transition: all 0.5s;
+    ${(props) =>
+      props.$open &&
+      css`
+        right: 0;
+        transition: all 0.5s;
+      `}
   }
 `;
 
@@ -269,7 +270,7 @@ const Circle = styled(motion.span)`
   border-radius: 50%;
   background-color: ${({ theme }) => theme.red};
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     top: 0;
     bottom: 0;
     left: -10px;
@@ -287,7 +288,7 @@ const SearchForm = styled.form`
 
 const SearchInput = styled(motion.input)`
   position: absolute;
-  right: 60px;
+  right: 60px; // padding-right
   width: 210px;
   padding: 5px 10px;
   background-color: ${({ theme }) => theme.gray};
@@ -300,19 +301,16 @@ const SearchInput = styled(motion.input)`
   }
   ${({ theme }) => theme.RemoveAutoFill("white")}
 
-  @media (max-width: 1024px) {
-    font-size: 14px;
-    &::placeholder {
-      font-size: 14px;
-    }
+  @media (max-width: 1023px) {
+    right: 40px; // padding-right
   }
 
-  @media (max-width: 1024px) {
-    right: 40px;
+  @media (max-width: 1023px) {
+    right: 80px; // padding right + menu-icon width + menu-icon margin-left
   }
 
-  @media (max-width: 480px) {
-    right: 60px;
+  @media (max-width: 479px) {
+    right: 60px; // padding right + menu-icon width + menu-icon margin-left
   }
 `;
 
@@ -325,7 +323,7 @@ const SearchIcon = styled(FontAwesomeIcon)<{ $hide: boolean }>`
 const MenuIcon = styled(FontAwesomeIcon)`
   display: none;
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     cursor: pointer;
     display: block;
     width: 20px;
