@@ -42,13 +42,13 @@ function Banner({ section, content }: IBannerProps) {
           <DateAndRatingContainer>
             <Date>
               {section === "movie"
-                ? t("label.release") + ": " + content.release_date ??
+                ? t("label.release") + ": " + content.release_date ||
                   t("label.none")
-                : t("label.firstAir") + ": " + content.first_air_date ??
+                : t("label.firstAir") + ": " + content.first_air_date ||
                   t("label.none")}
             </Date>
             <Rating>
-              {content.vote_average
+              {content.vote_average !== null
                 ? t("label.rating") + ": ⭐" + content.vote_average
                 : t("label.rating") + ": ⭐" + t("label.none")}
             </Rating>
