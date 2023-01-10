@@ -22,8 +22,8 @@ interface ISliderVariantsProps {
 }
 
 function getSliderOffset(windowWidth: number) {
-  if (windowWidth <= 480) return 2;
-  else if (windowWidth <= 1024) return 3;
+  if (windowWidth <= 479) return 2;
+  else if (windowWidth <= 1023) return 3;
   else return 6;
 }
 
@@ -174,11 +174,11 @@ const Container = styled.div`
   top: -12.5vw;
   margin-bottom: 70px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     margin-bottom: 60px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     margin-bottom: 50px;
   }
 `;
@@ -190,18 +190,18 @@ const TitleAndIndicator = styled.div`
   padding: 0 60px;
   margin-bottom: 10px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     padding: 0 40px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     padding: 0 20px;
   }
 `;
 
 const Title = styled.h2`
   font-size: 1.6vw;
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     font-size: 20px;
   }
 `;
@@ -215,11 +215,11 @@ const SliderContainer = styled.div`
   width: 100%;
   height: 8vw;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     height: 16vw;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     height: 24vw;
   }
 `;
@@ -239,12 +239,12 @@ const Btn = styled.button`
   font-size: 1.6vw;
   opacity: 0;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     width: 40px;
     font-size: 20px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     width: 20px;
     font-size: 16px;
   }
@@ -280,11 +280,11 @@ const SliderWrapper = styled(motion.div)<{ offset: number; zindex: number }>`
   width: 100%;
   padding: 0 60px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     padding: 0 40px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     padding: 0 20px;
   }
 `;
@@ -353,17 +353,27 @@ const CardThumbnail = styled(motion.div)<{
 `;
 
 const CardInfoTitle = styled.div`
-  font-size: 14px;
+  font-size: 0.9vw;
   font-weight: 700;
   margin-bottom: 5px;
+  @media (max-width: 1023px) {
+    font-size: 16px;
+  }
 `;
 
 const CardInfoDateAndRating = styled.div`
-  font-size: 11px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.6vw;
+  @media (max-width: 1023px) {
+    font-size: 11px;
+  }
 `;
 
 const CardDate = styled.span`
   color: ${({ theme }) => theme.green};
+  margin-right: 8px;
 `;
 
-const CardRating = styled.div``;
+const CardRating = styled.span``;
