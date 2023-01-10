@@ -8,7 +8,7 @@ type useListType = [
   (id: number) => void
 ];
 
-function useList(section: string): useListType {
+function useMyList(section: string): useListType {
   const [myMovie, setMyMovie] = useRecoilState<number[]>(myMovieAtom);
   const [myTv, setMyTv] = useRecoilState<number[]>(myTvAtom);
   const MAX_NUM_OF_LIST = 8;
@@ -45,4 +45,4 @@ function useList(section: string): useListType {
   return [checkIsNewContent, addToList, removeFromList];
 }
 
-export default useList;
+export default useMyList;

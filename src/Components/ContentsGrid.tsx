@@ -2,13 +2,14 @@ import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import useList from "../hook/useList";
+import useMyList from "../hook/useMyList";
 import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import {
   faCheck,
   faChevronDown,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { DefaultMoreButton } from "../styles/common";
 
 interface IContentsGridProps {
   title: string;
@@ -26,7 +27,7 @@ function ContentsGrid({
   const offset = 8;
   const [index, setIndex] = useState(offset);
 
-  const [checkIsNewContent, addToList, removeFromList] = useList(section!);
+  const [checkIsNewContent, addToList, removeFromList] = useMyList(section!);
 
   return (
     <>
@@ -53,10 +54,10 @@ function ContentsGrid({
             </Poster>
             <Info>
               <h1>{section === "movie" ? content.title : content.name}</h1>
-              <div>
+              <div className="date">
                 {getDate(section, content.release_date, content.first_air_date)}
               </div>
-              <div>{getRating(content.vote_average)}</div>
+              <div className="rating">{getRating(content.vote_average)}</div>
             </Info>
           </ContentWrapper>
         ))}
@@ -67,7 +68,7 @@ function ContentsGrid({
           />
         ) : null}
       </GridWrapper>
-      {contents?.length === 0 ? altText : null}
+      <Footer>{contents?.length === 0 ? altText : null}</Footer>
     </>
   );
 }
@@ -75,9 +76,12 @@ function ContentsGrid({
 export default ContentsGrid;
 
 const Title = styled.h1`
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  margin-top: 3rem;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  @media (max-width: 479px) {
+    font-size: 22px;
+  }
 `;
 
 const GridWrapper = styled.div`
@@ -87,11 +91,16 @@ const GridWrapper = styled.div`
   column-gap: 20px;
   row-gap: 40px;
   position: relative;
+
+  @media (max-width: 479px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const ContentWrapper = styled.div``;
 
 const PosterButton = styled(FontAwesomeIcon)`
+  display: none;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -113,17 +122,16 @@ const PosterButton = styled(FontAwesomeIcon)`
       color: white;
     }
   }
-  display: none;
 `;
 
 const PosterOverlay = styled.div`
+  display: none;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: none;
 `;
 
 const Poster = styled.div<{ bg: string }>`
@@ -158,39 +166,25 @@ const Info = styled.div`
   padding-top: 10px;
   h1 {
     font-size: 14px;
+    font-weight: 700;
     text-align: center;
-    --max-lines: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: var(--max-lines);
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 28px;
+    margin: 5px 0;
   }
   div {
     font-size: 12px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.5);
+    opacity: 0.8;
+    text-align: center;
+  }
+  .date {
+    color: ${({ theme }) => theme.green};
   }
 `;
 
 const MoreButton = styled(FontAwesomeIcon)`
-  position: absolute;
-  bottom: -50px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 20px;
-  height: 20px;
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid lightgray;
-  color: lightgray;
-  cursor: pointer;
-  @media (hover: hover) {
-    &:hover {
-      background-color: gray;
-      border-color: white;
-      color: white;
-    }
-  }
+  ${DefaultMoreButton};
+`;
+
+const Footer = styled.div`
+  margin-bottom: 80px;
+  font-size: 16px;
 `;

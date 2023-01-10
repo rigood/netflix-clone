@@ -15,21 +15,16 @@ import {
   getSimilar,
   getVideos,
 } from "../api/queryFn";
-import {
-  getDate,
-  getImgPath,
-  getRating,
-  getRuntimeOrEpisodes,
-  noBackdrop,
-} from "../api/utils";
+import { getImgPath, noBackdrop } from "../api/utils";
 import useBodyScroll from "../hook/useBodyScroll";
-import useList from "../hook/useList";
+import useList from "../hook/useMyList";
 import Loader from "../components/Loader";
+import Details from "../components/Details";
 import CastGrid from "../components/CastGrid";
 import MainVideo from "../components/MainVideo";
 import Videos from "../components/Videos";
 import ContentsGrid from "../components/ContentsGrid";
-import { faCheck, faClose, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { DefaultButton } from "../styles/common";
 
 function Modal() {
@@ -112,9 +107,6 @@ function Modal() {
   // Define main video
   const mainVideoKey = videos?.[0]?.key;
 
-  // Add, Remove from MyList
-  const [checkIsNewContent, addToList, removeFromList] = useList(section!);
-
   // language translation
   const { t } = useTranslation();
 
@@ -148,52 +140,11 @@ function Modal() {
                 />
               )}
               <ContentContainer>
-                <Genres>
-                  {details?.genres.map((genre) => (
-                    <span key={genre.id}>{genre.name}</span>
-                  ))}
-                </Genres>
-                <Title>
-                  {details?.title || details?.name || t("modal.altText.title")}
-                </Title>
-                <Row>
-                  <InfoLeftCol>
-                    <TimeAndCount>
-                      {getRuntimeOrEpisodes(
-                        section!,
-                        details?.runtime!,
-                        details?.number_of_seasons!,
-                        details?.number_of_episodes!
-                      )}
-                    </TimeAndCount>
-                    <DateAndRating>
-                      <span>
-                        {getDate(
-                          section!,
-                          details?.release_date!,
-                          details?.first_air_date!
-                        )}
-                      </span>
-                      <span>{getRating(details?.vote_average!)}</span>
-                    </DateAndRating>
-                  </InfoLeftCol>
-                  <ButtonRightCol>
-                    {!isError && checkIsNewContent(details?.id!) ? (
-                      <ListButton
-                        icon={faPlus}
-                        onClick={() => addToList(details?.id!)}
-                      />
-                    ) : (
-                      <ListButton
-                        icon={faCheck}
-                        onClick={() => removeFromList(details?.id!)}
-                      />
-                    )}
-                  </ButtonRightCol>
-                </Row>
-                <Overview>
-                  {details?.overview || t("modal.altText.overview")}
-                </Overview>
+                <Details
+                  section={section!}
+                  details={details!}
+                  isError={isError}
+                />
                 <CastGrid
                   title={t("modal.cast")}
                   cast={cast!}
@@ -232,7 +183,7 @@ const Overlay = styled(motion.div)`
   position: fixed;
   inset: 0;
   overflow-y: scroll;
-  z-index: 9998;
+  z-index: 9998; // Wrapper 밑에 위치
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
 `;
@@ -246,6 +197,10 @@ const Wrapper = styled(motion.div)`
   position: relative; // CloseBtn 배치
   border-radius: 8px;
   overflow: hidden;
+  @media (max-width: 767px) {
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 const Backdrop = styled.div<{ bg: string }>`
@@ -262,70 +217,6 @@ const Backdrop = styled.div<{ bg: string }>`
 
 const ContentContainer = styled.div`
   margin: 0 30px;
-
-  @media (max-width: 1024px) {
-    margin: 0 20px;
-  }
-
-  @media (max-width: 480px) {
-    margin: 0 10px;
-  }
-`;
-
-const Genres = styled.div`
-  margin-bottom: 10px;
-  span {
-    margin-right: 10px;
-    padding: 3px 9px;
-    border-radius: 4px;
-    background-color: ${(props) => props.theme.red};
-    font-size: 14px;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-
-  @media (max-width: 1024px) {
-    font-size: 24px;
-  }
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
-const InfoLeftCol = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 14px;
-  font-weight: 700;
-`;
-
-const TimeAndCount = styled.div``;
-
-const DateAndRating = styled.div`
-  span:first-child {
-    margin-right: 10px;
-    color: ${(props) => props.theme.green};
-  }
-`;
-
-const ButtonRightCol = styled.div``;
-
-const ListButton = styled(FontAwesomeIcon)`
-  ${DefaultButton}
-`;
-
-const Overview = styled.p`
-  color: ${({ theme }) => theme.white};
-  font-size: 14px;
-  font-weight: 300;
 `;
 
 const CloseButton = styled(FontAwesomeIcon)`

@@ -18,7 +18,7 @@ export const DefaultButton = css`
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     width: 20px;
     height: 20px;
     font-size: 20px;
@@ -26,9 +26,30 @@ export const DefaultButton = css`
     right: 15px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 479px) {
     top: 10px;
     right: 10px;
     border: none;
+  }
+`;
+
+export const DefaultMoreButton = css`
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  border-radius: 50%;
+  border: 3px solid lightgray;
+  color: lightgray;
+  cursor: pointer;
+  @media (hover: hover) {
+    &:hover {
+      border-color: white;
+      color: white;
+    }
   }
 `;

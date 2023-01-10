@@ -38,9 +38,12 @@ function Videos({ title, videos, altText }: IVideosProps) {
 export default Videos;
 
 const Title = styled.h1`
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  margin-top: 3rem;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  @media (max-width: 479px) {
+    font-size: 22px;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -93,9 +96,10 @@ const Info = styled.div`
     font-style: 14px;
   }
   .date {
-    font-size: 13px;
-    font-weight: 400;
+    font-size: 12px;
+    font-weight: 300;
     font-style: italic;
+    opacity: 0.8;
   }
 `;
 
@@ -123,5 +127,9 @@ const Video = styled.div`
     &:hover ${Info} {
       background-color: #202020;
     }
+  }
+
+  @media (max-width: 479px) {
+    grid-template-columns: 100px auto;
   }
 `;

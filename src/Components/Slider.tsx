@@ -86,7 +86,9 @@ function Slider({ section, title, list, zindex }: ISliderProps) {
       <TitleAndIndicator>
         <Title>{title}</Title>
         <Indicator>
-          {index + 1}/{maxIndex + 1}
+          {Array.from({ length: maxIndex + 1 }).map((dot, idx) => (
+            <Dot key={idx} active={idx === index} />
+          ))}
         </Indicator>
       </TitleAndIndicator>
 
@@ -195,6 +197,7 @@ const TitleAndIndicator = styled.div`
   }
 
   @media (max-width: 479px) {
+    align-items: center;
     padding: 0 20px;
   }
 `;
@@ -207,7 +210,15 @@ const Title = styled.h2`
 `;
 
 const Indicator = styled.div`
-  font-size: 14px;
+  display: flex;
+`;
+
+const Dot = styled.div<{ active: boolean }>`
+  width: 10px;
+  height: 2px;
+  background-color: ${({ theme, active }) =>
+    active ? theme.white : theme.lightgray};
+  margin-right: 2px;
 `;
 
 const SliderContainer = styled.div`
