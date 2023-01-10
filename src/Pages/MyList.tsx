@@ -67,7 +67,13 @@ function MyList() {
 export default MyList;
 
 const Wrapper = styled.div`
-  padding: 100px 60px 60px 60px;
+  padding: 60px;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1023px) {
+    padding: 40px;
+  }
+  @media (max-width: 479px) {
+    padding: 40px 20px;
+  }
 `;

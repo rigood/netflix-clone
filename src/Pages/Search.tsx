@@ -5,6 +5,7 @@ import { getMovieSearch, getTvSearch } from "../api/queryFn";
 import Loader from "../components/Loader";
 import SearchGrid from "../components/SearchGrid";
 import useInfiniteSearchQuery from "../hook/useInfiniteSearchQuery";
+import { useTranslation } from "react-i18next";
 
 function Search() {
   // Extract keyword and section
@@ -26,6 +27,9 @@ function Search() {
     setTab(section);
     navigate(`/search/${section}?q=${keyword}`);
   };
+
+  // language translation
+  const { t } = useTranslation();
 
   // Initialize tab and scroll as keyword changes
   useEffect(() => {
@@ -54,17 +58,18 @@ function Search() {
     <>
       <Wrapper>
         <Title>
-          <strong>{keyword}</strong> 에 대한 검색 결과
+          <strong>"{keyword}"</strong>
+          <span>{t("search.title")}</span>
         </Title>
         <TabWrapper>
           <Tab
             isActive={tab === "movie"}
             onClick={() => handleTabClick("movie")}
           >
-            영화({movieCount})
+            {t("menu.movie")}({movieCount})
           </Tab>
           <Tab isActive={tab === "tv"} onClick={() => handleTabClick("tv")}>
-            TV 프로그램({tvCount})
+            {t("menu.tv")}({tvCount})
           </Tab>
         </TabWrapper>
         <SearchGrid
@@ -81,20 +86,32 @@ function Search() {
 export default Search;
 
 const Wrapper = styled.div`
-  padding: 130px 60px 60px 60px;
+  padding: 120px 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: 1023px) {
+    padding: 100px 40px;
+  }
+  @media (max-width: 479px) {
+    padding: 80px 20px;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 20px;
-  font-weight: 500;
   color: #808080;
+  text-align: center;
   strong {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
     color: white;
+  }
+  @media (max-width: 479px) {
+    font-size: 18px;
+    strong {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -103,13 +120,19 @@ const TabWrapper = styled.div`
   gap: 40px;
   margin-top: 30px;
   margin-bottom: 60px;
+  @media (max-width: 479px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const Tab = styled.span<{ isActive: boolean }>`
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
   padding-bottom: 3px;
   cursor: pointer;
   color: ${(props) => props.isActive && "#E51013"};
   border-bottom: ${(props) => props.isActive && "3px solid #E51013"};
+  @media (max-width: 479px) {
+    font-size: 20px;
+  }
 `;

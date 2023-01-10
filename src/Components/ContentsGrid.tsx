@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
 import useMyList from "../hook/useMyList";
-import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import {
   faCheck,
   faChevronDown,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { DefaultMoreButton } from "../styles/common";
+import Content from "./Content";
 
 interface IContentsGridProps {
   title: string;
@@ -35,30 +35,14 @@ function ContentsGrid({
       <GridWrapper>
         {contents?.slice(0, index).map((content) => (
           <ContentWrapper key={content.id}>
-            <Poster
-              bg={
-                content.poster_path
-                  ? getImgPath(content.poster_path, "w500")
-                  : noPoster
+            <Content
+              section={section}
+              content={content}
+              icon={checkIsNewContent(content.id) ? faPlus : faCheck}
+              onClick={
+                checkIsNewContent(content.id) ? addToList : removeFromList
               }
-              onClick={() =>
-                checkIsNewContent(content.id)
-                  ? addToList(content.id)
-                  : removeFromList(content.id)
-              }
-            >
-              <PosterOverlay />
-              <PosterButton
-                icon={checkIsNewContent(content.id) ? faCheck : faPlus}
-              />
-            </Poster>
-            <Info>
-              <h1>{section === "movie" ? content.title : content.name}</h1>
-              <div className="date">
-                {getDate(section, content.release_date, content.first_air_date)}
-              </div>
-              <div className="rating">{getRating(content.vote_average)}</div>
-            </Info>
+            />
           </ContentWrapper>
         ))}
         {index < contents?.length ? (
@@ -98,87 +82,6 @@ const GridWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div``;
-
-const PosterButton = styled(FontAwesomeIcon)`
-  display: none;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 36px;
-  height: 36px;
-  padding: 10px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 36px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  @media (hover: hover) {
-    &:hover {
-      border-color: white;
-      color: white;
-    }
-  }
-`;
-
-const PosterOverlay = styled.div`
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-`;
-
-const Poster = styled.div<{ bg: string }>`
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  background-image: url(${(props) => props.bg});
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
-  @media (hover: hover) {
-    &:hover {
-      transform: scale(1.05);
-    }
-    &:hover ${PosterOverlay} {
-      display: block;
-    }
-    &:hover ${PosterButton} {
-      display: block;
-    }
-  }
-`;
-
-const Info = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 10px;
-  padding-top: 10px;
-  h1 {
-    font-size: 14px;
-    font-weight: 700;
-    text-align: center;
-    margin: 5px 0;
-  }
-  div {
-    font-size: 12px;
-    opacity: 0.8;
-    text-align: center;
-  }
-  .date {
-    color: ${({ theme }) => theme.green};
-  }
-`;
 
 const MoreButton = styled(FontAwesomeIcon)`
   ${DefaultMoreButton};

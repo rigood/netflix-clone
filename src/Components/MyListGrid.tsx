@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
+import Content from "./Content";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 interface IMyListGridProps {
@@ -21,32 +20,18 @@ function MyListGrid({ title, contents, section, altText }: IMyListGridProps) {
   return (
     <>
       <Title>{title}</Title>
-
       <GridWrapper>
         {contents?.map((content) => (
           <ContentWrapper key={content.id}>
-            <Poster
-              bg={
-                content.poster_path
-                  ? getImgPath(content.poster_path, "w500")
-                  : noPoster
-              }
-              onClick={() => openModal(content.id)}
-            >
-              <PosterOverlay />
-              <PosterButton icon={faChevronRight} />
-            </Poster>
-            <Info>
-              <h1>{section === "movie" ? content.title : content.name}</h1>
-              <div>
-                {getDate(section, content.release_date, content.first_air_date)}
-              </div>
-              <div>{getRating(content.vote_average)}</div>
-            </Info>
+            <Content
+              section={section}
+              content={content}
+              icon={faChevronRight}
+              onClick={openModal}
+            />
           </ContentWrapper>
         ))}
       </GridWrapper>
-
       {contents?.length === 0 ? altText : null}
     </>
   );
@@ -55,9 +40,12 @@ function MyListGrid({ title, contents, section, altText }: IMyListGridProps) {
 export default MyListGrid;
 
 const Title = styled.h1`
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-  margin-top: 3rem;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  @media (max-width: 479px) {
+    font-size: 22px;
+  }
 `;
 
 const GridWrapper = styled.div`
@@ -67,88 +55,15 @@ const GridWrapper = styled.div`
   column-gap: 20px;
   row-gap: 40px;
   position: relative;
+  @media (max-width: 1023px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 479px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const ContentWrapper = styled.div``;
-
-const PosterButton = styled(FontAwesomeIcon)`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 36px;
-  height: 36px;
-  padding: 10px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 36px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  @media (hover: hover) {
-    &:hover {
-      border-color: white;
-      color: white;
-    }
-  }
-  display: none;
-`;
-
-const PosterOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-`;
-
-const Poster = styled.div<{ bg: string }>`
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  background-image: url(${(props) => props.bg});
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
-  @media (hover: hover) {
-    &:hover {
-      transform: scale(1.05);
-    }
-    &:hover ${PosterOverlay} {
-      display: block;
-    }
-    &:hover ${PosterButton} {
-      display: block;
-    }
-  }
-`;
-
-const Info = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 10px;
-  padding-top: 10px;
-  h1 {
-    font-size: 14px;
-    text-align: center;
-    --max-lines: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: var(--max-lines);
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 28px;
-  }
-  div {
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.5);
-  }
-`;
