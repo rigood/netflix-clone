@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import {
   motion,
   useScroll,

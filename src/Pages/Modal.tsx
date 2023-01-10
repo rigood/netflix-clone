@@ -17,15 +17,14 @@ import {
 } from "../api/queryFn";
 import { getImgPath, noBackdrop } from "../api/utils";
 import useBodyScroll from "../hook/useBodyScroll";
-import useList from "../hook/useMyList";
 import Loader from "../components/Loader";
 import Details from "../components/Details";
 import CastGrid from "../components/CastGrid";
 import MainVideo from "../components/MainVideo";
 import Videos from "../components/Videos";
 import ContentsGrid from "../components/ContentsGrid";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { DefaultButton } from "../styles/common";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 function Modal() {
   // Extract section, id

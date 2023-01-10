@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IContent } from "../api/interface";
-import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import useMyList from "../hook/useMyList";
-import { useNavigate } from "react-router-dom";
+import { getDate, getImgPath, getRating, noPoster } from "../api/utils";
 
 interface IContentProps {
   section: string;
